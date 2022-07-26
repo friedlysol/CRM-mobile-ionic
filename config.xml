@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.friendlysol.aspeng" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>Aspen General Contractors</name>
-    <description>We take pride in providing high-quality services to GSE servicing companies, asset portfolio managers, institutional investors, asset portfolio managers, hedge fund investors, property management companies, community stabilization companies and more. We value the loyal relationships we have built with our clients..</description>
+<widget id="com.friendlysol.ahdcrm" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>AHD CRM</name>
+    <description>CRM.</description>
     <author email="support@friendly-solutions.com" href="https://friendlysol.com/">Friendly Solutions Corp</author>
     <content src="index.html" />
     <access origin="*" />

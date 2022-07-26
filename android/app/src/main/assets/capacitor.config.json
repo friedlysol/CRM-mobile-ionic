@@ -1,11 +1,8 @@
 {
-	"appId": "com.friendlysol.aspengc",
-	"appName": "Aspen General Contractors",
+	"appId": "com.friendlysol.ahdcrm",
+	"appName": "AHD CRM",
 	"webDir": "www",
 	"bundledWebRuntime": false,
-	"server": {
-		"androidScheme": "ionic"
-	},
 	"plugins": {
 		"Keyboard": {
 			"resize": "native",

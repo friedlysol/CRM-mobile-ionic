@@ -1,8 +1,5 @@
 {
-  "name": "Aspen General Contractors",
-  "server": {
-    "androidScheme": "ionic"
-  },
+  "name": "AHD CRM",
   "integrations": {
     "capacitor": {},
     "cordova": {

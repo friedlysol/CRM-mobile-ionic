@@ -47,9 +47,15 @@ export class SignInPage implements OnInit {
                     return this.loginFailed();
                 }
             })
-            .catch((err) => {
+            .catch(async (err) => {
                 console.log(err);
-                this.loginFailed();
+                const alert = await this.alertController.create({
+                    message: JSON.stringify(err),
+                    buttons: [
+                        'Ok'
+                    ]
+                });
+                await alert.present();
             });
     }
 
