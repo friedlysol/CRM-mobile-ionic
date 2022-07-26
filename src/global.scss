@@ -1,0 +1,242 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "~@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "~@ionic/angular/css/normalize.css";
+@import "~@ionic/angular/css/structure.css";
+@import "~@ionic/angular/css/typography.css";
+@import '~@ionic/angular/css/display.css';
+
+/* Optional CSS utils that can be commented out */
+@import "~@ionic/angular/css/padding.css";
+@import "~@ionic/angular/css/float-elements.css";
+@import "~@ionic/angular/css/text-alignment.css";
+@import "~@ionic/angular/css/text-transformation.css";
+@import "~@ionic/angular/css/flex-utils.css";
+
+:root {
+  --ion-color-green: #4d7a1a;
+  --ion-color-green-rgb: 77, 122, 26;
+  --ion-color-green-contrast: #ffffff;
+  --ion-color-green-contrast-rgb: 255, 255, 255;
+  --ion-color-green-shade: #159f84;
+  --ion-color-green-tint: #76ab3a;
+
+  --ion-color-light-green: #ccfc94;
+  --ion-color-light-green-rgb: 204, 252, 148;
+  --ion-color-light-green-contrast: #666666;
+  --ion-color-light-green-contrast-rgb: 255, 255, 255;
+  --ion-color-light-green-shade: #159f84;
+  --ion-color-light-green-tint: #dcffb3;
+
+  --ion-color-grey: #c2c4c2;
+  --ion-color-grey-rgb: 105, 187, 123;
+  --ion-color-grey-contrast: #ffffff;
+  --ion-color-grey-contrast-rgb: 255, 255, 255;
+  --ion-color-grey-shade: #9f9f9f;
+  --ion-color-grey-tint: #c9cbc9;
+}
+
+.ion-color-green {
+  --ion-color-base: var(--ion-color-green);
+  --ion-color-base-rgb: var(--ion-color-green-rgb);
+  --ion-color-contrast: var(--ion-color-green-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-green-contrast-rgb);
+  --ion-color-shade: var(--ion-color-green-shade);
+  --ion-color-tint: var(--ion-color-green-tint);
+}
+
+.ion-color-light-green {
+  --ion-color-base: var(--ion-color-light-green);
+  --ion-color-base-rgb: var(--ion-color-light-green-rgb);
+  --ion-color-contrast: var(--ion-color-light-green-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-light-green-contrast-rgb);
+  --ion-color-shade: var(--ion-color-light-green-shade);
+  --ion-color-tint: var(--ion-color-light-green-tint);
+}
+
+.ion-color-grey {
+  --ion-color-base: var(--ion-color-grey);
+  --ion-color-base-rgb: var(--ion-color-grey-rgb);
+  --ion-color-contrast: var(--ion-color-grey-contrast);
+  --ion-color-contrast-rgb: var(--ion-color-grey-contrast-rgb);
+  --ion-color-shade: var(--ion-color-grey-shade);
+  --ion-color-tint: var(--ion-color-grey-tint);
+}
+
+app-modal-preview-photo {
+  ion-content {
+    text-align: center;
+    vertical-align: middle;
+  }
+}
+
+ion-button,
+button {
+  border-radius: 0;
+  --border-radius: 0px;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.photo-gallery .modal-wrapper {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  display: block;
+}
+
+.preview-photo .modal-wrapper {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  display: block;
+  background-color: transparent;
+}
+
+.photo {
+  position: relative;
+
+  .trash {
+    position: absolute;
+    bottom: 10px;
+    right: 5px;
+    background-color: #ffffff;
+    border-radius: 50px;
+    padding: 5px;
+  }
+}
+
+.required {
+  color: #ff0015;
+}
+
+.break {
+  flex-basis: 100%;
+  height: 0;
+}
+
+.rotation {
+  -webkit-animation: rotation 2s infinite linear;
+  animation: rotation 2s infinite linear;
+}
+
+@keyframes rotation {
+  from {
+    -webkit-transform: rotate(0deg);
+  }
+
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+.modal-fullscreen {
+  width: 100vw;
+  height: 100vh;
+  --width: 100vw;
+  --height: calc(100vh - 26px);
+  --border-radius: 0;
+  align-items: start;
+
+  .modal-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+    --width: 100%;
+    --height: 100%;
+  }
+}
+
+.ios .modal-fullscreen {
+  --border-radius: 0;
+  --height: calc(100vh - 26px);
+  align-items: start;
+
+  .modal-wrapper {
+    top: 26px;
+  }
+}
+
+div.photo {
+  min-height: 50px;
+  min-width: 50px;
+}
+
+.width-60 {
+  --min-width: 60vw !important;
+  --width: 60vw !important;
+}
+
+.width-80 {
+  --min-width: 80vw !important;
+  --width: 80vw !important;
+}
+
+//modal-wrapper ion-overlay-wrapper sc-ion-modal-md
+
+.container-page {
+  width: 90%;
+  margin: 0 auto;
+}
+
+thead.table-header,
+.pagination {
+  color: #fdfdfd;
+  background: #2c2c2c;
+}
+
+.pagination {
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+table {
+  table-layout: fixed;
+}
+
+td,
+th {
+  font-weight: normal;
+}
+
+.pages {
+  display: flex;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  align-content: flex-start;
+
+  .page-btn {
+    ion-button {
+      --background: #000000;
+      --color: #f2f2f2;
+      --padding-start: 10px;
+      --padding-end: 10px;
+      --padding-top: 5px;
+      height: auto;
+      --padding-bottom: 5px;
+      &.selected {
+        --background: #2f2f2f;
+        --color: #ffffff;
+      }
+    }
+  }
+}

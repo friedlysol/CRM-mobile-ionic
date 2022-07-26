@@ -1,0 +1,15 @@
+{
+	"appId": "com.friendlysol.aspengc",
+	"appName": "Aspen General Contractors",
+	"webDir": "www",
+	"bundledWebRuntime": false,
+	"server": {
+		"androidScheme": "ionic"
+	},
+	"plugins": {
+		"Keyboard": {
+			"resize": "native",
+			"style": "dark"
+		}
+	}
+}

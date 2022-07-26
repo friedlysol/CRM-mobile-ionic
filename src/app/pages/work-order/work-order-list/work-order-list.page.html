@@ -1,0 +1,51 @@
+<ion-content class="ion-padding">
+  <ion-button (click)="logout()">Logout</ion-button>
+  <div class="container-page">
+    <div class="table-responsive">
+      <div class="pagination">
+        <div>{{numberOfWorkOrders}} Items</div>
+        <div class="pages">
+          <div class="page-btn"><ion-button class="ion-no-padding" expand="block" (click)="changePage(1)">{{'<<'}}</ion-button></div>
+          <div class="page-btn" *ngFor="let i of paginationButtons"><ion-button (click)="changePage(i)" class="ion-no-padding" [class.selected]="i === pagination.page" expand="block">{{i}}</ion-button></div>
+          <div class="page-btn"><ion-button class="ion-no-padding" expand="block" (click)="changePage(pagination.last_page)">{{'>>'}}</ion-button></div>
+        </div>
+      </div>
+      <table class="table table-striped">
+        <thead class="table-header">
+          <tr>
+            <th scope="col">ID</th>
+            <th scope="col">Description</th>
+            <th scope="col">Status</th>
+            <th scope="col">Priority</th>
+            <th scope="col">ECD</th>
+            <th scope="col">Assigned to</th>
+        </thead>
+        <tbody>
+          <ng-container *ngIf="listData.length > 0">
+            <tr *ngFor="let item of listData">
+              <th scope="row">{{item.id}}</th>
+              <th scope="row">
+                <ng-container *ngIf="item.description">
+                  {{ (item.description.length>60)? (item.description | slice:0:60)+'...':(item.description) }}
+                </ng-container>
+              </th>
+              <th scope="row">{{item.wo_status_type_id_value}}</th>
+              <th scope="row">{{item.crm_priority}}</th>
+              <th scope="row">{{item.expected_completion_date}}</th>
+              <th scope="row">
+                <ng-container *ngIf="item.assigned_to">
+                  <div *ngFor="let at of item.assigned_to">{{at.person_name}}</div>
+                </ng-container>
+              </th>
+            </tr>
+          </ng-container>
+          <ng-container *ngIf="!isLoading && listData.length === 0">
+            <tr>
+              <td colspan="6">No Data</td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</ion-content>

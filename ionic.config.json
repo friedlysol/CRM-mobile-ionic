@@ -1,0 +1,14 @@
+{
+  "name": "Aspen General Contractors",
+  "server": {
+    "androidScheme": "ionic"
+  },
+  "integrations": {
+    "capacitor": {},
+    "cordova": {
+      "enabled": false
+    }
+  },
+  "type": "angular",
+  "id": "2f90f3f2"
+}
