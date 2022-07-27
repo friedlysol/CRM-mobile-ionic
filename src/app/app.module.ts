@@ -25,7 +25,9 @@ import {OrderModule} from 'ngx-order-pipe';
         BrowserModule,
         HttpClientModule,
         HttpClientJsonpModule,
-        IonicModule.forRoot(),
+        IonicModule.forRoot({
+            mode: 'md'
+        }),
         IonicStorageModule.forRoot({
             name: 'aspen-database',
             // eslint-disable-next-line no-underscore-dangle

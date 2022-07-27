@@ -75,6 +75,10 @@
   --ion-color-tint: var(--ion-color-grey-tint);
 }
 
+ion-button {
+  text-transform: none;
+}
+
 app-modal-preview-photo {
   ion-content {
     text-align: center;
@@ -242,19 +246,27 @@ th {
 }
 
 .login-form {
-  .text {
-    color: #1e1e1e;
-    font-size: 30px;
-    text-align: center;
-    padding: 10px;
+  .bar {
+    border-bottom: 1px solid #c9c9c9;
+    padding: 10px 0;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    .text {
+      color: #1e1e1e;
+      font-size: 30px;
+      text-align: center;
+    }
   }
+  .frame {
+    padding: 20px 10px;
+  }
+  padding-bottom: 20px;
   background: #f7f7f7;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 9999;
   position: fixed;
-  padding: 10px;
   border-radius: 5px;
   width: 80%;
   max-width: 400px;
@@ -265,6 +277,6 @@ th {
     --border-radius: 2px;
   }
   .buttons {
-    margin-top: 20px;
+    padding: 0 10px;
   }
 }

@@ -20,9 +20,9 @@ export class ApiInterceptor implements HttpInterceptor {
       headers: request.headers.set('Authorization', `Bearer ${this.authService.getToken()}`),
     });
 
-    if (!environment.production) {
+    /*if (!environment.production) {
       request = request.clone({headers: request.headers.set('X-Cors', '1')});
-    }
+    }*/
 
     if (!request.headers.has('Content-Type')) {
       request = request.clone({headers: request.headers.set('Content-Type', 'application/json')});
