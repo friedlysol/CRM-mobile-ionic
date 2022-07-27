@@ -1,0 +1,1 @@
+You can put here DEMO apks. If there is one apk already - delete it and send a new one, this way the repository will not take a lot of disk space.

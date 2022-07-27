@@ -35,7 +35,6 @@ export class AuthService {
 
   login(credentials: CredentialsInterface, deviceId: string) {
     const props: any = credentials;
-    props.email = credentials.username;
     props.grant = 'password';
     props.is_new_crm = 1;
     props.is_mobile = 1;

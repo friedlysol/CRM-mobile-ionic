@@ -192,14 +192,14 @@ div.photo {
 //modal-wrapper ion-overlay-wrapper sc-ion-modal-md
 
 .container-page {
-  width: 90%;
+  width: 98%;
   margin: 0 auto;
 }
 
 thead.table-header,
 .pagination {
   color: #fdfdfd;
-  background: #2c2c2c;
+  background: #0080ff;
 }
 
 .pagination {
@@ -226,7 +226,7 @@ th {
 
   .page-btn {
     ion-button {
-      --background: #000000;
+      --background: #004487;
       --color: #f2f2f2;
       --padding-start: 10px;
       --padding-end: 10px;
@@ -234,9 +234,37 @@ th {
       height: auto;
       --padding-bottom: 5px;
       &.selected {
-        --background: #2f2f2f;
+        --background: #43698e;
         --color: #ffffff;
       }
     }
+  }
+}
+
+.login-form {
+  .text {
+    color: #1e1e1e;
+    font-size: 30px;
+    text-align: center;
+    padding: 10px;
+  }
+  background: #f7f7f7;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
+  position: fixed;
+  padding: 10px;
+  border-radius: 5px;
+  width: 80%;
+  max-width: 400px;
+  box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+  ion-button {
+    --background: #0080ff;
+    --color: #ffffff;
+    --border-radius: 2px;
+  }
+  .buttons {
+    margin-top: 20px;
   }
 }

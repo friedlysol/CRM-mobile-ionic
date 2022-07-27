@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '@app/services/auth.service';
 import { Router } from '@angular/router';
 import { CredentialsInterface } from '@app/interfaces/credentials';
-import { AlertController } from '@ionic/angular';
+import { AlertController, NavController } from '@ionic/angular';
 import { Device } from '@capacitor/device';
 import { filter, take, map } from 'rxjs/operators';
 
@@ -17,9 +17,12 @@ export class SignInPage implements OnInit {
         password: null
     };
 
+    isLoading = false;
+
     deviceId = '';
 
     constructor(
+        private navCtrl: NavController,
         private authService: AuthService,
         private router: Router,
         private alertController: AlertController
@@ -30,6 +33,7 @@ export class SignInPage implements OnInit {
     }
 
     async login() {
+        this.isLoading = true;
         try {
             const id = await Device.getId();
             this.deviceId = id.uuid;
@@ -38,8 +42,9 @@ export class SignInPage implements OnInit {
             console.log(error);
         }
 
-        this.authService.login(this.credentials, this.deviceId)
+        this.authService.login({password: this.credentials.password, email: this.credentials.username}, this.deviceId)
             .then(async res => {
+                this.isLoading = false;
                 console.log({ res });
                 if (res) {
                     this.router.navigateByUrl('/', { replaceUrl: true });
@@ -48,6 +53,7 @@ export class SignInPage implements OnInit {
                 }
             })
             .catch(async (err) => {
+                this.isLoading = false;
                 console.log(err);
                 const alert = await this.alertController.create({
                     message: JSON.stringify(err),

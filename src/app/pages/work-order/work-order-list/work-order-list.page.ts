@@ -14,7 +14,7 @@ import { finalize } from 'rxjs/operators';
 })
 export class WorkOrderListPage implements OnInit {
     listData: any = [];
-    params = {limit: 20, page: 1};
+    params = { limit: 20, page: 1 };
     numberOfWorkOrders = 0;
     pagination = {
         page: 0,
@@ -53,10 +53,10 @@ export class WorkOrderListPage implements OnInit {
                     const pag = [];
                     const trimStart = this.pagination.page - 3;
                     const trimEnd = this.pagination.last_page;
-                    for(let i = trimStart; i < trimEnd; i++) {
-                        if(i + 1 <= 0) {continue;}
+                    for (let i = trimStart; i < trimEnd; i++) {
+                        if (i + 1 <= 0) { continue; }
                         pag.push(i + 1);
-                        if(pag.length >= 5) {break;}
+                        if (pag.length >= 5) { break; }
                     }
                     this.paginationButtons = pag;
                     console.log(this.paginationButtons);
@@ -75,10 +75,31 @@ export class WorkOrderListPage implements OnInit {
     }
 
     async logout() {
-        await this.authService.logout();
+        const alert = await this.alertCtrl.create({
+            header: 'Logout',
+            message: 'Do you want to logout?',
+            buttons: [
+                {
+                    text: 'Cancel',
+                    role: 'cancel',
+                    handler: () => {
+                        console.log('Cancel clicked');
+                    }
+                },
+                {
+                    text: 'Confirm',
+                    handler: async () => {
+                        console.log('Buy clicked');
+                        await this.authService.logout();
+                    }
+                }
+            ]
+        });
+
+        await alert.present();
     }
 
-    numberReturn(length){
+    numberReturn(length) {
         return new Array(length);
     }
 }
