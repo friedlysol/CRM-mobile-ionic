@@ -1,0 +1,27 @@
+<ion-content class="ion-padding">
+  <ion-row>
+    <ion-col>
+      <div class="container">
+        <div class="login-form">
+          <div class="bar"><div class="text">AHD</div></div>
+          <div class="frame">
+            <ion-item>
+              <ion-input type="email" placeholder="Email address" name="username" [(ngModel)]="credentials.username">
+              </ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-input type="password" placeholder="Password" name="password" [(ngModel)]="credentials.password">
+              </ion-input>
+            </ion-item>
+          </div>
+
+          <div class="buttons">
+            <ion-button (click)="login()" [disabled]="isLoading" color="primary" expand="block">Sign In</ion-button>
+          </div>
+        </div>
+      </div>
+    </ion-col>
+  </ion-row>
+
+</ion-content>
