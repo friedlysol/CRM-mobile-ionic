@@ -6,6 +6,7 @@ import { CredentialsInterface } from '@app/interfaces/credentials';
 import { AlertController } from '@ionic/angular';
 import { WorkOrderService } from '@app/services/workorder.service';
 import { finalize } from 'rxjs/operators';
+import { SettingsService } from '@app/services/settings.service';
 
 @Component({
     selector: 'app-work-order-list',
@@ -27,11 +28,16 @@ export class WorkOrderListPage implements OnInit {
         private authService: AuthService,
         private alertCtrl: AlertController,
         private woService: WorkOrderService,
+        private settingsService: SettingsService
     ) {
     }
 
     ngOnInit() {
         this.loadList();
+    }
+
+    sync() {
+        this.settingsService.sync();
     }
 
     changePage(i: number) {

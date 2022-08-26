@@ -4,8 +4,11 @@ import { NavController, Platform } from '@ionic/angular';
 import { Storage } from '@ionic/storage';
 import { BehaviorSubject } from 'rxjs';
 import { CredentialsInterface } from '../interfaces/credentials';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { environment } from '@env/environment';
+
+import { AuthApi } from '@app/providers/api/auth-api';
+import { AccountsDatabase } from '@app/services/database/accounts.database';
 
 const TOKEN_KEY = 'api-key';
 
@@ -16,8 +19,15 @@ export class AuthService {
   public userToken = new BehaviorSubject(null);
   apiEndpoint: string = environment.apiEndpoint;
 
-  constructor(private http: HttpClient, private navCtrl: NavController,
-    private storage: Storage, private platform: Platform, private router: Router) {
+  constructor(
+    private accountsDatabase: AccountsDatabase,
+    private authApi: AuthApi,
+    private http: HttpClient,
+    private navCtrl: NavController,
+    private platform: Platform,
+    private router: Router,
+    private storage: Storage,
+  ) {
     this.loadStoredToken();
   }
 
@@ -33,21 +43,39 @@ export class AuthService {
     }
   }
 
-  login(credentials: CredentialsInterface, deviceId: string) {
-    const props: any = credentials;
-    props.grant = 'password';
-    props.is_new_crm = 1;
-    props.is_mobile = 1;
-    props.device_id = deviceId;
-    return this.http.post(`${this.apiEndpoint}auth/token`, props).toPromise()
+  loginByDeviceIdOrImei(deviceId: string, imei: string = null) {
+    return this.authApi.loginByDeviceIdOrImei(deviceId, imei)
+      .toPromise()
       .then((res: any) => {
-        console.log(res, res.response.access_token);
-        if (res && res.response.access_token) {
-          return this.setToken(res.response.access_token).then(x => true);
-        }
+        // const personId = res?.data?.response?.user?.person_id;
+        // const currentPersonId = Settings.getSetting('current_person_id', null);
+        // const checkPersonId = parseInt(Settings.getSetting('app.check_person_id_last_signed_in', 1)) === 1;
+      })
+      .catch(err => {
 
-        return false;
       });
+  }
+
+  loginByEmail(credentials: CredentialsInterface, deviceId: string) {
+    return this.authApi.loginByEmail(credentials, deviceId)
+      .toPromise()
+      .then(async (res: any) => {
+        if (res && res.response.access_token) {
+          await this.accountsDatabase.saveAccount({
+            person_id: res.response.user.person_id,
+            username: res.response.user.username,
+            token: res.response.access_token
+          });
+
+          return this.setToken(res.response.access_token).then(x => true);
+        } else {
+          return false;
+        }
+      });
+  }
+
+  loginByPhoneNumber(deviceId: string, imei: string = null) {
+
   }
 
   logout(redirectTo = '/sign-in') {

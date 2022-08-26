@@ -56,9 +56,9 @@ export class ApiInterceptor implements HttpInterceptor {
     // eslint-disable-next-line @typescript-eslint/dot-notation
     const currentRoute = this.activatedRoute.snapshot['_routerState'].url;
 
-    if ((err.status === 401 || err.status === 403) && !this.ignoreRoutes.includes(currentRoute)) {
+    if ((err.status === 401 || err.status === 403 || err.status === 498) && !this.ignoreRoutes.includes(currentRoute)) {
       this.authService.logout();
-
+console.log('asd');
       return of(err.message);
     }
 

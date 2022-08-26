@@ -7,6 +7,13 @@
 		"Keyboard": {
 			"resize": "native",
 			"style": "dark"
+		},
+		"SplashScreen": {
+			"launchShowDuration": 0,
+			"launchAutoHide": true,
+			"backgroundColor": "#ffffffff",
+			"androidScaleType": "CENTER_CROP",
+			"spinnerColor": "#999999"
 		}
 	}
 }

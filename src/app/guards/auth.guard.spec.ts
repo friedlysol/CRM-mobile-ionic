@@ -1,8 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 
-import { AuthGuard } from './auth.guard';
+import { AuthGuard } from './sign-in-auth-guard';
 
-describe('AuthGuard', () => {
+describe('SignInAuthGuard', () => {
   let guard: AuthGuard;
 
   beforeEach(() => {

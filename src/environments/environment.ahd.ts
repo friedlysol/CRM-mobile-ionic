@@ -4,10 +4,10 @@
 
 export const environment = {
   apiEndpoint: 'https://ahd.friendlysol.com/',
-  production: false,
+  production: true,
   tag: 'ahd',
   companyName: 'American Home Design',
-  authBy: 'email', //'device-id' | 'email' | 'phone-number'
+  authByDeviceId: true
 };
 /*
  * For easier debugging in development mode, you can import the following file
