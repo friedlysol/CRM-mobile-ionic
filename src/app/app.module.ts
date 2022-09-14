@@ -26,12 +26,21 @@ import { StaticService } from '@app/services/static.service';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { Toast } from '@ionic-native/toast/ngx';
 import { DatabaseService } from '@app/services/database.service';
+import { IConfig, NgxMaskModule } from 'ngx-mask';
+import { SmsRetriever } from '@ionic-native/sms-retriever/ngx';
+import { SyncComponent } from '@app/components/sync/sync.component';
+import { HeaderComponent } from '@app/components/header/header.component';
+import { SharedModule } from '@app/shared.module';
 
 export const appInitFactory = (databaseService: DatabaseService, platform: Platform, staticService: StaticService) => async () => {
   await platform.ready().then(async () => {
     await databaseService.init();
     await staticService.init();
   });
+};
+
+const maskConfig: Partial<IConfig> = {
+  validation: false,
 };
 
 @NgModule({
@@ -49,10 +58,12 @@ export const appInitFactory = (databaseService: DatabaseService, platform: Platf
     IonicStorageModule.forRoot({
       name: 'database',
       // eslint-disable-next-line no-underscore-dangle
-      driverOrder: [CordovaSQLiteDriver._driver, Drivers.IndexedDB, Drivers.LocalStorage]
+      driverOrder: [Drivers.LocalStorage]
     }),
+    NgxMaskModule.forRoot(maskConfig),
     AppRoutingModule,
     OrderModule,
+    SharedModule,
     ReactiveFormsModule
   ],
   providers: [
@@ -84,9 +95,13 @@ export const appInitFactory = (databaseService: DatabaseService, platform: Platf
     SQLite,
     StaticService,
     StatusBar,
-    Toast
+    Toast,
+    SmsRetriever
   ],
   bootstrap: [AppComponent],
+  exports: [
+
+  ]
 })
 export class AppModule {
 }

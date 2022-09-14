@@ -45,7 +45,7 @@ export class DatabaseService {
       .catch(err => {
         console.error('Database error', err, query, parameters);
 
-        return {rows: []};
+        return {rows: [], error: err};
       });
   }
 

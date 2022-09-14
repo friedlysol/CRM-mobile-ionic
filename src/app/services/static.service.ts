@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { DatabaseService } from './database.service';
 import { LoadingController, Platform } from '@ionic/angular';
+import { ConnectionStatus, Network } from '@capacitor/network';
+import { EventService } from '@app/services/event.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,26 +12,48 @@ export class StaticService {
   public invalidToken = new BehaviorSubject<boolean | null>(null);
   public startSync = new BehaviorSubject<boolean | null>(null);
 
+  public authEmail: string = null;
+  public deviceToken: string = null;
+  public deviceTokenType: string = null;
+
   public isFirstSync = true;
   public isTablet = !!navigator.userAgent.match(/iPad/i);
+
+
+  public networkStatus: ConnectionStatus = {
+    connected: false,
+    connectionType: 'unknown'
+  };
+
+  public settings: Record<string, any> = {};
 
   private loading;
 
   constructor(
     private databaseService: DatabaseService,
-    private platform: Platform,
-    private loadingController: LoadingController
+    private loadingController: LoadingController,
+    private platform: Platform
   ) {
-    this.platform.ready().then(() => {
-      this.isTablet = this.platform.is('tablet');
+    this.platform.ready()
+      .then(() => {
+        this.isTablet = this.platform.is('tablet');
 
-
-      console.log('isTablet', this.isTablet);
-    });
+        console.log('isTablet', this.isTablet);
+      });
   }
 
   async init() {
+    Network.addListener('networkStatusChange', status => {
+      console.log('Network status changed', status);
 
+      this.networkStatus = status;
+    });
+
+    Network.getStatus().then(status => {
+      this.networkStatus = status;
+
+      EventService.networkStatus.next(status);
+    });
   }
 
   clearSyncStatus() {

@@ -1,0 +1,26 @@
+<ion-header>
+  <app-header [title]="'Database query'"></app-header>
+</ion-header>
+
+<ion-content>
+  <ion-item class="text-center" lines="none">
+    <ion-label>SQL Query</ion-label>
+  </ion-item>
+
+  <ion-item lines="none">
+    <ion-textarea [(ngModel)]="query" [rows]="4"></ion-textarea>
+  </ion-item>
+
+  <div class="m-3">
+    <ion-button expand="full" (click)="executeQuery()">Execute the query</ion-button>
+  </div>
+
+  <div class="m-3">
+    <textarea class="query-result" [rows]="10">{{queryResult | json}}</textarea>
+    <span class="query-error">{{ queryError }}</span>
+
+    <ul>
+      <li *ngFor="let query of lastQueries" [value]="query" (click)="setQuery(query)">{{ query }}</li>
+    </ul>
+  </div>
+</ion-content>

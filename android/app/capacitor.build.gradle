@@ -20,6 +20,9 @@ dependencies {
     implementation project(':capacitor-filesystem')
     implementation project(':capacitor-haptics')
     implementation project(':capacitor-keyboard')
+    implementation project(':capacitor-local-notifications')
+    implementation project(':capacitor-network')
+    implementation project(':capacitor-push-notifications')
     implementation project(':capacitor-splash-screen')
     implementation project(':transistorsoft-capacitor-background-fetch')
     implementation "androidx.appcompat:appcompat:1.0.0"

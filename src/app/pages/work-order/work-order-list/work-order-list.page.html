@@ -1,66 +1,46 @@
-<ion-menu side="start" menuId="custom" contentId="main" class="my-custom-menu">
-  <ion-header>
-    <ion-toolbar color="tertiary">
-      <ion-title>AHD</ion-title>
-    </ion-toolbar>
-  </ion-header>
-  <ion-content>
-    <ion-list>
-      <ion-item>Work Orders</ion-item>
-      <ion-item (click)="logout()">Logout</ion-item>
-    </ion-list>
-  </ion-content>
-</ion-menu>
-
+<ion-header>
+  <app-header [title]="'Work orders'"></app-header>
+</ion-header>
 <ion-content id="main" class="ion-padding">
   <button (click)="sync()">Sync</button>
+  <button (click)="logout()">Logout</button>
 
-  <div class="container-page">
-    <div class="table-responsive">
-      <div class="pagination">
-        <div>{{numberOfWorkOrders}} Items</div>
-        <div class="pages">
-          <div class="page-btn"><ion-button class="ion-no-padding" expand="block" (click)="changePage(1)">{{'<<'}}</ion-button></div>
-          <div class="page-btn" *ngFor="let i of paginationButtons"><ion-button (click)="changePage(i)" class="ion-no-padding" [class.selected]="i === pagination.page" expand="block">{{i}}</ion-button></div>
-          <div class="page-btn"><ion-button class="ion-no-padding" expand="block" (click)="changePage(pagination.last_page)">{{'>>'}}</ion-button></div>
-        </div>
-      </div>
-      <table class="table table-striped">
-        <thead class="table-header">
-          <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Description</th>
-            <th scope="col">Status</th>
-            <th scope="col">Priority</th>
-            <th scope="col">ECD</th>
-            <th scope="col">Assigned to</th>
-        </thead>
-        <tbody>
-          <ng-container *ngIf="listData.length > 0">
-            <tr *ngFor="let item of listData">
-              <th scope="row">{{item.id}}</th>
-              <th scope="row">
-                <ng-container *ngIf="item.description">
-                  {{ (item.description.length>60)? (item.description | slice:0:60)+'...':(item.description) }}
-                </ng-container>
-              </th>
-              <th scope="row">{{item.wo_status_type_id_value}}</th>
-              <th scope="row">{{item.crm_priority}}</th>
-              <th scope="row">{{item.expected_completion_date}}</th>
-              <th scope="row">
-                <ng-container *ngIf="item.assigned_to">
-                  <div *ngFor="let at of item.assigned_to">{{at.person_name}}</div>
-                </ng-container>
-              </th>
-            </tr>
-          </ng-container>
-          <ng-container *ngIf="!isLoading && listData.length === 0">
-            <tr>
-              <td colspan="6">No Data</td>
-            </tr>
-          </ng-container>
-        </tbody>
-      </table>
+  <div class="pagination">
+    <div>{{numberOfWorkOrders}} Items</div>
+    <div class="pages">
+      <div class="page-btn"><ion-button class="ion-no-padding" expand="block" (click)="changePage(1)">{{'<<'}}</ion-button></div>
+      <div class="page-btn" *ngFor="let i of paginationButtons"><ion-button (click)="changePage(i)" class="ion-no-padding" [class.selected]="i === pagination.page" expand="block">{{i}}</ion-button></div>
+      <div class="page-btn"><ion-button class="ion-no-padding" expand="block" (click)="changePage(pagination.last_page)">{{'>>'}}</ion-button></div>
     </div>
   </div>
+
+  <ion-list *ngIf="listData.length > 0">
+    <ion-item *ngFor="let item of listData">
+      <p>{{item.id}}</p>
+
+        <ng-container *ngIf="item.description">
+          {{ (item.description.length>60)? (item.description | slice:0:60)+'...':(item.description) }}
+        </ng-container>
+
+      <p>{{item.wo_status_type_id_value}}</p>
+      <p>{{item.crm_priority}}</p>
+      <p>{{item.expected_completion_date}}</p>
+
+        <ng-container *ngIf="item.assigned_to">
+          <div *ngFor="let at of item.assigned_to">{{at.person_name}}</div>
+        </ng-container>
+
+    </ion-item>
+  </ion-list>
 </ion-content>
+<ion-footer>
+  <ion-row class="tab-content">
+    <ng-container *ngFor="let tab of tabs">
+      <ion-col [class]="{active: tab.isActive}" (click)="setActiveTab(tab.key)">
+        <ion-label>{{ tab.label }} ({{ tab.total }})</ion-label>
+      </ion-col>
+    </ng-container>
+  </ion-row>
+
+  <app-sync></app-sync>
+</ion-footer>

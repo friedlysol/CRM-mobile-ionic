@@ -1,6 +1,6 @@
 {
-	"appId": "com.friendlysol.ahdcrm",
-	"appName": "AHD CRM",
+	"appId": "com.friendlysol.crm.ahd",
+	"appName": "AHD Mobile",
 	"webDir": "www",
 	"bundledWebRuntime": false,
 	"plugins": {

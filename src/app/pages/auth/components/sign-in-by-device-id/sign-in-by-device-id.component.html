@@ -1,3 +1,27 @@
-<p>
-  sign-in-by-device-id works!
-</p>
+<ion-content class="bg-sign-in">
+  <div class="bg-logo text-center pt-5">
+    <img src="/assets/images/ahd/logo.png"/>
+  </div>
+
+  <h1 class="text-center quicksand bold" style="color: #2f2d3a">Welcome Back</h1>
+  <h6 class="text-center poppins text-black-50 mt-0">Sign In to continue</h6>
+
+  <div class="mx-4 mt-5 mx-auto text-center text-color-dark w-75">
+    <small>
+    If you have problems signing, please contact the office and give them the device id below
+    </small>
+  </div>
+
+  <div class="bg-frame rounded-pill text-center mx-4 mt-3 p-3 device-id">
+    {{ deviceId }}
+  </div>
+
+  <div class="mx-4 mt-6">
+    <button
+        (click)="login()"
+        [disabled]="isLoading"
+        tabindex="3"
+        class="bg-sign-in-button rounded-pill width-100">Sign In
+    </button>
+  </div>
+</ion-content>

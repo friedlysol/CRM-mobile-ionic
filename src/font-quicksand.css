@@ -1,0 +1,22 @@
+@font-face {
+  font-family: 'Quicksand';
+  font-style: normal;
+  font-weight: 300;
+  src: url(assets/Quicksand/Quicksand-normal-300.ttf) format('truetype'), url(assets/Quicksand/Quicksand-normal-300.woff2) format('woff2'), url(assets/Quicksand/Quicksand-normal-300.woff) format('woff');
+}
+
+@font-face {
+  font-family: 'Quicksand';
+  font-style: normal;
+  font-weight: 400;
+  src: url(assets/Quicksand/Quicksand.eot);
+  src: local('Quicksand'), url(assets/Quicksand/Quicksand.eot?#iefix) format('embedded-opentype'), url(assets/Quicksand/Quicksand.ttf) format('truetype'), url(assets/Quicksand/Quicksand.woff2) format('woff2'), url(assets/Quicksand/Quicksand.svg#Quicksand) format('svg'), url(assets/Quicksand/Quicksand.woff) format('woff');
+}
+
+@font-face {
+  font-family: 'Quicksand';
+  font-style: normal;
+  font-weight: 700;
+  src: url(assets/Quicksand/Quicksand-normal-700.ttf) format('truetype'), url(assets/Quicksand/Quicksand-normal-700.woff2) format('woff2'), url(assets/Quicksand/Quicksand-normal-700.woff) format('woff');
+}
+

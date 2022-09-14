@@ -1,3 +1,88 @@
-<p>
-  sign-in-by-phone-number works!
-</p>
+<ion-content class="bg-sign-in">
+  <div class="bg-logo text-center pt-5">
+    <img src="/assets/images/ahd/logo.png"/>
+  </div>
+
+  <ng-container *ngIf="!confirmationCode">
+    <h1 class="text-center quicksand bold text-color-dark">Welcome Back</h1>
+    <h6 class="text-center poppins text-black-50 mt-0">Sign In to continue</h6>
+
+    <div class="bg-frame rounded-pill mx-4 mt-5">
+      <label class="item">
+        <span>Select Country</span>
+        <select
+            name="countryCode"
+            class="bg-transparent border-0"
+            [(ngModel)]="credentials.countryCode"
+        >
+          <option *ngFor="let country of countries" [ngValue]="country.value">{{country.label}}</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="bg-frame rounded-pill mx-4 mt-3">
+      <label class="item">
+        <span>Phone Number</span>
+        <input
+            type="tel"
+            name="phoneNumber"
+            class="bg-transparent border-0"
+            mask="000 000 0000"
+            [(ngModel)]="credentials.phoneNumber"
+        />
+      </label>
+    </div>
+
+    <div class="mx-4 mt-5">
+      <button
+          (click)="getCode()"
+          [disabled]="isLoading || !(credentials.countryCode && credentials.phoneNumber)"
+          tabindex="3"
+          class="bg-sign-in-button rounded-pill width-100">Continue
+      </button>
+    </div>
+
+    <div class="text-center mt-1 ">
+      <small>
+        We will sed you a One Time SMS message<br/>with confirmation code
+      </small>
+    </div>
+  </ng-container>
+
+  <ng-container *ngIf="confirmationCode">
+
+    <h1 class="text-center quicksand bold text text-color-dark">Verification Code</h1>
+
+    <div class="text-center w-75 mx-auto mt-4 text-color-grayish">
+      <small>
+        Please enter the Verification Code sent to your mobile number
+      </small>
+    </div>
+
+    <div class="bg-frame rounded-pill mx-4 mt-3">
+      <input
+          type="tel"
+          name="code"
+          class="bg-transparent border-0 code-field text-center"
+          mask="0 0 0 0 0 0"
+          [(ngModel)]="code"
+          (keyup)="checkCodeLength()"
+      />
+    </div>
+
+    <div class="mx-4 mt-7">
+      <button
+          (click)="verificationCode()"
+          [disabled]="isLoading || code.length < 6"
+          class="bg-sign-in-button rounded-pill width-100">Verify
+      </button>
+    </div>
+
+    <div class="mx-4 mt-4" *ngIf="showBackButton">
+      <button
+          (click)="back()"
+          class="bg-sign-in-button rounded-pill width-100">Back
+      </button>
+    </div>
+  </ng-container>
+</ion-content>

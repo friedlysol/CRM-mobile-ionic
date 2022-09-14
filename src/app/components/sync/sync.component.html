@@ -1,0 +1,4 @@
+<div *ngIf="syncInProgress">
+  <div class="pending-bar" [style]="{width: pendingStatus + '%'}">
+  <small>Sync {{ sync.title }} - {{ sync.done }} / {{ sync.total }}</small>
+</div>

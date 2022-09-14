@@ -1,5 +1,22 @@
 <ion-app>
-  <ion-split-pane contentId="main-content">
-    <ion-router-outlet id="main-content"></ion-router-outlet>
+  <ion-split-pane contentId="mainContent">
+    <ion-menu menuId="menu" contentId="mainContent" swipeGesture="true" side="start" type="reveal">
+      <ion-content>
+        <ion-menu-toggle auto-hide="false">
+          <ng-container *ngFor="let item of menu">
+            <ion-item *ngIf="item.isActive" [routerLink]="item.url" [replaceUrl]="true" color="transparent" lines="none">
+              <ion-icon name="{{ item.icon }}" size="small"></ion-icon>
+              {{ item.label}}
+            </ion-item>
+          </ng-container>
+        </ion-menu-toggle>
+
+      </ion-content>
+      <ion-footer class="text-center">
+        {{ appName }}
+      </ion-footer>
+    </ion-menu>
+
+    <ion-router-outlet id="mainContent"></ion-router-outlet>
   </ion-split-pane>
 </ion-app>

@@ -3,11 +3,82 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
+  appUrl: 'https://ahd.friendlysol.com/',
   apiEndpoint: 'https://ahd.friendlysol.com/',
   production: false,
   tag: 'ahd',
   companyName: 'American Home Design',
   authBy: 'email', //'device-id' | 'email' | 'phone-number'
+  settings: {},
+  countryCodes: [
+    {
+      label: 'USA (+1)',
+      value: '+1'
+    },
+    {
+      label: 'Poland (+48)',
+      value: '+48'
+    }
+  ],
+  menu: [
+    {
+      key: 'work-order',
+      label: 'Open Work Orders',
+      icon: 'clipboard-outline',
+      url: ['/work-order', 'list'],
+      isActive: true
+    },
+    {
+      key: 'supplies-request',
+      label: 'Supplies Request',
+      icon: 'construct-outline',
+      url: ['/supplies-request', 'list'],
+      isActive: true
+    },
+    {
+      key: 'vehicle-inspection',
+      label: 'Vehicle Inspection',
+      icon: 'car-sport-outline',
+      url: ['/vehicle-inspection', 'list'],
+      isActive: true
+    },
+    {
+      key: 'message-center',
+      label: 'Message Center',
+      icon: 'chatbubble-outline',
+      url: ['/message-center', 'list'],
+      isActive: true
+    },
+    {
+      key: 'job-search',
+      label: 'Job Search',
+      icon: 'search-outline',
+      url: ['/job-search', 'list'],
+      isActive: false
+    },
+    {
+      key: 'settings',
+      label: 'Settings',
+      icon: 'settings-outline',
+      url: ['/settings', 'list'],
+      isActive: true
+    },
+  ],
+  workOrderTabs: [
+    {
+      key: 'open',
+      label: 'Open',
+      isActive: true
+    },
+    {
+      key: 'today',
+      label: 'Today',
+    },
+    {
+      key: 'completed',
+      label: 'Completed',
+    },
+  ]
 };
 /*
  * For easier debugging in development mode, you can import the following file

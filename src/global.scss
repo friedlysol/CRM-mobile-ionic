@@ -25,7 +25,31 @@
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
 
+@import 'font-poppins.css';
+@import 'font-quicksand.css';
+
+
+
+//#ffffff - background
+//#fcfcfb - background
+//#e8e4dc - background form/frame
+//#82817e - text / border
+//
+//#898079
+//
+//#968a80 - badge
+//#9e9186
+//#ab9e92
+//#c3a894
+//#bc997e
+//#d2a27c
+
+
+
 :root {
+  --ion-background-color: #fcfcfb;
+  --ion-background-color-rgb: 252, 252, 251;
+
   --ion-color-green: #4d7a1a;
   --ion-color-green-rgb: 77, 122, 26;
   --ion-color-green-contrast: #ffffff;
@@ -46,6 +70,8 @@
   --ion-color-grey-contrast-rgb: 255, 255, 255;
   --ion-color-grey-shade: #9f9f9f;
   --ion-color-grey-tint: #c9cbc9;
+
+  --ion-font-family: 'Poppins', sans-serif;
 }
 
 .ion-color-green {
@@ -79,49 +105,24 @@ ion-button {
   text-transform: none;
 }
 
-app-modal-preview-photo {
-  ion-content {
-    text-align: center;
-    vertical-align: middle;
-  }
+.mt-6 {
+  margin-top: 4rem !important;
 }
 
-ion-button,
-button {
-  border-radius: 0;
-  --border-radius: 0px;
+.mt-7 {
+  margin-top: 5rem !important;
+}
+
+.alert-title {
+  font-size: 18px !important;
+}
+
+.alert-message {
+  font-size: 14px !important;
 }
 
 .bold {
   font-weight: bold;
-}
-
-.photo-gallery .modal-wrapper {
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  display: block;
-}
-
-.preview-photo .modal-wrapper {
-  height: 100%;
-  width: 100%;
-  position: absolute;
-  display: block;
-  background-color: transparent;
-}
-
-.photo {
-  position: relative;
-
-  .trash {
-    position: absolute;
-    bottom: 10px;
-    right: 5px;
-    background-color: #ffffff;
-    border-radius: 50px;
-    padding: 5px;
-  }
 }
 
 .required {
@@ -131,6 +132,10 @@ button {
 .break {
   flex-basis: 100%;
   height: 0;
+}
+
+.h-33w {
+  height: 33vw;
 }
 
 .rotation {
@@ -178,11 +183,6 @@ button {
   }
 }
 
-div.photo {
-  min-height: 50px;
-  min-width: 50px;
-}
-
 .width-60 {
   --min-width: 60vw !important;
   --width: 60vw !important;
@@ -193,90 +193,55 @@ div.photo {
   --width: 80vw !important;
 }
 
-//modal-wrapper ion-overlay-wrapper sc-ion-modal-md
 
-.container-page {
-  width: 98%;
-  margin: 0 auto;
+.quicksand {
+  font-family: 'Quicksand', sans-serif;
 }
 
-thead.table-header,
-.pagination {
-  color: #fdfdfd;
-  background: #0080ff;
+*:focus {
+  outline: none;
 }
 
-.pagination {
-  padding: 10px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.bg-logo {
+  background: linear-gradient(180deg, rgba(130,129,126,1) 0%, rgba(232,228,220,1) 65%, rgba(252,252,251,1) 100%);
 }
 
-table {
-  table-layout: fixed;
-}
-
-td,
-th {
-  font-weight: normal;
-}
-
-.pages {
-  display: flex;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  align-content: flex-start;
-
-  .page-btn {
-    ion-button {
-      --background: #004487;
-      --color: #f2f2f2;
-      --padding-start: 10px;
-      --padding-end: 10px;
-      --padding-top: 5px;
-      height: auto;
-      --padding-bottom: 5px;
-      &.selected {
-        --background: #43698e;
-        --color: #ffffff;
-      }
+.bg-frame {
+  font-size: 0.9rem;
+  label {
+    span {
+      display: inline-block;
+      font-weight: 500;
+      width: 30% !important;
     }
+
+    color: #ab9e92;
+    padding-left: 5px;
   }
+
+  input {
+    color: #82817e;
+  }
+
+  background-color: #e8e4dc;
 }
 
-.login-form {
-  .bar {
-    border-bottom: 1px solid #c9c9c9;
-    padding: 10px 0;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-    .text {
-      color: #1e1e1e;
-      font-size: 30px;
-      text-align: center;
-    }
+.bg-sign-in-button {
+  &[disabled] {
+    background-color: #ab9e92 !important;
   }
-  .frame {
-    padding: 20px 10px;
-  }
-  padding-bottom: 20px;
-  background: #f7f7f7;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 9999;
-  position: fixed;
-  border-radius: 5px;
-  width: 80%;
-  max-width: 400px;
-  box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
-  ion-button {
-    --background: #0080ff;
-    --color: #ffffff;
-    --border-radius: 2px;
-  }
-  .buttons {
-    padding: 0 10px;
-  }
+
+  background-color: #898079;
+  color: #ffffff;
+  font-size: 1.1rem;
+  padding: 18px;
+  width: 100%;
+}
+
+.text-color-dark {
+  color: #2f2d3a
+}
+
+.text-color-grayish {
+  color: #898079
 }

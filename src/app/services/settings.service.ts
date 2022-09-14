@@ -10,15 +10,18 @@ import { PermissionInterface } from '@app/interfaces/permission-interface';
 import { AppVersion } from '@ionic-native/app-version/ngx';
 import { StaticService } from '@app/services/static.service';
 import { LoggerService } from '@app/services/logger.service';
-
-import * as _ from 'underscore';
 import { DatabaseService } from '@app/services/database.service';
+import { EventService } from '@app/services/event.service';
+import { environment } from '@env/environment';
 
+import * as moment from 'moment';
+import * as _ from 'underscore';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SettingsService implements SyncInterface {
+  syncTitle = 'settings';
 
   constructor(
     private appVersion: AppVersion,
@@ -33,19 +36,144 @@ export class SettingsService implements SyncInterface {
   ) {
   }
 
+  /**
+   * Sync settings with api
+   */
   async sync(): Promise<boolean> {
     const lastMigrationId = await this.migrationsDatabase.getLastMigrationId();
+
+    EventService.syncDetails.next({
+      start: moment().toISOString(),
+      title: this.syncTitle,
+      total: 4,
+      done: 0
+    });
 
     return this.settingsApi.getSettings(lastMigrationId)
       .toPromise()
       .then(async (res: SettingsApiResponseInterface) => {
-        await this.syncSettings(res);
-        await this.syncPermissions(res);
+
         await this.syncMigrations(res);
+
+        EventService.syncDetailsDone.next(true);
+
+        await this.syncSettings(res);
+
+        EventService.syncDetailsDone.next(true);
+
+        await this.syncPermissions(res);
+
+        EventService.syncDetailsDone.next(true);
+
         await this.syncTimeSheetTypes(res);
+
+        EventService.syncDetailsDone.next(true);
+
+        EventService.endSync.next(true);
 
         return true;
       });
+  }
+
+  /**
+   * Get setting
+   *
+   * @param key
+   * @param defaultValue
+   */
+  get(key, defaultValue = null) {
+    if (this.staticService.settings.hasOwnProperty(key)) {
+      return (this.staticService.settings[key]);
+    }
+
+    return defaultValue;
+  }
+
+  /**
+   * Create or update existing setting
+   *
+   * @param key
+   * @param value
+   * @param refresh
+   */
+  async set(key, value, refresh = true) {
+    const setting = this.settingsDatabase.getByKey(key);
+
+    try {
+      if (setting) {
+        await this.settingsDatabase.update(key, value);
+      } else {
+        await this.settingsDatabase.create(key, value);
+      }
+    } catch (err) {
+      this.loggerService.error('Cannot save settings', err, {name: key, value, refresh});
+    }
+
+    if (refresh) {
+      await this.refreshSettings();
+    }
+  };
+
+  /**
+   * Remove setting
+   *
+   * @param key
+   */
+  remove(key) {
+    return this.settingsDatabase.remove(key);
+  };
+
+  /**
+   * Get all settings
+   */
+  getAllSettings() {
+    return this.settingsDatabase.getAllSettings();
+  };
+
+  /**
+   * Refresh all settings in staticService
+   */
+  refreshSettings() {
+    return this.settingsDatabase.getAllSettings()
+      .then(dbSettings => {
+        const settings = environment.settings || {};
+
+        for (const key in dbSettings) {
+          if (dbSettings.hasOwnProperty(key)) {
+            let value = dbSettings[key];
+
+            try {
+              value = JSON.parse(value);
+            } catch (e) {
+
+            }
+
+            if (!_.isObject(value)) {
+              if (value === 'false') {
+                value = false;
+              } else if (value === 'true') {
+                value = true;
+              }
+            }
+
+            settings[key] = value;
+          }
+        }
+
+        this.staticService.settings = settings;
+
+        return settings;
+      });
+  };
+
+  /**
+   * Check value
+   *
+   * @param key
+   * @param defaultValue
+   */
+  check(key, defaultValue) {
+    return parseInt(this.get(key, defaultValue), 10) === 1;
   }
 
   /**
@@ -58,7 +186,12 @@ export class SettingsService implements SyncInterface {
     const settings = res?.response?.settings || {};
 
     if (!_.isEmpty(settings)) {
+
+
       const currentSettings = await this.settingsDatabase.getAllSettings();
+      console.log(moment().toISOString(), currentSettings);
+
+      const queries = [];
 
       for (const key in settings) {
         if (settings.hasOwnProperty(key)) {
@@ -76,16 +209,12 @@ export class SettingsService implements SyncInterface {
                 value = value.toString();
               }
 
-              const queries = [];
-
               try {
                 if (!currentSettings.hasOwnProperty(name)) {
                   queries.push(this.settingsDatabase.getSqlForCreate(name, value));
                 } else if (currentSettings[name] !== value) {
                   queries.push(this.settingsDatabase.getSqlForUpdate(name, value));
                 }
-
-                this.databaseService.bulkQueries(queries);
               } catch (err) {
                 this.loggerService.error('Cannot save settings', err, {name, value});
               }
@@ -93,6 +222,12 @@ export class SettingsService implements SyncInterface {
           }
         }
       }
+
+      console.log(moment().toISOString(), queries);
+
+      await this.databaseService.bulkQueries(queries);
+
+      console.log(moment().toISOString());
     }
   }
 

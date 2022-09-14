@@ -4,7 +4,7 @@ import { WorkOrderListPage } from './work-order-list/work-order-list.page';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'list',
     component: WorkOrderListPage
   }
 ];

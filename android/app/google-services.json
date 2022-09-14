@@ -1,0 +1,263 @@
+{
+  "project_info": {
+    "project_number": "868647349355",
+    "firebase_url": "https://friendlysol-c2fac.firebaseio.com",
+    "project_id": "friendlysol-c2fac",
+    "storage_bucket": "friendlysol-c2fac.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:868647349355:android:a036af9c23c0feb8d1552e",
+        "android_client_info": {
+          "package_name": "com.friendlysol.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "868647349355-nl8vjmie88birviflf8lqlrula8rqv1s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZ9XUBfnJjHJDWatdtFc2bXjNMbX_kq9A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "868647349355-nl8vjmie88birviflf8lqlrula8rqv1s.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "868647349355-1u5lgn5501vshc67c3rp2c28n5s6h0n0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.friendlysol.helloglucose"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:868647349355:android:bb3c780833954276d1552e",
+        "android_client_info": {
+          "package_name": "com.friendlysol.crm.ahd"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "868647349355-nl8vjmie88birviflf8lqlrula8rqv1s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZ9XUBfnJjHJDWatdtFc2bXjNMbX_kq9A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "868647349355-nl8vjmie88birviflf8lqlrula8rqv1s.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "868647349355-1u5lgn5501vshc67c3rp2c28n5s6h0n0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.friendlysol.helloglucose"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:868647349355:android:b647dcfb2110bd96",
+        "android_client_info": {
+          "package_name": "com.friendlysol.crm.bfc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "868647349355-nl8vjmie88birviflf8lqlrula8rqv1s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZ9XUBfnJjHJDWatdtFc2bXjNMbX_kq9A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "868647349355-nl8vjmie88birviflf8lqlrula8rqv1s.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "868647349355-1u5lgn5501vshc67c3rp2c28n5s6h0n0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.friendlysol.helloglucose"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:868647349355:android:f11e06362f3b4b1ed1552e",
+        "android_client_info": {
+          "package_name": "com.friendlysol.crm.bfcconnect"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "868647349355-nl8vjmie88birviflf8lqlrula8rqv1s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZ9XUBfnJjHJDWatdtFc2bXjNMbX_kq9A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "868647349355-nl8vjmie88birviflf8lqlrula8rqv1s.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "868647349355-1u5lgn5501vshc67c3rp2c28n5s6h0n0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.friendlysol.helloglucose"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:868647349355:android:9d0be24a68e178fc",
+        "android_client_info": {
+          "package_name": "com.friendlysol.crm.bfctest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "868647349355-nl8vjmie88birviflf8lqlrula8rqv1s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZ9XUBfnJjHJDWatdtFc2bXjNMbX_kq9A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "868647349355-nl8vjmie88birviflf8lqlrula8rqv1s.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "868647349355-1u5lgn5501vshc67c3rp2c28n5s6h0n0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.friendlysol.helloglucose"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:868647349355:android:b85cdbdb4864d202",
+        "android_client_info": {
+          "package_name": "com.friendlysol.crm.bfctestlocal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "868647349355-nl8vjmie88birviflf8lqlrula8rqv1s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZ9XUBfnJjHJDWatdtFc2bXjNMbX_kq9A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "868647349355-nl8vjmie88birviflf8lqlrula8rqv1s.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "868647349355-1u5lgn5501vshc67c3rp2c28n5s6h0n0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.friendlysol.helloglucose"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:868647349355:android:e3e8fbe8c24ec370",
+        "android_client_info": {
+          "package_name": "com.friendlysol.crm.mighty"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "868647349355-nl8vjmie88birviflf8lqlrula8rqv1s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZ9XUBfnJjHJDWatdtFc2bXjNMbX_kq9A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "868647349355-nl8vjmie88birviflf8lqlrula8rqv1s.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "868647349355-1u5lgn5501vshc67c3rp2c28n5s6h0n0.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.friendlysol.helloglucose"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

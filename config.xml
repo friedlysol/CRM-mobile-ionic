@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
-<widget id="com.friendlysol.ahdcrm" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.friendlysol.crm.ahd" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
     <name>AHD</name>
-    <description>AHD CRM</description>
+    <description>AHD Mobile</description>
     <author email="support@friendly-solutions.com" href="https://friendlysol.com/">Friendly Solutions Corp</author>
     <content src="index.html" />
     <access origin="*" />
