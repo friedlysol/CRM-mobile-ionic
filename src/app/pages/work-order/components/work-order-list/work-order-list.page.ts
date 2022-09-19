@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '@app/services/auth.service';
+import { AuthService } from '@app/pages/auth/services/auth.service';
 import { AlertController } from '@ionic/angular';
-import { WorkOrderService } from '@app/services/workorder.service';
+import { WorkOrderService } from '@app/pages/work-order/services/workorder.service';
 import { finalize } from 'rxjs/operators';
-import { SettingsService } from '@app/services/settings.service';
+import { SettingsService } from '@app/pages/settings/services/settings.service';
 import { EventService } from '@app/services/event.service';
 import { TabInterface } from '@app/interfaces/tab.interface';
 import { environment } from '@env/environment';

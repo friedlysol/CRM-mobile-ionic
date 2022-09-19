@@ -1,7 +1,7 @@
 import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import { StorageService } from '@app/services/storage.service';
-import { AuthService } from '@app/services/auth.service';
+import { AuthService } from '@app/pages/auth/services/auth.service';
 import { App } from '@capacitor/app';
 import { environment } from '@env/environment';
 import { PushNotificationService } from '@app/services/push-notifications.service';
@@ -71,9 +71,7 @@ export class AppComponent implements OnInit {
   }
 
   exit() {
-    this.platform.backButton.subscribe(() => {
-      // eslint-disable-next-line @typescript-eslint/dot-notation
-      navigator['app'].exitApp();
-    });
+    // eslint-disable-next-line @typescript-eslint/dot-notation
+    navigator['app'].exitApp();
   }
 }

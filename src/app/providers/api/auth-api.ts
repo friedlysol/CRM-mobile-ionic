@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Api } from '@app/providers';
 
-import { CredentialsInterface } from '@app/interfaces/credentials.interface';
+import { CredentialsInterface } from '@app/pages/auth/interfaces/credentials.interface';
 import { Device } from '@capacitor/device';
 import { AppVersion } from '@ionic-native/app-version/ngx';
 import { HttpClient } from '@angular/common/http';
@@ -48,8 +48,12 @@ export class AuthApi extends Api {
   async deviceTokenSync(): Promise<any> {
     const params = await this.getDeviceData();
 
-    return this.http.post(`${this.apiEndpoint}mobile/devicetoken/sync`, params)
-      .toPromise();
+    if(params.device_token) {
+      return this.http.post(`${this.apiEndpoint}mobile/devicetoken/sync`, params)
+        .toPromise();
+    } else {
+      return Promise.resolve(false);
+    }
   };
 
   async getDeviceData(): Promise<any> {

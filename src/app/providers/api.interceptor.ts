@@ -2,9 +2,10 @@ import {Injectable} from '@angular/core';
 import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse,} from '@angular/common/http';
 import {Observable, of, throwError} from 'rxjs';
 import {catchError, map} from 'rxjs/operators';
-import {environment} from '@env/environment';
-import {AuthService} from '@app/services/auth.service';
+import {AuthService} from '@app/pages/auth/services/auth.service';
 import {ActivatedRoute} from '@angular/router';
+
+import {environment} from '@env/environment';
 
 @Injectable()
 export class ApiInterceptor implements HttpInterceptor {

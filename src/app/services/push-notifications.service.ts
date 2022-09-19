@@ -1,4 +1,4 @@
-import { AuthService } from './auth.service';
+import { AuthService } from '@app/pages/auth/services/auth.service';
 import { BehaviorSubject } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable, NgZone } from '@angular/core';

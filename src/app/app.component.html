@@ -9,6 +9,16 @@
               {{ item.label}}
             </ion-item>
           </ng-container>
+
+          <ion-item (click)="logout()" lines="none">
+            <ion-icon name="log-out-outline" size="small"></ion-icon>
+            Logout
+          </ion-item>
+
+          <ion-item (click)="exit()" lines="none">
+            <ion-icon name="power-outline" size="small"></ion-icon>
+            Exit
+          </ion-item>
         </ion-menu-toggle>
 
       </ion-content>

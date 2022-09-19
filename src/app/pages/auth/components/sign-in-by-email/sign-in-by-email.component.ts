@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Device } from '@capacitor/device';
 import { AlertController, NavController } from '@ionic/angular';
-import { AuthService } from '@app/services/auth.service';
+import { AuthService } from '@app/pages/auth/services/auth.service';
 import { Router } from '@angular/router';
-import { CredentialsInterface } from '@app/interfaces/credentials.interface';
+import { CredentialsInterface } from '@app/pages/auth/interfaces/credentials.interface';
 import { StorageService } from '@app/services/storage.service';
 
 @Component({

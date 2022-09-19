@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { SyncInterface } from '@app/interfaces/sync.interface';
 import { MigrationsDatabase } from '@app/services/database/migrations.database';
-import { SettingsDatabase } from '@app/services/database/settings.database';
+import { SettingsDatabase } from '@app/pages/settings/services/settings.database';
 import { SettingsApi } from '@app/providers/api/settings-api';
 import { SettingsApiResponseInterface } from '@app/providers/api/interfaces/settings-api-response.interface';
 import { TimeSheetTypesDatabase } from '@app/services/database/time-sheet-types.database';

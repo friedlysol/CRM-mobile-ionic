@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DatabaseService } from '@app/services/database.service';
-import { AccountInterface } from '@app/interfaces/account.interface';
+import { AccountInterface } from '@app/pages/auth/interfaces/account.interface';
 
 import * as sqlBuilder from 'sql-bricks';
 
