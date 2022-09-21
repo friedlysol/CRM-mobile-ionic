@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { SyncInterface } from '@app/interfaces/sync.interface';
 import { MigrationsDatabase } from '@app/services/database/migrations.database';
-import { SettingsDatabase } from '@app/pages/settings/services/settings.database';
+import { SettingsDatabase } from '@app/services/database/settings.database';
 import { SettingsApi } from '@app/providers/api/settings-api';
-import { SettingsApiResponseInterface } from '@app/providers/api/interfaces/settings-api-response.interface';
+import { ResponseSettingsApiInterface } from '@app/providers/api/interfaces/response-settings-api.interface';
 import { TimeSheetTypesDatabase } from '@app/services/database/time-sheet-types.database';
 import { PermissionsDatabase } from '@app/services/database/permissions.database';
 import { PermissionInterface } from '@app/interfaces/permission-interface';
@@ -51,7 +51,7 @@ export class SettingsService implements SyncInterface {
 
     return this.settingsApi.getSettings(lastMigrationId)
       .toPromise()
-      .then(async (res: SettingsApiResponseInterface) => {
+      .then(async (res: ResponseSettingsApiInterface) => {
 
         await this.syncMigrations(res);
 
@@ -182,7 +182,7 @@ export class SettingsService implements SyncInterface {
    * @param res
    * @private
    */
-  private async syncSettings(res: SettingsApiResponseInterface) {
+  private async syncSettings(res: ResponseSettingsApiInterface) {
     const settings = res?.response?.settings || {};
 
     if (!_.isEmpty(settings)) {
@@ -237,7 +237,7 @@ export class SettingsService implements SyncInterface {
    * @param res
    * @private
    */
-  private async syncPermissions(res: SettingsApiResponseInterface) {
+  private async syncPermissions(res: ResponseSettingsApiInterface) {
     const permissions = res?.response?.permissions || {};
 
     await this.permissionsDatabase.deleteAll();
@@ -270,7 +270,7 @@ export class SettingsService implements SyncInterface {
    * @param res
    * @private
    */
-  private async syncMigrations(res: SettingsApiResponseInterface) {
+  private async syncMigrations(res: ResponseSettingsApiInterface) {
     const migrations = res?.response?.migrations || [];
 
     if (!_.isEmpty(migrations)) {
@@ -306,7 +306,7 @@ export class SettingsService implements SyncInterface {
    * @param res
    * @private
    */
-  private async syncTimeSheetTypes(res: SettingsApiResponseInterface) {
+  private async syncTimeSheetTypes(res: ResponseSettingsApiInterface) {
     const timeSheetTypes = res?.response?.time_sheet_types || [];
 
     await this.timeSheetTypesDatabase.deleteAll();

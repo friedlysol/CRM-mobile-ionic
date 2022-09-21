@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Api } from '@app/providers';
 import { Observable } from 'rxjs';
-import { SettingsApiResponseInterface } from '@app/providers/api/interfaces/settings-api-response.interface';
+import { ResponseSettingsApiInterface } from '@app/providers/api/interfaces/response-settings-api.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SettingsApi extends Api {
-  getSettings(migrationLastId: number | string = null): Observable<SettingsApiResponseInterface> {
-    return this.http.get<SettingsApiResponseInterface>(`${this.apiEndpoint}mobile/settings?migration_last_id=${migrationLastId}`);
+  getSettings(migrationLastId: number | string = null): Observable<ResponseSettingsApiInterface> {
+    return this.http.get<ResponseSettingsApiInterface>(`${this.apiEndpoint}mobile/settings?migration_last_id=${migrationLastId}`);
   }
 }

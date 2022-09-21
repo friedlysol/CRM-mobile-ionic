@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { MessageCenterListPage } from './components/message-center-list/message-center-list.page';
+import { MessageCenterListPage } from './message-center-list/message-center-list.page';
 
 const routes: Routes = [
   {

@@ -75,7 +75,7 @@ export class DatabaseService {
     return moment().utc().format('YYYY-MM-DD HH:mm:ss');
   }
 
-  public findOrNull(query, parameters = []) {
+  public findOrNull(query: any, parameters?: any) {
     return this.query(query, parameters)
       .then((result) => {
         if (result.rows.length) {
@@ -86,7 +86,7 @@ export class DatabaseService {
       });
   }
 
-  public findAsArray(query, parameters = []) {
+  public findAsArray(query: any, parameters?: any) {
     return this.query(query, parameters)
       .then((results) => this.getAll(results)
       );

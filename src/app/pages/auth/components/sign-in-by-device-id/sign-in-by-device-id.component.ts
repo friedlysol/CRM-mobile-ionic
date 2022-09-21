@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AlertController, NavController } from '@ionic/angular';
-import { AuthService } from '@app/pages/auth/services/auth.service';
+import { AuthService } from '@app/services/auth.service';
 import { Router } from '@angular/router';
 import { StorageService } from '@app/services/storage.service';
 import { Device } from '@capacitor/device';

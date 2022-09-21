@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Api } from '@app/providers';
 
-import { CredentialsInterface } from '@app/pages/auth/interfaces/credentials.interface';
+import { CredentialsInterface } from '@app/interfaces/credentials.interface';
 import { Device } from '@capacitor/device';
 import { AppVersion } from '@ionic-native/app-version/ngx';
 import { HttpClient } from '@angular/common/http';

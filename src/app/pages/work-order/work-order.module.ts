@@ -4,8 +4,9 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 import { WorkOrderRoutingModule } from './work-order.routing.module';
-import { WorkOrderListPage } from './components/work-order-list/work-order-list.page';
+import { WorkOrderListPage } from './work-order-list/work-order-list.page';
 import { SharedModule } from '@app/shared.module';
+import { AddressComponent } from '@app/components/address/address.component';
 
 @NgModule({
   imports: [
@@ -15,6 +16,6 @@ import { SharedModule } from '@app/shared.module';
     SharedModule,
     WorkOrderRoutingModule
   ],
-  declarations: [WorkOrderListPage],
+  declarations: [WorkOrderListPage, AddressComponent],
 })
 export class  WorkOrderModule {}

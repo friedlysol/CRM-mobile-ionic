@@ -101,6 +101,10 @@
   --ion-color-tint: var(--ion-color-grey-tint);
 }
 
+ion-card-title {
+  font-size: 1.1rem;
+}
+
 ion-button {
   text-transform: none;
 }
@@ -244,4 +248,23 @@ ion-button {
 
 .text-color-grayish {
   color: #898079
+}
+
+.search-box {
+  background-color: #e8e4dc;
+  border-bottom: 1px solid #ab9e92;
+  font-size: 0.7rem;
+
+  ion-input {
+    width: 80vw;
+  }
+
+  ion-icon {
+    font-size: 20px;
+    margin-top: 8px;
+  }
+
+  .buttons {
+    text-align: right;
+  }
 }

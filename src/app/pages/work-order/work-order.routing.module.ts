@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { WorkOrderListPage } from './components/work-order-list/work-order-list.page';
+import { WorkOrderListPage } from './work-order-list/work-order-list.page';
 
 const routes: Routes = [
   {

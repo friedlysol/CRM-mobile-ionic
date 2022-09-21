@@ -1,33 +1,35 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthService } from '@app/pages/auth/services/auth.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { AuthService } from '@app/services/auth.service';
 import { AlertController } from '@ionic/angular';
-import { WorkOrderService } from '@app/pages/work-order/services/workorder.service';
-import { finalize } from 'rxjs/operators';
-import { SettingsService } from '@app/pages/settings/services/settings.service';
+import { WorkOrderService } from '@app/services/workorder.service';
+import { SettingsService } from '@app/services/settings.service';
 import { EventService } from '@app/services/event.service';
 import { TabInterface } from '@app/interfaces/tab.interface';
-import { environment } from '@env/environment';
 import { ActivatedRoute, Router } from '@angular/router';
+import { WorkOrderInterface } from '@app/interfaces/work-order.interface';
+
+import { environment } from '@env/environment';
+import { AddressService } from '@app/services/address.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-work-order-list',
   templateUrl: './work-order-list.page.html',
   styleUrls: ['./work-order-list.page.scss'],
 })
-export class WorkOrderListPage implements OnInit {
-  listData: any = [];
-
-  params: any = {};
-
-  numberOfWorkOrders = 0;
-  pagination = {
-    page: 0,
-    last_page: 0,
-  };
-  paginationButtons = [];
+export class WorkOrderListPage implements OnInit, OnDestroy {
   isLoading = false;
 
+  params: any = {
+    query: '',
+    short: false
+  };
+
   tabs: TabInterface[] = [];
+
+  workOrders: WorkOrderInterface[];
+
+  private subscriptions = new Subscription();
 
   constructor(
     private route: ActivatedRoute,
@@ -35,12 +37,10 @@ export class WorkOrderListPage implements OnInit {
     private authService: AuthService,
     private alertCtrl: AlertController,
     private router: Router,
-    private woService: WorkOrderService,
-    private settingsService: SettingsService
+    private workOrderService: WorkOrderService,
+    public addressService: AddressService
   ) {
     this.setTabs();
-
-    console.log('tabs', this.tabs);
   }
 
   ngOnInit() {
@@ -49,14 +49,22 @@ export class WorkOrderListPage implements OnInit {
         this.params = Object.assign({}, params);
       }
 
-      if(this.params.hasOwnProperty('tab')) {
+      if (this.params.hasOwnProperty('tab')) {
         this.setActiveTab(this.params.tab, false);
       }
 
-      console.log('params', this.params, params);
-
       this.loadList();
     });
+
+    this.subscriptions.add(EventService.endSync.subscribe(status => {
+      if(status) {
+        this.loadList();
+      }
+    }));
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 
   sync() {
@@ -69,42 +77,19 @@ export class WorkOrderListPage implements OnInit {
   }
 
   loadList() {
-    this.isLoading = true;
-    this.woService
-      .getList(this.params)
-      .pipe(finalize(() => (this.isLoading = false)))
-      .subscribe(
-        (response: any) => {
-          this.listData = response.response.data;
-          this.pagination.page = response.response.current_page;
-          this.pagination.last_page = response.response.last_page;
-          this.numberOfWorkOrders = response.response.total;
-          const pag = [];
-          const trimStart = this.pagination.page - 3;
-          const trimEnd = this.pagination.last_page;
-          for (let i = trimStart; i < trimEnd; i++) {
-            if (i + 1 <= 0) {
-              continue;
-            }
-            pag.push(i + 1);
-            if (pag.length >= 5) {
-              break;
-            }
-          }
-          this.paginationButtons = pag;
-          console.log(this.paginationButtons);
-        },
-        async (error) => {
-          console.log(error);
-          const alert = await this.alertCtrl.create({
-            header: 'Error',
-            message: 'Error while loading list!',
-            buttons: ['OK']
-          });
+    const activeTab = this.getActiveTabKey();
 
-          await alert.present();
-        }
-      );
+    this.isLoading = true;
+
+    this.workOrderService
+      .getWorkOrdersByTab(activeTab, this.params.query)
+      .then((workOrders: WorkOrderInterface[]) => {
+        this.isLoading = false;
+
+        this.workOrders = workOrders;
+      });
+
+    this.workOrderService.getTotalWorkOrdersByTabs(this.tabs, this.params.query);
   }
 
   async logout() {
@@ -134,6 +119,16 @@ export class WorkOrderListPage implements OnInit {
 
   numberReturn(length) {
     return new Array(length);
+  }
+
+  getActiveTabKey() {
+    const activeTabs = this.tabs.filter(tab => tab.isActive);
+
+    if (activeTabs.length) {
+      return activeTabs[0].key;
+    }
+
+    return null;
   }
 
   setActiveTab(selectedTabKey, withUpdateParams = true) {

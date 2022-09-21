@@ -6,7 +6,7 @@ import { BehaviorSubject } from 'rxjs';
 import { CredentialsInterface } from '../interfaces/credentials.interface';
 import { HttpClient } from '@angular/common/http';
 import { AuthApi } from '@app/providers/api/auth-api';
-import { AccountsDatabase } from '@app/pages/auth/services/accounts.database';
+import { AccountsDatabase } from '@app/services/database/accounts.database';
 import { StaticService } from '@app/services/static.service';
 import { PhoneInterface } from '@app/interfaces/phone.interface';
 

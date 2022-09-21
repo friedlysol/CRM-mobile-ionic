@@ -1,0 +1,56 @@
+<ion-header>
+  <app-header [title]="'Work orders'"></app-header>
+  <div class="search-box">
+    <ion-row>
+      <ion-col>
+        <ion-input
+            [(ngModel)]="params.query"
+            [debounce]="300"
+            (ionChange)="loadList()" placeholder="Type to search">
+        </ion-input>
+      </ion-col>
+      <ion-col class="buttons">
+        <ion-icon
+            [name]="params.short ? 'document-text' : 'document-text-outline'"
+            (click)="params.short = !params.short">
+        </ion-icon>
+      </ion-col>
+    </ion-row>
+  </div>
+</ion-header>
+
+<ion-content id="main">
+  <ion-list>
+    <ion-card *ngFor="let workOrder of workOrders">
+      <ion-card-header>
+        <ion-card-title>#{{ workOrder.work_order_number }}</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-row *ngIf="!params.short">
+          <b>Status</b>: {{ workOrder.status }}
+        </ion-row>
+        <ion-row>
+          <b>Scheduled date</b>: {{ workOrder.scheduled_date || '-' }}
+        </ion-row>
+        <ion-row class="mt-2" *ngIf="!params.short">
+          <b>Client</b>: {{ workOrder.client }}
+        </ion-row>
+        <ion-row *ngIf="!params.short">
+          <app-address [address]="workOrder"></app-address>
+        </ion-row>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+</ion-content>
+
+<ion-footer>
+  <ion-row class="tab-content">
+    <ng-container *ngFor="let tab of tabs">
+      <ion-col [class]="{active: tab.isActive}" (click)="setActiveTab(tab.key)">
+        <ion-label>{{ tab.label }} ({{ tab.total }})</ion-label>
+      </ion-col>
+    </ng-container>
+  </ion-row>
+
+  <app-sync></app-sync>
+</ion-footer>
