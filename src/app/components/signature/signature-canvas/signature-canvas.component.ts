@@ -15,7 +15,7 @@ export class SignatureCanvasComponent implements AfterViewInit {
   @ViewChild('canvasElement') signaturePadElement: ElementRef<HTMLCanvasElement>;
 
   @Output() onCancel = new EventEmitter<void>();
-  @Output() onSave = new EventEmitter<void>();
+  @Output() onSave = new EventEmitter<string>();
   
   context: CanvasRenderingContext2D;
   canvas: HTMLCanvasElement;
@@ -54,7 +54,7 @@ export class SignatureCanvasComponent implements AfterViewInit {
   }
 
   onSaveClick(){
-    this.onSave.emit();
+    this.onSave.emit(this.canvas.toDataURL('image/jpeg'));
   }
 
   drawOnCanvas(current: ICoordinates){

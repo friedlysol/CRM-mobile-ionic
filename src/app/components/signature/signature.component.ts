@@ -18,6 +18,7 @@ export class SignatureComponent implements OnInit {
 
   ownerName = '';
   ownerTitle = '';
+  image: string;
 
   constructor() { }
 
@@ -41,10 +42,12 @@ export class SignatureComponent implements OnInit {
     this.canvasModal.dismiss(null, 'cancel');
   }
 
-  onSave(){
+  onSave(image: string){
+    this.image = image;
     console.log({
       ownerName: this.ownerName,
       ownerTitle: this.ownerTitle,
+      image: this.image,
     })
     this.onCanvasCancel()
     this.onFormCancel();
