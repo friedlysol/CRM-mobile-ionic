@@ -1,41 +1,42 @@
-<ion-header>
-  <ion-title>Signature</ion-title>
-</ion-header>
-
 <ion-content>
 
 <canvas
+  (touchmove)="onTouchMove($event)"
+  (touchstart)="onTouchStart($event)"
+  (touchend)="onTouchEnd()"
   #canvasElement 
   class="signature-pad">
 </canvas>
 
-<ion-row class="buttons">
-  <ion-col>
-    <ion-button 
-      expand="full"
-      color="danger"
-      (click)="onCancelClick()">
-      Cancel
-    </ion-button>
-  </ion-col>
-
-  <ion-col>
-    <ion-button 
-      expand="full"
-      color="warning"
-      (click)="onClear()">
-      Clear
-    </ion-button>
-  </ion-col>
-
-  <ion-col>
-    <ion-button 
-      expand="full"
-      color="primary"
-      (click)="onSaveClick()">
-      Save
-    </ion-button>
-  </ion-col>
-</ion-row>
+<ion-footer>
+  <ion-row class="buttons">
+    <ion-col>
+      <ion-button 
+        expand="full"
+        color="danger"
+        (click)="onCancelClick()">
+        Cancel
+      </ion-button>
+    </ion-col>
+  
+    <ion-col>
+      <ion-button 
+        expand="full"
+        color="warning"
+        (click)="onClear()">
+        Clear
+      </ion-button>
+    </ion-col>
+  
+    <ion-col>
+      <ion-button 
+        expand="full"
+        color="primary"
+        (click)="onSaveClick()">
+        Save
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</ion-footer>
 
 </ion-content>

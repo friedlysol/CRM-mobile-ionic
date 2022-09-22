@@ -1,5 +1,6 @@
 <ion-button
   *ngIf="file; else getSignatureBtn"
+  (click)="onGetSignatureClick()"
   expand="block"
   color="success">
   Signed by {{ file.description }}

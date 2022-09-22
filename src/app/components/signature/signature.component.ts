@@ -51,11 +51,7 @@ export class SignatureComponent implements OnInit {
 
   onSave(image: string){
     this.image = image;
-    console.log({
-      ownerName: this.ownerName,
-      ownerTitle: this.ownerTitle,
-      image: this.image,
-    })
+    console.log({image: this.image})
     this.onCanvasCancel()
     this.onFormCancel();
     this.saveSignature();
@@ -72,23 +68,23 @@ export class SignatureComponent implements OnInit {
   }
 
   saveSignature(){
-    const file: FileInterface = {
+    this.file = {
       object_type: this.objectType,
       object_uuid: this.objectUuid,
       object_id: this.objectId,
       type_id: this.typeId,
       description: `${this.ownerName}_${this.ownerTitle}`,
-      crc: this.image,
       sync: 0,
-      created_at: new Date().toLocaleTimeString(),
       path: '',
       type: 'signature',
     }
 
+    const time = new Date().getTime();
+
     this.fileService.saveBase64File(
       this.image,
-      `signature_${file.object_id}_${file.description}_${file.created_at}`,
-      file,
+      `signature_${this.file.object_id}_${this.file.description}_${time}.png`,
+      this.file,
     )
   }
 }

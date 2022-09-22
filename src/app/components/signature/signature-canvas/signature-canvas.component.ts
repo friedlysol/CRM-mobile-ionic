@@ -1,5 +1,4 @@
 import { AfterViewInit, Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
-import { GestureController } from '@ionic/angular';
 
 interface ICoordinates{
   x :number,
@@ -20,28 +19,63 @@ export class SignatureCanvasComponent implements AfterViewInit {
   context: CanvasRenderingContext2D;
   canvas: HTMLCanvasElement;
   prevDrawing: ICoordinates;
+  currentLines: number[]
+  drawing = false;
 
-  constructor(
-    private gestureCtrl: GestureController,
-  ) { }
+  constructor() { }
 
   ngAfterViewInit(): void {
     this.canvas = this.signaturePadElement.nativeElement;
     this.context = this.canvas.getContext('2d');
-    
-    this.canvas.width = window.innerWidth;
-    this.canvas.height = 550;
-    
-    this.gestureCtrl.create({
-      el: this.canvas,
-      gestureName: 'drawing',
-      onMove: e => {
-        const rect = this.canvas.getBoundingClientRect();
-        this.drawOnCanvas({x: e.currentX - rect.left, y: e.currentY - rect.top})
-      },
-      onEnd: () => this.prevDrawing = null,
-    }, true).enable()
 
+    const offset = window.screen.orientation.type === 'portrait-primary' ||
+        window.screen.orientation.type === 'portrait-secondary'? 130: 90;
+    this.canvas.width = window.screen.width;
+    this.canvas.height = window.screen.height - offset;
+
+    window.screen.orientation.onchange = () => {
+      const data = this.context.getImageData(0, 0, this.canvas.width, this.canvas.height);
+      const offset = window.screen.orientation.type === 'portrait-primary' ||
+        window.screen.orientation.type === 'portrait-secondary'? 130: 90;
+      this.canvas.width = window.screen.width;
+      this.canvas.height = window.screen.height - offset;
+      this.context.putImageData(data, 0, 0)
+    }
+  }
+
+  onTouchStart(e: TouchEvent){
+    this.drawing = true;
+    const canvasPosition = this.canvas.getBoundingClientRect();
+    this.prevDrawing = {
+      x: e.touches[0].pageX - canvasPosition.x,
+      y: e.touches[0].pageY - canvasPosition.y,
+    }
+  }
+  
+  onTouchEnd(){
+    this.drawing = false;
+  }
+  
+  onTouchMove(e){
+    if(!this.drawing) return;
+
+    const canvasPosition = this.canvas.getBoundingClientRect();
+    const current: ICoordinates = {
+      x: e.touches[0].pageX - canvasPosition.x,
+      y: e.touches[0].pageY - canvasPosition.y,
+    }
+
+    this.context.beginPath();
+    this.context.moveTo(this.prevDrawing.x, this.prevDrawing.y);
+    this.context.lineTo(current.x, current.y);
+    this.context.closePath()
+
+    this.context.lineWidth = 1;
+    this.context.lineCap = 'round';
+    this.context.strokeStyle = '#000';
+    this.context.stroke();
+    
+    this.prevDrawing = current;
   }
 
   onCancelClick(){
@@ -54,22 +88,7 @@ export class SignatureCanvasComponent implements AfterViewInit {
   }
 
   onSaveClick(){
-    this.onSave.emit(this.canvas.toDataURL('image/jpeg'));
-  }
-
-  drawOnCanvas(current: ICoordinates){
-    if(!this.context) return;
-
-    this.context.beginPath();
-    if(this.prevDrawing){
-      this.context.moveTo(this.prevDrawing.x, this.prevDrawing.y);
-      this.context.lineTo(current.x, current.y);
-      this.context.lineWidth = 1;
-      this.context.lineCap = 'round';
-      this.context.strokeStyle = '#000';
-      this.context.stroke();
-    }
-    this.prevDrawing = current;
+    this.onSave.emit(this.canvas.toDataURL());
   }
 
 }
