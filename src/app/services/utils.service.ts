@@ -20,4 +20,10 @@ export class UtilsService {
 
     return hashMap;
   }
+
+  getCurrentCoords() {
+    //ToDo: get coords from gps
+
+    return '';
+  }
 }
