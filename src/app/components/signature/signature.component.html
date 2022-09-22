@@ -1,0 +1,24 @@
+<ion-button
+  (click)="onClick()"
+  expand="block"
+  color="danger">
+  {{ label? label: 'Get a signature'}}
+</ion-button>
+
+<ion-modal #formModal>
+  <ng-template>
+    <signature-form 
+      (onCancel)="onFormCancel()"
+      (onNext)="onFormNext($event)">
+    </signature-form>
+  </ng-template>
+</ion-modal>
+
+<ion-modal #canvasModal>
+  <ng-template>
+    <signature-canvas
+    (onCancel)="onCanvasCancel()"
+    (onSave)="onSave()">
+    </signature-canvas>
+  </ng-template>
+</ion-modal>
