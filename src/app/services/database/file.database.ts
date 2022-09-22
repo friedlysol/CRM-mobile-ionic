@@ -46,14 +46,18 @@ export class FileDatabase {
    * @param objectUuid
    * @param typeId
    */
-  getByObjectAndType(objectType: string, objectUuid: string, typeId: number): Promise<FileInterface[]> {
-    const query = sqlBuilder
+  getByObjectAndType(objectType: string, objectUuid: string, typeId: number, linkPersonWoId: number = null): Promise<FileInterface[]> {
+    let query = sqlBuilder
       .select('files.*')
       .from('files')
       .where('object_type', objectType)
       .where('object_uuid', objectUuid)
       .where('type_id', typeId)
       .where('is_deleted', '0');
+
+    if(linkPersonWoId !== null) {
+      query = query.where('link_person_wo_id', linkPersonWoId);
+    }
 
     return this.databaseService
       .findAsArray(query.toString(), query.toParams());

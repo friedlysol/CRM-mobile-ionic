@@ -13,8 +13,13 @@ export class FileService {
 
   }
 
-  async getLastByObjectAndType(objectType: string, objectUuid: string, typeId: number): Promise<FileInterface | null> {
-    const files = await this.fileDatabase.getByObjectAndType(objectType, objectUuid, typeId);
+  async getLastByObjectAndType(
+    objectType: string,
+    objectUuid: string,
+    typeId: number,
+    linkPersonWoId: number = null
+  ): Promise<FileInterface | null> {
+    const files = await this.fileDatabase.getByObjectAndType(objectType, objectUuid, typeId, linkPersonWoId);
 
     if (files.length) {
       return files.pop();
@@ -22,6 +27,23 @@ export class FileService {
 
     return null;
   }
+
+  async getTotalByObjectAndType(
+    objectType: string,
+    objectUuid: string,
+    typeId: number,
+    linkPersonWoId: number = null
+  ): Promise<number> {
+    const files = await this.fileDatabase.getByObjectAndType(objectType, objectUuid, typeId, linkPersonWoId);
+
+    return files.length;
+  }
+
+  async saveFile(filePath: string, file: FileInterface): Promise<FileInterface> {
+    file.path = filePath;
+
+    return this.fileDatabase.create(file);
+  };
 
   async saveBase64File(fileBase64: string, fileName: string, file: FileInterface): Promise<FileInterface> {
     const writeFile = await Filesystem.writeFile({
