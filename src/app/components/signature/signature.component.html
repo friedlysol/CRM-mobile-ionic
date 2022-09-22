@@ -1,9 +1,18 @@
 <ion-button
-  (click)="onClick()"
+  *ngIf="file; else getSignatureBtn"
   expand="block"
-  color="danger">
-  {{ label? label: 'Get a signature'}}
+  color="success">
+  Signed by {{ file.description }}
 </ion-button>
+
+<ng-template #getSignatureBtn>
+  <ion-button
+    (click)="onGetSignatureClick()"
+    expand="block"
+    color="danger">
+    {{ label? label: 'Get a signature'}}
+  </ion-button>
+</ng-template>
 
 <ion-modal #formModal>
   <ng-template>
