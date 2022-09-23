@@ -9,12 +9,12 @@ import { MediaOptionsInterface } from '@app/interfaces/media-options.interface';
 export class MessageCenterListPage implements OnInit {
   buttonLabel: MediaOptionsInterface = {
     buttonLabel: 'Add photos',
-    onlyNewPhoto: true,
     requiredOnce: true,
     greyscale: true,
     callbackBeforeSave: () => new Promise((resolve, reject) => {
       resolve('t')
-    })
+    }),
+    thumbnail: false,
   }
   constructor() { }
 

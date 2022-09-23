@@ -17,22 +17,28 @@ export class CaptureMediaComponent implements OnInit {
   @Input() typeId: number;
   @Input() type: 'photo' | 'video';
   @Input() linkPersonWoId?: number;
-  @Input() mediaOptions: MediaOptionsInterface = {
-    buttonLabel: 'Media',
-    required: false,
-    requiredOnce: false,
-    minQuantity: 0,
-    onlyNewPhoto: true,
-    height: null,
-    width: null,
-    quality: 100,
-    greyscale: false,
-    requiredDescription: false,
-    minLengthDescription: 0,
-    allowCropPhoto: false,
-    callbackBeforeSave: null,
-    class: null,
+  @Input() 
+  get mediaOptions(): MediaOptionsInterface { return this._mediaOptions};
+  set mediaOptions(options: MediaOptionsInterface){
+    this._mediaOptions = {
+      buttonLabel: options.buttonLabel != null? options.buttonLabel: 'Media',
+      required: options.required != null? options.required: false,
+      requiredOnce: options.required != null? options.required: false,
+      minQuantity: options.minQuantity != null? options.minQuantity: 0,
+      onlyNewPhoto: options.onlyNewPhoto != null? options.onlyNewPhoto: true,
+      height: options.height != null? options.height: null,
+      width: options.width != null? options.width: null,
+      quality: options.quality != null? options.quality: 100,
+      greyscale: options.greyscale != null? options.greyscale: false,
+      requiredDescription: options.requiredDescription != null? options.requiredDescription: false,
+      minLengthDescription: options.minLengthDescription != null? options.minLengthDescription: 0,
+      allowCropPhoto: options.allowCropPhoto != null? options.allowCropPhoto: false,
+      callbackBeforeSave: options.callbackBeforeSave != null? options.callbackBeforeSave: null,
+      thumbnail: options.thumbnail != null? options.thumbnail: true,
+      class: options.class != null? options.class: null,
+    }
   };
+  private _mediaOptions: MediaOptionsInterface;
 
   quantity = 0;
   description: string;
@@ -116,7 +122,10 @@ export class CaptureMediaComponent implements OnInit {
     if(this.mediaOptions.greyscale){
       source = await this.fileService.convertToGrayScale(source);
     }
-
+    if(this.mediaOptions.thumbnail){
+      source = await this.fileService.generateThumnail(source);
+    }
+    console.log(source);
     try{
       if(this.mediaOptions.callbackBeforeSave){
         const res = await this.mediaOptions.callbackBeforeSave();

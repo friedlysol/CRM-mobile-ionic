@@ -64,7 +64,7 @@ export class FileService {
       image.onload = () => {
         const canvas = this.createCanvas(image.width, image.height)
         const ctx = canvas.getContext('2d');
-        ctx.drawImage(image, 0, 0, image.width, image.height);
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
         let imgPixels = ctx.getImageData(0, 0, image.width, image.height);
         for(let y = 0; y < imgPixels.height; y++){
           for(let x = 0; x < imgPixels.width; x++){
@@ -78,13 +78,22 @@ export class FileService {
         }
         
         ctx.putImageData(imgPixels, 0, 0, 0, 0, imgPixels.width, imgPixels.height);
-        resolve(canvas.toDataURL());
+        resolve(canvas.toDataURL('image/jpeg'));
       }
     })
   }
 
-  generateThumnail(){
-
+  generateThumnail(source: string, width: number = 300, height: number = 300): Promise<string>{
+    const image = new Image();
+    image.src = source;
+    return new Promise((resolve) => {
+      image.onload = () => {
+        const canvas = this.createCanvas(width, height)
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+        resolve(canvas.toDataURL('image/jpeg'));
+      }
+    })
   }
 
   private createCanvas(width: number, height: number){

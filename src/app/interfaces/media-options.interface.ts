@@ -11,6 +11,7 @@ export interface MediaOptionsInterface {
     requiredDescription?: boolean,
     minLengthDescription?: number,
     allowCropPhoto?: boolean,
+    thumbnail?: boolean,
     callbackBeforeSave?: () => Promise<any>,
     class?: string,
 }
