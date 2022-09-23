@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 
 interface ICoordinates{
   x :number,
@@ -10,7 +10,7 @@ interface ICoordinates{
   templateUrl: './signature-canvas.component.html',
   styleUrls: ['./signature-canvas.component.scss'],
 })
-export class SignatureCanvasComponent implements AfterViewInit {
+export class SignatureCanvasComponent implements AfterViewInit, OnInit, OnDestroy {
   @ViewChild('canvasElement') signaturePadElement: ElementRef<HTMLCanvasElement>;
 
   @Output() onCancel = new EventEmitter<void>();
@@ -24,24 +24,27 @@ export class SignatureCanvasComponent implements AfterViewInit {
 
   constructor() { }
 
+  ngOnInit(): void {
+    window.screen.orientation.lock('landscape');
+  }
+
   ngAfterViewInit(): void {
     this.canvas = this.signaturePadElement.nativeElement;
     this.context = this.canvas.getContext('2d');
-
-    const offset = window.screen.orientation.type === 'portrait-primary' ||
-        window.screen.orientation.type === 'portrait-secondary'? 130: 90;
-    this.canvas.width = window.screen.width;
-    this.canvas.height = window.screen.height - offset;
-
-    window.screen.orientation.onchange = () => {
-      const data = this.context.getImageData(0, 0, this.canvas.width, this.canvas.height);
-      const offset = window.screen.orientation.type === 'portrait-primary' ||
-        window.screen.orientation.type === 'portrait-secondary'? 130: 90;
+    if(window.screen.orientation.type == 'portrait-primary' ||
+      window.screen.orientation.type == 'portrait-secondary'){
+      this.canvas.height = window.screen.width - 90;
+      this.canvas.width = window.screen.height;
+    }else{
+      this.canvas.height = window.screen.height - 90;
       this.canvas.width = window.screen.width;
-      this.canvas.height = window.screen.height - offset;
-      this.context.putImageData(data, 0, 0)
     }
   }
+
+  ngOnDestroy(): void {
+    window.screen.orientation.unlock();
+  }
+
 
   onTouchStart(e: TouchEvent){
     this.drawing = true;
@@ -80,6 +83,7 @@ export class SignatureCanvasComponent implements AfterViewInit {
 
   onCancelClick(){
     this.onCancel.emit();
+    window.screen.orientation.unlock();
   }
 
   onClear(){
@@ -89,6 +93,7 @@ export class SignatureCanvasComponent implements AfterViewInit {
 
   onSaveClick(){
     this.onSave.emit(this.canvas.toDataURL());
+    window.screen.orientation.unlock();
   }
 
 }

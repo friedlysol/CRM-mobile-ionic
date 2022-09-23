@@ -61,6 +61,7 @@
     "cordova-plugin-app-version": "^0.1.14",
     "cordova-plugin-document-viewer": "^1.0.0",
     "cordova-plugin-file": "^7.0.0",
+    "cordova-plugin-screen-orientation": "^3.0.2",
     "cordova-plugin-sms-retriever-manager": "^1.0.3",
     "cordova-plugin-x-toast": "^2.7.3",
     "cordova-sqlite-storage": "^6.0.0",
