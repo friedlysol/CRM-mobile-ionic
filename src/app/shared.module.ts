@@ -7,6 +7,7 @@ import { IonicModule } from '@ionic/angular';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SignatureFormComponent } from '@app/components/signature/signature-form/signature-form.component';
 import { SignatureCanvasComponent } from '@app/components/signature/signature-canvas/signature-canvas.component';
+import { CaptureMediaComponent } from './components/capture-media/capture-media.component';
 
 @NgModule({
   declarations: [
@@ -15,6 +16,7 @@ import { SignatureCanvasComponent } from '@app/components/signature/signature-ca
     SignatureComponent,
     SignatureFormComponent,
     SignatureCanvasComponent,
+    CaptureMediaComponent,
   ],
   imports: [
     CommonModule,
@@ -25,9 +27,10 @@ import { SignatureCanvasComponent } from '@app/components/signature/signature-ca
     HeaderComponent,
     SyncComponent,
     SignatureComponent,
+    CaptureMediaComponent,
   ],
   providers: [
-    ScreenOrientation
+    
   ]
 })
 export class SharedModule { }
