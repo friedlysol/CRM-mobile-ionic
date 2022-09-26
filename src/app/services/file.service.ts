@@ -76,11 +76,29 @@ export class FileService {
     return writeFile.uri;
   }
 
-  async deleteFile(file: FileInterface){
-    return this.fileDatabase.delete(file.uuid);
+  async removeFile(file: FileInterface) {
+    if (file.sync === 1) {
+      if (file.path.search(/file:/) === 0) {
+        try {
+          await Filesystem.deleteFile({path: file.path});
+        } catch (err) {
+        }
+
+        if (file.thumbnail) {
+          try {
+            await Filesystem.deleteFile({path: file.thumbnail});
+          } catch (err) {
+          }
+        }
+      }
+
+      return this.fileDatabase.remove(file.uuid);
+    }
+
+    return Promise.resolve(false);
   }
 
-  convertToGrayScale(source: string): Promise<string>{
+  convertToGrayScale(source: string): Promise<string> {
     const image = new Image();
     image.src = source;
     return new Promise((resolve) => {

@@ -5,6 +5,7 @@ import { UtilsService } from '@app/services/utils.service';
 
 import * as sqlBuilder from 'sql-bricks';
 import * as _ from 'underscore';
+import { PrevNextInterface } from '@app/interfaces/prev-next.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +24,9 @@ export class FileDatabase {
     'path',
     'thumbnail',
     'type',
-    'type_id'
+    'type_id',
+    'sync',
+    'sync_bg_status'
   ];
 
   constructor(private databaseService: DatabaseService, private utilsService: UtilsService) {
@@ -64,7 +67,7 @@ export class FileDatabase {
   }
 
   /**
-   * Create setting in db
+   * Create file in db
    *
    * @param file
    */
@@ -77,6 +80,22 @@ export class FileDatabase {
         created_at: this.databaseService.getTimeStamp(),
         updated_at: null,
         sync: 0
+      }, _.pick(file, this.allowFields))
+    );
+
+    return this.databaseService.query(query.toString(), query.toParams())
+      .then(() => this.getByUuid(uuid));
+  }
+
+  /**
+   * Update file in db
+   *
+   * @param file
+   * @param uuid
+   */
+  async update(file: FileInterface, uuid: string): Promise<FileInterface> {
+    const query = sqlBuilder.update('files', Object.assign({
+        updated_at: this.databaseService.getTimeStamp()
       }, _.pick(file, this.allowFields))
     );
 
@@ -102,9 +121,60 @@ export class FileDatabase {
    *
    * @param fileUuid
    */
-  delete(fileUuid) {
+  delete(fileUuid: string) {
     return this.databaseService
-      .query(`update files set is_deleted = 1 where id = ?`, [fileUuid]);
+      .query(`update files set is_deleted = 0 where uuid = ?`, [fileUuid]);
+  }
+
+  /**
+   * Remove file form database
+   *
+   * @param fileUuid
+   */
+  remove(fileUuid: string) {
+    return this.databaseService
+      .query(`delete from files where uuid = ?`, [fileUuid]);
+  }
+
+  async getUnSyncFiles() {
+    return this.databaseService.findAsArray(`
+      select * from files where sync = 0 and objectId is not null and url not like 'http%'
+    `);
+  }
+
+  /**
+   * Get prev and next uuid of files
+   *
+   * @param uuid
+   */
+  getPrevNextByUuid(uuid): Promise<PrevNextInterface | null> {
+    return this.databaseService.findOrNull(`
+        select
+          (
+            select uuid 
+            from files 
+            where 
+              files.object_type = current.object_type and 
+              files.object_uuid = current.object_uuid and 
+              files.created_at < current.created_at 
+            order by files.created_at desc 
+            limit 1
+          ) as prev,
+          (
+            select uuid 
+            from files 
+            where 
+              files.object_type = current.object_type and 
+              files.object_uuid = current.object_uuid and 
+              files.created_at > current.created_at 
+            order by files.created_at asc 
+            limit 1
+          ) as next           
+        from files as current
+        where current.uuid = ?
+      `, [
+      uuid
+    ]);
   }
 
   // /**
@@ -143,5 +213,6 @@ export class FileDatabase {
   //
   //   };
   // }
+
 
 }
