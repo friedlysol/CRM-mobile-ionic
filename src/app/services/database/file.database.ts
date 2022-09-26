@@ -55,7 +55,7 @@ export class FileDatabase {
       .where('type_id', typeId)
       .where('is_deleted', '0');
 
-    if(linkPersonWoId !== null) {
+    if (linkPersonWoId !== null) {
       query = query.where('link_person_wo_id', linkPersonWoId);
     }
 
@@ -82,6 +82,19 @@ export class FileDatabase {
 
     return this.databaseService.query(query.toString(), query.toParams())
       .then(() => this.getByUuid(uuid));
+  }
+
+  /**
+   * Update thumbnail path
+   *
+   * @param file
+   */
+  updateThumbnail(file: FileInterface) {
+    const query = sqlBuilder.update('files')
+      .set('thumbnail', file.thumbnail)
+      .where('uuid', file.uuid);
+
+    return this.databaseService.query(query.toString(), query.toParams());
   }
 
   /**
@@ -130,4 +143,5 @@ export class FileDatabase {
   //
   //   };
   // }
+
 }

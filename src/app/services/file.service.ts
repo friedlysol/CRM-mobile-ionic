@@ -46,58 +46,68 @@ export class FileService {
   };
 
   async saveBase64File(fileBase64: string, fileName: string, file: FileInterface): Promise<FileInterface> {
+    file.path = await this.createFileAndGetUrl(fileBase64, fileName);
+
+    return this.fileDatabase.create(file);
+  };
+
+  async saveBase64Thumbnail(fileBase64: string, file: FileInterface) {
+    file.thumbnail = await this.createFileAndGetUrl(fileBase64, file.uuid + '_thumbnail.jpg');
+
+    return this.fileDatabase.updateThumbnail(file);
+  }
+
+  async createFileAndGetUrl(fileBase64: string, fileName: string): Promise<string> {
     const writeFile = await Filesystem.writeFile({
       path: fileName,
       data: fileBase64,
       directory: Directory.Data,
     });
 
-    file.path = writeFile.uri;
+    return writeFile.uri;
+  }
 
-    return this.fileDatabase.create(file);
-  };
-
-  convertToGrayScale(source: string): Promise<string>{
+  convertToGrayScale(source: string): Promise<string> {
     const image = new Image();
     image.src = source;
     return new Promise((resolve) => {
       image.onload = () => {
-        const canvas = this.createCanvas(image.width, image.height)
+        const canvas = this.createCanvas(image.width, image.height);
         const ctx = canvas.getContext('2d');
         ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
-        let imgPixels = ctx.getImageData(0, 0, image.width, image.height);
-        for(let y = 0; y < imgPixels.height; y++){
-          for(let x = 0; x < imgPixels.width; x++){
-            let i = (y * 4) * imgPixels.width + x * 4;
-            let avg = (imgPixels.data[i] + imgPixels.data[i + 1] + imgPixels.data[i + 2]) / 3;
-            
+        const imgPixels = ctx.getImageData(0, 0, image.width, image.height);
+        for (let y = 0; y < imgPixels.height; y++) {
+          for (let x = 0; x < imgPixels.width; x++) {
+            const i = (y * 4) * imgPixels.width + x * 4;
+            const avg = (imgPixels.data[i] + imgPixels.data[i + 1] + imgPixels.data[i + 2]) / 3;
+
             imgPixels.data[i] = avg;
             imgPixels.data[i + 1] = avg;
             imgPixels.data[i + 2] = avg;
           }
         }
-        
+
         ctx.putImageData(imgPixels, 0, 0, 0, 0, imgPixels.width, imgPixels.height);
         resolve(canvas.toDataURL('image/jpeg'));
-      }
-    })
+      };
+    });
   }
 
-  generateThumnail(source: string, width: number = 300, height: number = 300): Promise<string>{
+  generateThumnail(source: string, width: number = 300, height: number = 300): Promise<string> {
     const image = new Image();
     image.src = source;
     return new Promise((resolve) => {
       image.onload = () => {
-        const canvas = this.createCanvas(width, height)
+        const canvas = this.createCanvas(width, height);
         const ctx = canvas.getContext('2d');
         ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
         resolve(canvas.toDataURL('image/jpeg'));
-      }
-    })
+      };
+    });
   }
 
-  private createCanvas(width: number, height: number){
-    const canvas = <HTMLCanvasElement>document.createElement("canvas");
+  private createCanvas(width: number, height: number) {
+    const canvas = <HTMLCanvasElement>document.createElement('canvas');
     canvas.width = width;
     canvas.height = height;
     return canvas;
