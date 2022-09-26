@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FileInterface } from '@app/interfaces/file.interface';
 import { MediaOptionsInterface } from '@app/interfaces/media-options.interface';
+import { DatabaseService } from '@app/services/database.service';
 import { FileService } from '@app/services/file.service';
 import { Camera, CameraResultType, CameraSource, Photo } from '@capacitor/camera';
 import { AlertController, ToastController } from '@ionic/angular';
@@ -44,8 +45,9 @@ export class CaptureMediaComponent implements OnInit {
   description: string;
 
   constructor(
-    private fileService: FileService,
     private alertController: AlertController,
+    private databaseService: DatabaseService,
+    private fileService: FileService,
     private toastController: ToastController,
   ) { }
 
@@ -109,6 +111,7 @@ export class CaptureMediaComponent implements OnInit {
 
   async savePhoto(photo: Photo){
     const file: FileInterface = {
+      uuid: this.databaseService.getUuid(),
       object_type: this.objectType,
       object_uuid: this.objectUuid,
       object_id: this.objectId,
@@ -123,7 +126,11 @@ export class CaptureMediaComponent implements OnInit {
       source = await this.fileService.convertToGrayScale(source);
     }
     if(this.mediaOptions.thumbnail){
-      source = await this.fileService.generateThumnail(source);
+      const thumbnailBase64 = await this.fileService.generateThumnail(source);
+      file.thumbnail = await this.fileService.createFileAndGetUrl(
+        thumbnailBase64,
+        `${file.uuid}_thumbnail.jpg`
+      );
     }
     console.log(source);
     try{
