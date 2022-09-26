@@ -14,6 +14,7 @@ export interface FileInterface {
   object_uuid: string;
   path?: string;
   sync?: number;
+  sync_bg_status?: string;
   thumbnail?: string;
   type: string;
   type_id: number;

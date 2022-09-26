@@ -16,8 +16,9 @@ CREATE TABLE `files`
     `is_downloaded`     INTEGER DEFAULT 0,
     `download_attempts` INTEGER DEFAULT 0,
     `is_deleted`        INTEGER DEFAULT 0,
-    `hash`              TEXT DEFAULT NULL,
+    `hash`              TEXT    DEFAULT NULL,
     `sync`              INTEGER DEFAULT 0,
+    `sync_bg_status`    TEXT    DEFAULT NULL,
     `created_at`        TEXT,
     `updated_at`        TEXT,
     PRIMARY KEY (uuid)

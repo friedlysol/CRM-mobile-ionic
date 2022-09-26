@@ -2,15 +2,66 @@ import { Injectable } from '@angular/core';
 import { FileDatabase } from '@app/services/database/file.database';
 import { Directory, Filesystem } from '@capacitor/filesystem';
 import { FileInterface } from '@app/interfaces/file.interface';
+import { PrevNextInterface } from '@app/interfaces/prev-next.interface';
+
+declare let FileTransferManager: any;
 
 @Injectable({
   providedIn: 'root'
 })
 export class FileService {
-  constructor(
-    private fileDatabase: FileDatabase,
-  ) {
+  private uploader: any;
 
+  constructor(private fileDatabase: FileDatabase) {
+
+  }
+
+  backgroundUploadInit(): void {
+    console.log('Background uploader init');
+
+    this.uploader = FileTransferManager.init({
+      parallelUploadsLimit: 2,
+      notificationTitle: 'Upload service',
+      notificationContent: 'Background upload service running'
+    }, async event => {
+      console.log('uploader - FileTransferManager EVENT', event);
+
+      const file: FileInterface = await this.fileDatabase.getByUuid(event.id);
+      if (!file) {
+        return;
+      }
+
+      file.sync_bg_status = event.state;
+
+      if (event.state === 'UPLOADED') {
+        try {
+          const response = JSON.parse(event.serverResponse);
+
+          console.log('uploader response: ', response);
+
+          if (response.data) {
+            file.id = response.data.object_id;
+            file.sync = 1;
+          }
+        } catch (err) {
+          console.error('uploader - serverResponse', err);
+        }
+      }
+
+      await this.fileDatabase.update(file, file.uuid);
+
+      if (event.eventId) {
+        this.uploader.acknowledgeEvent(event.eventId);
+      }
+    });
+  }
+
+  cancelUpload(file: FileInterface): void {
+    this.uploader.removeUpload(file.uuid, res => {
+      file.sync_bg_status = null;
+
+      return this.fileDatabase.update(file, file.uuid);
+    }, err => console.log('Error removing upload'));
   }
 
   async getLastByObjectAndType(
@@ -39,6 +90,19 @@ export class FileService {
     return files.length;
   }
 
+  async getPrevNextByUuid(uuid): Promise<PrevNextInterface> {
+    const prevNext = await this.fileDatabase.getPrevNextByUuid(uuid);
+
+    if (prevNext) {
+      return prevNext;
+    }
+
+    return {
+      prev: null,
+      next: null
+    };
+  }
+
   async saveFile(filePath: string, file: FileInterface): Promise<FileInterface> {
     file.path = filePath;
 
@@ -65,6 +129,28 @@ export class FileService {
     });
 
     return writeFile.uri;
+  }
+
+  async removeFile(file: FileInterface) {
+    if (file.sync === 1) {
+      if (file.path.search(/file:/) === 0) {
+        try {
+          await Filesystem.deleteFile({path: file.path});
+        } catch (err) {
+        }
+
+        if (file.thumbnail) {
+          try {
+            await Filesystem.deleteFile({path: file.thumbnail});
+          } catch (err) {
+          }
+        }
+      }
+
+      return this.fileDatabase.remove(file.uuid);
+    }
+
+    return Promise.resolve(false);
   }
 
   convertToGrayScale(source: string): Promise<string> {
