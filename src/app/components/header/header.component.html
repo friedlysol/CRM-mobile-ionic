@@ -9,7 +9,11 @@
 
   <ion-title>{{ title }}</ion-title>
 
+  
   <ion-buttons slot="end">
+
+    <ng-content select="[icons]"></ng-content>
+
     <ion-button>
       <ion-icon name="notifications-outline"></ion-icon>
     </ion-button>

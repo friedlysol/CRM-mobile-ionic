@@ -1,0 +1,19 @@
+<ion-header>
+  <p class="ion-text-center">
+    {{index}}/{{filesLength}}
+  </p>
+</ion-header>
+
+<ion-content>
+  <ion-img
+    class="fullheight"
+    appSideSwipe
+    (swipeLeft)="loadNext()" 
+    (swipeRight)="loadPrev()"
+    [src]="getFilePath()"></ion-img>
+</ion-content>
+
+<ion-footer>
+  <p class="ion-text-center">{{file.description}}</p>
+  <p class="ion-text-center">{{file.created_at}}</p>
+</ion-footer>

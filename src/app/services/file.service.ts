@@ -24,8 +24,17 @@ export class FileService {
     if (files.length) {
       return files.pop();
     }
-
     return null;
+  }
+
+  async getAllByObjectAndType(
+    objectType: string,
+    objectUuid: string,
+    typeId: number,
+    linkPersonWoId: number = null
+  ): Promise<FileInterface[]> {
+    const files = await this.fileDatabase.getByObjectAndType(objectType, objectUuid, typeId, linkPersonWoId);
+    return files;
   }
 
   async getTotalByObjectAndType(
@@ -67,7 +76,11 @@ export class FileService {
     return writeFile.uri;
   }
 
-  convertToGrayScale(source: string): Promise<string> {
+  async deleteFile(file: FileInterface){
+    return this.fileDatabase.delete(file.uuid);
+  }
+
+  convertToGrayScale(source: string): Promise<string>{
     const image = new Image();
     image.src = source;
     return new Promise((resolve) => {
@@ -106,8 +119,8 @@ export class FileService {
     });
   }
 
-  private createCanvas(width: number, height: number) {
-    const canvas = <HTMLCanvasElement>document.createElement('canvas');
+  private createCanvas(width: number, height: number){
+    const canvas = document.createElement('canvas') as HTMLCanvasElement;
     canvas.width = width;
     canvas.height = height;
     return canvas;

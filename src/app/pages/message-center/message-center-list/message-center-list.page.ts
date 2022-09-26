@@ -12,10 +12,9 @@ export class MessageCenterListPage implements OnInit {
     requiredOnce: true,
     greyscale: true,
     callbackBeforeSave: () => new Promise((resolve, reject) => {
-      resolve('t')
+      resolve('t');
     }),
-    thumbnail: false,
-  }
+  };
   constructor() { }
 
   ngOnInit() {

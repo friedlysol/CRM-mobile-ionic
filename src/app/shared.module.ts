@@ -8,6 +8,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SignatureFormComponent } from '@app/components/signature/signature-form/signature-form.component';
 import { SignatureCanvasComponent } from '@app/components/signature/signature-canvas/signature-canvas.component';
 import { CaptureMediaComponent } from './components/capture-media/capture-media.component';
+import { SideSwipeDirective } from './directives/side-swipe.directive';
 
 @NgModule({
   declarations: [
@@ -17,6 +18,7 @@ import { CaptureMediaComponent } from './components/capture-media/capture-media.
     SignatureFormComponent,
     SignatureCanvasComponent,
     CaptureMediaComponent,
+    SideSwipeDirective,
   ],
   imports: [
     CommonModule,
@@ -30,7 +32,6 @@ import { CaptureMediaComponent } from './components/capture-media/capture-media.
     CaptureMediaComponent,
   ],
   providers: [
-    
   ]
 })
 export class SharedModule { }

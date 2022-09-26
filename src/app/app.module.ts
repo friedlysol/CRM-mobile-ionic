@@ -2,11 +2,11 @@ import * as CordovaSQLiteDriver from 'localforage-cordovasqlitedriver';
 
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
 import { ApiInterceptor } from '@app/providers/api.interceptor';
-import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { APP_INITIALIZER, Injectable, NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppVersion } from '@ionic-native/app-version/ngx';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, HammerGestureConfig, HammerModule, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { Camera } from '@ionic-native/camera/ngx';
 import { CameraPreview } from '@awesome-cordova-plugins/camera-preview/ngx';
 import { Device } from '@ionic-native/device/ngx';
@@ -28,8 +28,6 @@ import { Toast } from '@ionic-native/toast/ngx';
 import { DatabaseService } from '@app/services/database.service';
 import { IConfig, NgxMaskModule } from 'ngx-mask';
 import { SmsRetriever } from '@ionic-native/sms-retriever/ngx';
-import { SyncComponent } from '@app/components/sync/sync.component';
-import { HeaderComponent } from '@app/components/header/header.component';
 import { SharedModule } from '@app/shared.module';
 
 export const appInitFactory = (databaseService: DatabaseService, platform: Platform, staticService: StaticService) => async () => {
@@ -38,6 +36,13 @@ export const appInitFactory = (databaseService: DatabaseService, platform: Platf
     await staticService.init();
   });
 };
+
+@Injectable()
+export class MyHammerConfig extends HammerGestureConfig {
+  overrides = {
+    swipe: {direction: Hammer.DIRECTION_HORIZONTAL},
+  };
+}
 
 const maskConfig: Partial<IConfig> = {
   validation: false,
@@ -64,7 +69,8 @@ const maskConfig: Partial<IConfig> = {
     AppRoutingModule,
     OrderModule,
     SharedModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HammerModule,
   ],
   providers: [
     {
@@ -82,6 +88,10 @@ const maskConfig: Partial<IConfig> = {
       deps: [DatabaseService, Platform, StaticService],
       multi: true
     },
+    {
+      provide: HAMMER_GESTURE_CONFIG,
+      useClass: MyHammerConfig,
+    },
     AndroidPermissions,
     AppVersion,
     Camera,
@@ -96,7 +106,7 @@ const maskConfig: Partial<IConfig> = {
     StaticService,
     StatusBar,
     Toast,
-    SmsRetriever
+    SmsRetriever,
   ],
   bootstrap: [AppComponent],
   exports: [

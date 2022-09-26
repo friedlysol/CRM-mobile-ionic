@@ -22,6 +22,10 @@ const routes: Routes = [
     loadChildren: () => import('./pages/message-center/message-center.module').then( m => m.MessageCenterModule)
   },
   {
+    path: 'gallery',
+    loadChildren: () => import('./pages/gallery/gallery.module').then( m => m.GalleryModule),
+  },
+  {
     path: 'settings',
     loadChildren: () => import('./pages/settings/settings.module').then( m => m.SettingsModule),
     canActivate: [AuthGuard]

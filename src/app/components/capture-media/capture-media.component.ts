@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/member-ordering */
+/* eslint-disable no-underscore-dangle */
 import { Component, Input, OnInit } from '@angular/core';
 import { FileInterface } from '@app/interfaces/file.interface';
 import { MediaOptionsInterface } from '@app/interfaces/media-options.interface';
@@ -18,8 +20,10 @@ export class CaptureMediaComponent implements OnInit {
   @Input() typeId: number;
   @Input() type: 'photo' | 'video';
   @Input() linkPersonWoId?: number;
-  @Input() 
-  get mediaOptions(): MediaOptionsInterface { return this._mediaOptions};
+  @Input()
+  get mediaOptions(): MediaOptionsInterface {
+    return this._mediaOptions;
+  };
   set mediaOptions(options: MediaOptionsInterface){
     this._mediaOptions = {
       buttonLabel: options.buttonLabel != null? options.buttonLabel: 'Media',
@@ -37,7 +41,7 @@ export class CaptureMediaComponent implements OnInit {
       callbackBeforeSave: options.callbackBeforeSave != null? options.callbackBeforeSave: null,
       thumbnail: options.thumbnail != null? options.thumbnail: true,
       class: options.class != null? options.class: null,
-    }
+    };
   };
   private _mediaOptions: MediaOptionsInterface;
 
@@ -49,7 +53,8 @@ export class CaptureMediaComponent implements OnInit {
     private databaseService: DatabaseService,
     private fileService: FileService,
     private toastController: ToastController,
-  ) { }
+    ) { }
+
 
   async ngOnInit() {
     if(this.mediaOptions.required){
@@ -58,13 +63,13 @@ export class CaptureMediaComponent implements OnInit {
         this.objectUuid,
         this.typeId,
         this.linkPersonWoId,
-      )
+      );
     } else if(this.mediaOptions.requiredOnce){
       this.quantity = await this.fileService.getTotalByObjectAndType(
         this.objectType,
         this.objectUuid,
         this.typeId,
-      )
+      );
     }
   }
 
@@ -72,8 +77,8 @@ export class CaptureMediaComponent implements OnInit {
     if(!this.mediaOptions.required && !this.mediaOptions.requiredOnce){
       return 'tertiary';
     }
-    
-    if((!this.mediaOptions.minQuantity && this.quantity === 0) || 
+
+    if((!this.mediaOptions.minQuantity && this.quantity === 0) ||
       (this.mediaOptions.minQuantity > 0 && this.quantity < this.mediaOptions.minQuantity)){
       return 'danger';
     }
@@ -82,8 +87,10 @@ export class CaptureMediaComponent implements OnInit {
   }
 
   getButtonLabel(){
-    return this.mediaOptions.buttonLabel + 
-      (this.mediaOptions.minQuantity > 0? ` ${Math.min(this.quantity, this.mediaOptions.minQuantity)}/${this.mediaOptions.minQuantity}`: '')
+    return this.mediaOptions.buttonLabel +
+      (this.mediaOptions.minQuantity > 0?
+        ` ${Math.min(this.quantity, this.mediaOptions.minQuantity)}/${this.mediaOptions.minQuantity}`:
+        '');
   }
 
   async onClick(){
@@ -96,11 +103,10 @@ export class CaptureMediaComponent implements OnInit {
         source: this.mediaOptions.onlyNewPhoto? CameraSource.Camera: CameraSource.Prompt,
         width: this.mediaOptions.width,
         height: this.mediaOptions.height,
-      })
+      });
       if(this.mediaOptions.requiredDescription){
         this.description = await this.showDescriptionAlert();
       }
-      
       this.savePhoto(photo);
       this.quantity++;
     }else{
@@ -119,7 +125,7 @@ export class CaptureMediaComponent implements OnInit {
       description: `${this.description || ''}`,
       sync: 0,
       type: this.type,
-    }
+    };
     let source = photo.dataUrl;
 
     if(this.mediaOptions.greyscale){
@@ -132,7 +138,7 @@ export class CaptureMediaComponent implements OnInit {
         `${file.uuid}_thumbnail.jpg`
       );
     }
-    console.log(source);
+
     try{
       if(this.mediaOptions.callbackBeforeSave){
         const res = await this.mediaOptions.callbackBeforeSave();
@@ -144,7 +150,7 @@ export class CaptureMediaComponent implements OnInit {
         source,
         `${this.type}_${file.object_id}_${file.description}_${time}.png`,
         file,
-      )
+      );
     }catch(e){}
   }
 
@@ -164,28 +170,28 @@ export class CaptureMediaComponent implements OnInit {
           role: 'submit',
           handler: data => {
             if(data.description.length < this.mediaOptions.minLengthDescription){
-              this.showErrorToast(`Description should by at least ${this.mediaOptions.minLengthDescription} characters long.`)
+              this.showErrorToast(`Description should by at least ${this.mediaOptions.minLengthDescription} characters long.`);
               return false;
             }
           }
         }
       ],
-    })
+    });
     alert.present();
-    return new Promise((resolve) => {   
+    return new Promise((resolve) => {
       alert.onDidDismiss().then((res) => {
         resolve(res.data.values.description);
-      })
-    })
+      });
+    });
   }
 
   async showErrorToast(message: string){
     const toast = await this.toastController.create({
-      message: message,
+      message,
       duration: 3000,
       position: 'top',
-    })
-    toast.present()
+    });
+    toast.present();
   }
 
 }

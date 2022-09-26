@@ -69,7 +69,7 @@ export class FileDatabase {
    * @param file
    */
   async create(file: FileInterface): Promise<FileInterface> {
-    const uuid = file.uuid || this.databaseService.getTimeStamp();
+    const uuid = file.uuid || this.databaseService.getUuid();
 
     const query = sqlBuilder.insert('files', Object.assign({
         uuid,
@@ -104,7 +104,7 @@ export class FileDatabase {
    */
   delete(fileUuid) {
     return this.databaseService
-      .query(`update files set is_deleted = 0 where id = ?`, [fileUuid]);
+      .query(`update files set is_deleted = 1 where id = ?`, [fileUuid]);
   }
 
   // /**
