@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { DatabaseService } from '@app/services/database.service';
 import { FileInterface } from '@app/interfaces/file.interface';
 import { UtilsService } from '@app/services/utils.service';
+import { PrevNextInterface } from '@app/interfaces/prev-next.interface';
 
 import * as sqlBuilder from 'sql-bricks';
 import * as _ from 'underscore';
-import { PrevNextInterface } from '@app/interfaces/prev-next.interface';
+
 
 @Injectable({
   providedIn: 'root'
@@ -72,7 +73,7 @@ export class FileDatabase {
    * @param file
    */
   async create(file: FileInterface): Promise<FileInterface> {
-    const uuid = file.uuid || this.databaseService.getTimeStamp();
+    const uuid = file.uuid || this.databaseService.getUuid();
 
     const query = sqlBuilder.insert('files', Object.assign({
         uuid,
@@ -156,7 +157,8 @@ export class FileDatabase {
             where 
               files.object_type = current.object_type and 
               files.object_uuid = current.object_uuid and 
-              files.created_at < current.created_at 
+              files.created_at < current.created_at and
+              files.path not like '%.pdf' 
             order by files.created_at desc 
             limit 1
           ) as prev,
@@ -166,7 +168,8 @@ export class FileDatabase {
             where 
               files.object_type = current.object_type and 
               files.object_uuid = current.object_uuid and 
-              files.created_at > current.created_at 
+              files.created_at > current.created_at and
+              files.path not like '%.pdf'
             order by files.created_at asc 
             limit 1
           ) as next           

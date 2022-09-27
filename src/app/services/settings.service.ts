@@ -186,8 +186,6 @@ export class SettingsService implements SyncInterface {
     const settings = res?.response?.settings || {};
 
     if (!_.isEmpty(settings)) {
-
-
       const currentSettings = await this.settingsDatabase.getAllSettings();
       console.log(moment().toISOString(), currentSettings);
 

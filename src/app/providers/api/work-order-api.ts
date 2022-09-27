@@ -8,6 +8,6 @@ import { ResponseWorkOrderApiInterface } from '@app/providers/api/interfaces/res
 })
 export class WorkOrderApi extends Api {
   sync(params: any): Observable<ResponseWorkOrderApiInterface> {
-    return this.http.post<ResponseWorkOrderApiInterface>(`${this.apiEndpoint}mobile/v2/workorders/sync`, params);
+    return this.http.post<ResponseWorkOrderApiInterface>(`${this.apiEndpoint}mobile/v2/work-orders/sync`, params);
   }
 }

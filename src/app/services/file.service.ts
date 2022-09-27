@@ -3,6 +3,8 @@ import { FileDatabase } from '@app/services/database/file.database';
 import { Directory, Filesystem } from '@capacitor/filesystem';
 import { FileInterface } from '@app/interfaces/file.interface';
 import { PrevNextInterface } from '@app/interfaces/prev-next.interface';
+import { environment } from '@env/environment';
+import { AuthService } from '@app/services/auth.service';
 
 declare let FileTransferManager: any;
 
@@ -12,7 +14,7 @@ declare let FileTransferManager: any;
 export class FileService {
   private uploader: any;
 
-  constructor(private fileDatabase: FileDatabase) {
+  constructor(private authService: AuthService, private fileDatabase: FileDatabase) {
 
   }
 
@@ -64,6 +66,52 @@ export class FileService {
     }, err => console.log('Error removing upload'));
   }
 
+  /**
+   * Added file to the synchronization queue
+   *
+   * @param file
+   */
+  async uploadFile(file: FileInterface) {
+    const uploadData = {
+      id: file.uuid,
+      filePath: file.path,
+      fileKey: 'file',
+      serverUrl: environment.apiEndpoint + '/mobile/v2/files/sync',
+      notificationTitle: 'Uploading file',
+      headers: {
+        authorization: 'Bearer ' + this.authService.getToken()
+      },
+      parameters: {
+        uuid: file.uuid,
+        id: file.id || '',
+        object_type: file.object_type,
+        object_uuid: file.object_uuid,
+        object_id: file.object_id || 0,
+        type: file.type,
+        type_id: file.type_id || '',
+        link_person_wo_id: file.link_person_wo_id || '',
+        filename: file.path.split(/(\\|\/)/g).pop(),
+        description: file.description || '',
+        gps_location: file.gps_coords || '',
+        crc: file.crc || '',
+        created_at: file.created_at
+      }
+    };
+
+    try {
+      this.uploader.startUpload(uploadData);
+
+      file.sync_bg_status = 'QUEUED';
+
+      console.log('File added to queue: ', uploadData);
+
+      return this.fileDatabase.update(file, file.uuid);
+    } catch (err) {
+
+      return file;
+    }
+  }
+
   async getLastByObjectAndType(
     objectType: string,
     objectUuid: string,
@@ -106,13 +154,15 @@ export class FileService {
   async saveFile(filePath: string, file: FileInterface): Promise<FileInterface> {
     file.path = filePath;
 
-    return this.fileDatabase.create(file);
+    return this.fileDatabase.create(file)
+      .then(createdFile => this.uploadFile(createdFile));
   };
 
   async saveBase64File(fileBase64: string, fileName: string, file: FileInterface): Promise<FileInterface> {
     file.path = await this.createFileAndGetUrl(fileBase64, fileName);
 
-    return this.fileDatabase.create(file);
+    return this.fileDatabase.create(file)
+      .then(createdFile => this.uploadFile(createdFile));
   };
 
   async saveBase64Thumbnail(fileBase64: string, file: FileInterface) {

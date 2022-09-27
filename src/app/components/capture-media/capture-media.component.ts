@@ -17,7 +17,7 @@ export class CaptureMediaComponent implements OnInit {
   @Input() typeId: number;
   @Input() type: 'photo' | 'video';
   @Input() linkPersonWoId?: number;
-  @Input() 
+  @Input()
   get mediaOptions(): MediaOptionsInterface { return this._mediaOptions};
   set mediaOptions(options: MediaOptionsInterface){
     this._mediaOptions = {
@@ -70,8 +70,8 @@ export class CaptureMediaComponent implements OnInit {
     if(!this.mediaOptions.required && !this.mediaOptions.requiredOnce){
       return 'tertiary';
     }
-    
-    if((!this.mediaOptions.minQuantity && this.quantity === 0) || 
+
+    if((!this.mediaOptions.minQuantity && this.quantity === 0) ||
       (this.mediaOptions.minQuantity > 0 && this.quantity < this.mediaOptions.minQuantity)){
       return 'danger';
     }
@@ -80,7 +80,7 @@ export class CaptureMediaComponent implements OnInit {
   }
 
   getButtonLabel(){
-    return this.mediaOptions.buttonLabel + 
+    return this.mediaOptions.buttonLabel +
       (this.mediaOptions.minQuantity > 0? ` ${Math.min(this.quantity, this.mediaOptions.minQuantity)}/${this.mediaOptions.minQuantity}`: '')
   }
 
@@ -98,7 +98,7 @@ export class CaptureMediaComponent implements OnInit {
       if(this.mediaOptions.requiredDescription){
         this.description = await this.showDescriptionAlert();
       }
-      
+
       this.savePhoto(photo);
       this.quantity++;
     }else{
@@ -125,7 +125,7 @@ export class CaptureMediaComponent implements OnInit {
     if(this.mediaOptions.thumbnail){
       source = await this.fileService.generateThumnail(source);
     }
-    console.log(source);
+
     try{
       if(this.mediaOptions.callbackBeforeSave){
         const res = await this.mediaOptions.callbackBeforeSave();
@@ -165,7 +165,7 @@ export class CaptureMediaComponent implements OnInit {
       ],
     })
     alert.present();
-    return new Promise((resolve) => {   
+    return new Promise((resolve) => {
       alert.onDidDismiss().then((res) => {
         resolve(res.data.values.description);
       })

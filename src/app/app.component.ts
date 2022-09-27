@@ -7,6 +7,7 @@ import { environment } from '@env/environment';
 import { PushNotificationService } from '@app/services/push-notifications.service';
 import { AppVersion } from '@ionic-native/app-version/ngx';
 import { MenuItemInterface } from '@app/interfaces/menu-item-interface';
+import { FileService } from '@app/services/file.service';
 
 @Component({
   selector: 'app-root',
@@ -21,10 +22,11 @@ export class AppComponent implements OnInit {
   constructor(
     private appVersion: AppVersion,
     private authService: AuthService,
+    private fileService: FileService,
     private platform: Platform,
-    private storageService: StorageService,
-    private zone: NgZone,
     private pushNotificationService: PushNotificationService,
+    private storageService: StorageService,
+    private zone: NgZone
   ) {
     environment.menu.map((item: MenuItemInterface) => {
       this.menu.push(item);
@@ -41,6 +43,8 @@ export class AppComponent implements OnInit {
       .then(async () => {
         await this.pushNotificationService.initEventListeners();
         await this.pushNotificationService.startService();
+
+        this.fileService.backgroundUploadInit();
       });
 
     App.addListener('appUrlOpen', (data: any) => {
