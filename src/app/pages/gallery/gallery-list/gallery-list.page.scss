@@ -1,11 +1,21 @@
+ion-grid{
+    --ion-grid-column-padding: 5px;
+    --ion-grid-padding: 5px;
+}
+
 .file-thumbnail{
-    --size: 120px;
+    --size: 30vw;
     border: 2px solid black;
 }
 
 .delete-btn{
     position: absolute;
-    top: 0px;
-    left: 5px;
+    bottom: 3px;
+    right: 5px;
     --border-radius: 14px;
+    --color: var(--ion-color-grey-shade)
+}
+
+.download-btn{
+    --background: var(--ion-color-grey-shade)
 }

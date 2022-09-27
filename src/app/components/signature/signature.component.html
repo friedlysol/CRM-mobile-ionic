@@ -17,18 +17,18 @@
 
 <ion-modal #formModal>
   <ng-template>
-    <signature-form 
-      (onCancel)="onFormCancel()"
-      (onNext)="onFormNext($event)">
-    </signature-form>
+    <app-signature-form 
+      (cancel)="onFormCancel()"
+      (next)="onFormNext($event)">
+    </app-signature-form>
   </ng-template>
 </ion-modal>
 
 <ion-modal #canvasModal>
   <ng-template>
-    <signature-canvas
-    (onCancel)="onCanvasCancel()"
-    (onSave)="onSave($event)">
-    </signature-canvas>
+    <app-signature-canvas
+      (cancel)="onCanvasCancel()"
+      (save)="onSave($event)">
+    </app-signature-canvas>
   </ng-template>
 </ion-modal>

@@ -1,3 +1,13 @@
-.fullheight {
-    height: 100%;
+.close-btn{
+    position: absolute;
+    --color: var(--ion-color-grey-shade)
+}
+
+.description{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 2vh 0;
+    color: white;
+    background-color: hsla(0, 0%, 0%, 0.8);
 }

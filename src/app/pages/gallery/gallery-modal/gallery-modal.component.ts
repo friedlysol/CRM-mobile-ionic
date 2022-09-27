@@ -3,7 +3,7 @@ import { FileInterface } from '@app/interfaces/file.interface';
 import { PrevNextInterface } from '@app/interfaces/prev-next.interface';
 import { FileService } from '@app/services/file.service';
 import { Capacitor } from '@capacitor/core';
-import { NavParams } from '@ionic/angular';
+import { ModalController, NavParams } from '@ionic/angular';
 import * as moment from 'moment';
 
 @Component({
@@ -18,8 +18,9 @@ export class GalleryModalComponent implements OnInit {
   prevNext: PrevNextInterface;
 
   constructor(
-    private params: NavParams,
     private fileService: FileService,
+    private modalCtrl: ModalController,
+    private params: NavParams,
   ) {
     this.file = params.data.currentFile;
     this.index = params.data.index;
@@ -34,7 +35,6 @@ export class GalleryModalComponent implements OnInit {
 
   getFilePath(){
     const source = this.file.thumbnail? this.file.thumbnail: this.file.path;
-
     return Capacitor.convertFileSrc(source);
   }
 
@@ -46,7 +46,6 @@ export class GalleryModalComponent implements OnInit {
     if(!this.prevNext.prev){
       return;
     }
-
     this.file = await this.fileService.getByUuid(this.prevNext.prev);
     this.prevNext = await this.fileService.getPrevAndNextByUuid(this.file.uuid);
     this.index++;
@@ -56,9 +55,12 @@ export class GalleryModalComponent implements OnInit {
     if(!this.prevNext.next){
       return;
     }
-
     this.file = await this.fileService.getByUuid(this.prevNext.next);
     this.prevNext = await this.fileService.getPrevAndNextByUuid(this.file.uuid);
     this.index--;
+  }
+
+  onCloseClick(){
+    this.modalCtrl.dismiss(null, 'cancel');
   }
 }
