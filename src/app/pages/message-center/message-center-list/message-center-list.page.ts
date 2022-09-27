@@ -10,10 +10,6 @@ export class MessageCenterListPage implements OnInit {
   buttonLabel: MediaOptionsInterface = {
     buttonLabel: 'Add photos',
     requiredOnce: true,
-    greyscale: true,
-    callbackBeforeSave: () => new Promise((resolve, reject) => {
-      resolve('t');
-    }),
   };
   constructor() { }
 

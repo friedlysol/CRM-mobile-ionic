@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { FileDatabase } from '@app/services/database/file.database';
 import { Directory, Filesystem } from '@capacitor/filesystem';
 import { FileInterface } from '@app/interfaces/file.interface';
+import { PrevNextInterface } from '@app/interfaces/prev-next.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -27,14 +28,25 @@ export class FileService {
     return null;
   }
 
-  async getAllByObjectAndType(
+  async getArrayByObjectAndType(
     objectType: string,
     objectUuid: string,
     typeId: number,
+    page: number = 1,
+    pageSize: number = null,
     linkPersonWoId: number = null
   ): Promise<FileInterface[]> {
-    const files = await this.fileDatabase.getByObjectAndType(objectType, objectUuid, typeId, linkPersonWoId);
-    return files;
+
+    if(pageSize){
+      return await this.fileDatabase.getByObjectAndTypeWithPagination(
+        objectType,
+        objectUuid,
+        typeId,
+        page,
+        pageSize,
+      );
+    }
+    return await this.fileDatabase.getByObjectAndType(objectType, objectUuid, typeId, linkPersonWoId);
   }
 
   async getTotalByObjectAndType(
@@ -46,6 +58,18 @@ export class FileService {
     const files = await this.fileDatabase.getByObjectAndType(objectType, objectUuid, typeId, linkPersonWoId);
 
     return files.length;
+  }
+
+  async getByUuid(
+    uuid: string,
+  ): Promise<FileInterface | null>{
+    return this.fileDatabase.getByUuid(uuid);
+  }
+
+  async getPrevAndNextByUuid(
+    uuid: string,
+  ): Promise<PrevNextInterface | null>{
+    return this.fileDatabase.getPrevNextByUuid(uuid);
   }
 
   async saveFile(filePath: string, file: FileInterface): Promise<FileInterface> {

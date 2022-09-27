@@ -8,12 +8,12 @@
   <ion-img
     class="fullheight"
     appSideSwipe
-    (swipeLeft)="loadNext()" 
-    (swipeRight)="loadPrev()"
+    (swipeLeft)="loadPrev()" 
+    (swipeRight)="loadNext()"
     [src]="getFilePath()"></ion-img>
 </ion-content>
 
 <ion-footer>
-  <p class="ion-text-center">{{file.description}}</p>
-  <p class="ion-text-center">{{file.created_at}}</p>
+  <div *ngIf="file.description" class="ion-text-center">{{file.description}}</div>
+  <div class="ion-text-center">{{getLocalDate(file.created_at)}}</div>
 </ion-footer>

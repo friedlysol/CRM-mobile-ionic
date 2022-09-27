@@ -66,6 +66,32 @@ export class FileDatabase {
       .findAsArray(query.toString(), query.toParams());
   }
 
+  getByObjectAndTypeWithPagination(
+    objectType: string,
+    objectUuid: string,
+    typeId: number,
+    page: number,
+    pageSize: number,
+  ): Promise<FileInterface[]>{
+    return this.databaseService.findAsArray(`
+      select *
+      from files
+      where 
+        files.object_type = ? and
+        files.object_uuid = ? and
+        files.type_id = ?
+      order by files.created_at desc
+      limit ?
+      offset ?
+    `, [
+      objectType,
+      objectUuid,
+      typeId,
+      pageSize,
+      (page-1)*pageSize
+    ]);
+  }
+
   /**
    * Create file in db
    *
