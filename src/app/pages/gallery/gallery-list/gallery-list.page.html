@@ -1,0 +1,34 @@
+<ion-header>
+  <app-header title="Gallery">
+    <ng-container icons>
+      <ion-button *ngIf="!readOnly" (click)="onAddClick()">
+        <ion-icon name="add-circle-outline"></ion-icon>
+      </ion-button>
+    </ng-container>
+  </app-header>
+</ion-header>
+
+<ion-content>
+
+  <ion-grid>
+    <ion-row class="ion-justify-items-start">
+      <ion-col size="4" *ngFor="let file of files; index as i; trackBy:trackByItem">
+        <ion-thumbnail class="file-thumbnail">
+          <ion-img (click)="openGalleryModal(file, i)" [src]="getFilePath(file)"></ion-img>
+          <ion-button
+              *ngIf="!readOnly"
+              class="delete-btn ion-no-padding"
+              fill="clear"
+              color="danger"
+              (click)="onDeleteClick(file)">
+            <ion-icon slot="icon-only" name="trash"></ion-icon>
+          </ion-button>
+        </ion-thumbnail>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="nextPage($event)">
+    <ion-infinite-scroll-content loadingSpinner="bubbles" loadingText="Loading data..."></ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>

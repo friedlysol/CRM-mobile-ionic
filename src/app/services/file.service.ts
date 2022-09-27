@@ -50,7 +50,7 @@ export class FileService {
         }
       }
 
-      await this.fileDatabase.update(file, file.uuid);
+      await this.fileDatabase.updateSyncBgStatus(file, file.uuid);
 
       if (event.eventId) {
         this.uploader.acknowledgeEvent(event.eventId);
@@ -62,7 +62,7 @@ export class FileService {
     this.uploader.removeUpload(file.uuid, res => {
       file.sync_bg_status = null;
 
-      return this.fileDatabase.update(file, file.uuid);
+      return this.fileDatabase.updateSyncBgStatus(file, file.uuid);
     }, err => console.log('Error removing upload'));
   }
 
@@ -105,7 +105,7 @@ export class FileService {
 
       console.log('File added to queue: ', uploadData);
 
-      return this.fileDatabase.update(file, file.uuid);
+      return this.fileDatabase.updateSyncBgStatus(file, file.uuid);
     } catch (err) {
 
       return file;
@@ -127,10 +127,30 @@ export class FileService {
     return null;
   }
 
+  async getArrayByObjectAndType(
+    objectType: string,
+    objectUuid: string,
+    page: number = 1,
+    pageSize: number = null,
+    linkPersonWoId: number = null
+  ): Promise<FileInterface[]> {
+
+    if (pageSize) {
+      return await this.fileDatabase.getByObjectAndTypeWithPagination(
+        objectType,
+        objectUuid,
+        page,
+        pageSize,
+      );
+    }
+
+    return await this.fileDatabase.getByObjectAndType(objectType, objectUuid, linkPersonWoId);
+  }
+
   async getTotalByObjectAndType(
     objectType: string,
     objectUuid: string,
-    typeId: number,
+    typeId: number = null,
     linkPersonWoId: number = null
   ): Promise<number> {
     const files = await this.fileDatabase.getByObjectAndType(objectType, objectUuid, typeId, linkPersonWoId);
@@ -138,7 +158,11 @@ export class FileService {
     return files.length;
   }
 
-  async getPrevNextByUuid(uuid): Promise<PrevNextInterface> {
+  async getByUuid(uuid: string): Promise<FileInterface | null> {
+    return this.fileDatabase.getByUuid(uuid);
+  }
+
+  async getPrevAndNextByUuid(uuid: string): Promise<PrevNextInterface | null> {
     const prevNext = await this.fileDatabase.getPrevNextByUuid(uuid);
 
     if (prevNext) {
@@ -206,12 +230,16 @@ export class FileService {
   convertToGrayScale(source: string): Promise<string> {
     const image = new Image();
     image.src = source;
+
     return new Promise((resolve) => {
       image.onload = () => {
         const canvas = this.createCanvas(image.width, image.height);
         const ctx = canvas.getContext('2d');
+
         ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+
         const imgPixels = ctx.getImageData(0, 0, image.width, image.height);
+
         for (let y = 0; y < imgPixels.height; y++) {
           for (let x = 0; x < imgPixels.width; x++) {
             const i = (y * 4) * imgPixels.width + x * 4;
@@ -229,23 +257,28 @@ export class FileService {
     });
   }
 
-  generateThumnail(source: string, width: number = 300, height: number = 300): Promise<string> {
+  generateThumbnail(source: string, width: number = 300, height: number = 300): Promise<string> {
     const image = new Image();
     image.src = source;
+
     return new Promise((resolve) => {
       image.onload = () => {
         const canvas = this.createCanvas(width, height);
         const ctx = canvas.getContext('2d');
+
         ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
+
         resolve(canvas.toDataURL('image/jpeg'));
       };
     });
   }
 
   private createCanvas(width: number, height: number) {
-    const canvas = <HTMLCanvasElement>document.createElement('canvas');
+    const canvas = document.createElement('canvas') as HTMLCanvasElement;
+
     canvas.width = width;
     canvas.height = height;
+
     return canvas;
   }
 }

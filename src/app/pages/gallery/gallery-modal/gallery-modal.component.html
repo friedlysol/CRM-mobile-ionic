@@ -1,0 +1,19 @@
+<ion-header>
+  <p class="ion-text-center">
+    {{index}}/{{filesLength}}
+  </p>
+</ion-header>
+
+<ion-content>
+  <ion-img
+    class="fullheight"
+    appSideSwipe
+    (swipeLeft)="loadPrev()" 
+    (swipeRight)="loadNext()"
+    [src]="getFilePath()"></ion-img>
+</ion-content>
+
+<ion-footer>
+  <div *ngIf="file.description" class="ion-text-center">{{file.description}}</div>
+  <div class="ion-text-center">{{getLocalDate(file.created_at)}}</div>
+</ion-footer>

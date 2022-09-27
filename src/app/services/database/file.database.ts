@@ -49,15 +49,24 @@ export class FileDatabase {
    * @param objectType
    * @param objectUuid
    * @param typeId
+   * @param linkPersonWoId
    */
-  getByObjectAndType(objectType: string, objectUuid: string, typeId: number, linkPersonWoId: number = null): Promise<FileInterface[]> {
+  getByObjectAndType(
+    objectType: string,
+    objectUuid: string,
+    typeId: number = null,
+    linkPersonWoId: number = null
+  ): Promise<FileInterface[]> {
     let query = sqlBuilder
       .select('files.*')
       .from('files')
       .where('object_type', objectType)
       .where('object_uuid', objectUuid)
-      .where('type_id', typeId)
       .where('is_deleted', '0');
+
+    if (typeId !== null) {
+      query = query.where('type_id', typeId);
+    }
 
     if (linkPersonWoId !== null) {
       query = query.where('link_person_wo_id', linkPersonWoId);
@@ -65,6 +74,30 @@ export class FileDatabase {
 
     return this.databaseService
       .findAsArray(query.toString(), query.toParams());
+  }
+
+  getByObjectAndTypeWithPagination(
+    objectType: string,
+    objectUuid: string,
+    page: number,
+    pageSize: number,
+  ): Promise<FileInterface[]> {
+    return this.databaseService.findAsArray(`
+      select *
+      from files
+      where 
+        files.object_type = ? and
+        files.object_uuid = ? and
+        is_deleted = 0
+      order by files.created_at desc
+      limit ?
+      offset ?
+    `, [
+      objectType,
+      objectUuid,
+      pageSize,
+      (page - 1) * pageSize
+    ]);
   }
 
   /**
@@ -94,11 +127,13 @@ export class FileDatabase {
    * @param file
    * @param uuid
    */
-  async update(file: FileInterface, uuid: string): Promise<FileInterface> {
-    const query = sqlBuilder.update('files', Object.assign({
-        updated_at: this.databaseService.getTimeStamp()
-      }, _.pick(file, this.allowFields))
-    );
+  async updateSyncBgStatus(file: FileInterface, uuid: string): Promise<FileInterface> {
+    const query = sqlBuilder
+      .update('files', Object.assign({
+          updated_at: this.databaseService.getTimeStamp()
+        }, _.pick(file, ['id', 'sync', 'sync_bg_status']))
+      )
+      .where('uuid', uuid);
 
     return this.databaseService.query(query.toString(), query.toParams())
       .then(() => this.getByUuid(uuid));
