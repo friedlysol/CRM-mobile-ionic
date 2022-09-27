@@ -5,15 +5,33 @@
 </ion-header>
 
 <ion-content>
+
+  <ion-button
+    fill="clear"
+    class="close-btn"
+    (click)="onCloseClick()">
+    <ion-icon 
+      name="close-outline">
+    </ion-icon>
+  </ion-button>
+
+  <div class="spacer"></div>
+
   <ion-img
-    class="fullheight"
     appSideSwipe
     (swipeLeft)="loadPrev()" 
     (swipeRight)="loadNext()"
-    [src]="getFilePath()"></ion-img>
+    [src]="getFilePath()">
+  </ion-img>
+
+  <ion-text
+    *ngIf="file.description" 
+    class="description ion-text-center">
+    {{file.description}}
+  </ion-text>
+
 </ion-content>
 
 <ion-footer>
-  <div *ngIf="file.description" class="ion-text-center">{{file.description}}</div>
-  <div class="ion-text-center">{{getLocalDate(file.created_at)}}</div>
+  <div class="ion-text-center ion-padding">{{getLocalDate(file.created_at)}}</div>
 </ion-footer>

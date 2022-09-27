@@ -50,8 +50,8 @@ export class GalleryListPage implements OnInit {
   ) { }
 
   ngOnInit() {
-    // Get data
     this.loadFiles().then((res) => {
+      console.log(res);
       this.files = res;
     });
   }
@@ -232,5 +232,17 @@ export class GalleryListPage implements OnInit {
 
   trackByItem(index: number, item: FileInterface){
     return item.uuid;
+  }
+
+  getPhotosToDownload(){
+    if(!this.files) {
+      return [];
+    }
+    return this.files.filter(file => /^https?:\/\//.test(file.path) && !file.is_downloaded);
+  }
+
+  onDownloadPhotosClick(){
+    // TODO: Download files
+    this.getPhotosToDownload().forEach(f => f.is_downloaded = true);
   }
 }

@@ -2,18 +2,18 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 
 export interface ISignatureFromData{
-  ownerName: string,
-  ownerTitle: string,
+  ownerName: string;
+  ownerTitle: string;
 }
 
 @Component({
-  selector: 'signature-form',
+  selector: 'app-signature-form',
   templateUrl: './signature-form.component.html',
   styleUrls: ['./signature-form.component.scss'],
 })
 export class SignatureFormComponent {
-  @Output() onCancel = new EventEmitter<void>();
-  @Output() onNext = new EventEmitter<ISignatureFromData>();
+  @Output() cancel = new EventEmitter<void>();
+  @Output() next = new EventEmitter<ISignatureFromData>();
 
   ownerName = new FormControl('', [Validators.required]);
   ownerTitle = new FormControl('', [Validators.required]);
@@ -21,7 +21,7 @@ export class SignatureFormComponent {
   constructor() { }
 
   onCancelClick(){
-    this.onCancel.emit();
+    this.cancel.emit();
   }
 
   onNextClick(){
@@ -31,10 +31,10 @@ export class SignatureFormComponent {
       return;
     }
 
-    this.onNext.emit({
+    this.next.emit({
       ownerName: this.ownerName.value,
       ownerTitle: this.ownerTitle.value,
-    })
+    });
   }
 
 }

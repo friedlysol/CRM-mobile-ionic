@@ -51,8 +51,8 @@ export class SignatureComponent implements OnInit {
 
   onSave(image: string){
     this.image = image;
-    console.log({image: this.image})
-    this.onCanvasCancel()
+    console.log({image: this.image});
+    this.onCanvasCancel();
     this.onFormCancel();
     this.saveSignature();
   }
@@ -64,7 +64,7 @@ export class SignatureComponent implements OnInit {
       this.typeId,
     ).then((file) => {
       this.file = file;
-    })
+    });
   }
 
   saveSignature(){
@@ -77,7 +77,7 @@ export class SignatureComponent implements OnInit {
       sync: 0,
       path: '',
       type: 'signature',
-    }
+    };
 
     const time = new Date().getTime();
 
@@ -85,6 +85,6 @@ export class SignatureComponent implements OnInit {
       this.image,
       `signature_${this.file.object_id}_${this.file.description}_${time}.png`,
       this.file,
-    )
+    );
   }
 }
