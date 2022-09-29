@@ -7,6 +7,10 @@
     <param name="onload" value="true"/>
   </feature>
 
+  <feature name="FileTransferBackground">
+    <param name="ios-package" value="FileTransferBackground"/>
+  </feature>
+
   <feature name="AppVersion">
     <param name="ios-package" value="AppVersion"/>
   </feature>

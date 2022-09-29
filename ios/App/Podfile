@@ -12,6 +12,7 @@ def capacitor_pods
   pod 'CapacitorCommunityBackgroundGeolocation', :path => '..\..\node_modules\@capacitor-community\background-geolocation'
   pod 'CapacitorCommunityCameraPreview', :path => '..\..\node_modules\@capacitor-community\camera-preview'
   pod 'CapacitorCommunityDatePicker', :path => '..\..\node_modules\@capacitor-community\date-picker'
+  pod 'CapacitorCommunityFileOpener', :path => '..\..\node_modules\@capacitor-community\file-opener'
   pod 'CapacitorCommunitySqlite', :path => '..\..\node_modules\@capacitor-community\sqlite'
   pod 'CapacitorActionSheet', :path => '..\..\node_modules\@capacitor\action-sheet'
   pod 'CapacitorApp', :path => '..\..\node_modules\@capacitor\app'

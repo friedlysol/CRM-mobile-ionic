@@ -5,7 +5,7 @@
 <ion-content>
   <ion-row>
     <ion-col>
-      <a [routerLink]="['/gallery', 'list', 'asset_pictures', '32134']" [queryParams]="{objectId: 0, readOnly: true}">
+      <a [routerLink]="['/gallery', 'list', 'asset_pictures', '32134']" [queryParams]="{objectId: 0, readOnly: false, onlyFilesWithExt: null, allowSkipDescription: true}">
         <ion-button>Browser photos</ion-button>
       </a>
     </ion-col>

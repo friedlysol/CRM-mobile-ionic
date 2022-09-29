@@ -11,6 +11,9 @@ project(':capacitor-community-camera-preview').projectDir = new File('../node_mo
 include ':capacitor-community-date-picker'
 project(':capacitor-community-date-picker').projectDir = new File('../node_modules/@capacitor-community/date-picker/android')
 
+include ':capacitor-community-file-opener'
+project(':capacitor-community-file-opener').projectDir = new File('../node_modules/@capacitor-community/file-opener/android')
+
 include ':capacitor-community-sqlite'
 project(':capacitor-community-sqlite').projectDir = new File('../node_modules/@capacitor-community/sqlite/android')
 

@@ -19,9 +19,9 @@
         *ngFor="let file of files; index as i; trackBy:trackByItem">
 
         <ion-thumbnail
-          class="file-thumbnail">
+          class="file-thumbnail {{this.getExtension(file.path) === '.pdf'? 'pdf-thumbnail': ''}}">
           <ion-img
-            (click)="openGalleryModal(file, i)"
+            (click)="onImageClick(file, i)"
             [src]="getFilePath(file)">
           </ion-img>
           <ion-button
@@ -44,15 +44,14 @@
       loadingText="Loading data...">
     </ion-infinite-scroll-content>
   </ion-infinite-scroll>
-
 </ion-content>
 
 <ion-footer
-  *ngIf="getPhotosToDownload().length as photosToDownload"
+  *ngIf="filesToDownload.length as photosToDownload"
   class="ion-text-center">
   <ion-button
     class="download-btn"
     (click)="onDownloadPhotosClick()">
-    Download {{photosToDownload}} photos
+    Download {{photosToDownload}} photo{{photosToDownload > 1? 's': ''}}
   </ion-button>
 </ion-footer>

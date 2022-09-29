@@ -5,6 +5,9 @@ import { FileInterface } from '@app/interfaces/file.interface';
 import { PrevNextInterface } from '@app/interfaces/prev-next.interface';
 import { environment } from '@env/environment';
 import { AuthService } from '@app/services/auth.service';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 declare let FileTransferManager: any;
 
@@ -14,9 +17,11 @@ declare let FileTransferManager: any;
 export class FileService {
   private uploader: any;
 
-  constructor(private authService: AuthService, private fileDatabase: FileDatabase) {
-
-  }
+  constructor(
+    private authService: AuthService,
+    private fileDatabase: FileDatabase,
+    private http: HttpClient,
+  ) { }
 
   backgroundUploadInit(): void {
     console.log('Background uploader init');
@@ -112,6 +117,34 @@ export class FileService {
     }
   }
 
+  downloadFile(file: FileInterface){
+    return this.http.get(
+      file.path,
+      {
+        reportProgress: true,
+        observe: 'events',
+        responseType: 'blob'
+      }
+    ).pipe(
+      tap(async data => {
+        if(data.type === 2){
+          file.download_attempts++;
+        }
+        if(data.type === 4){
+          file.path = await this.createFileAndGetUrl(
+            await data.body.text(),
+            new Date().getTime().toString(),
+          );
+          file.thumbnail = await this.createFileAndGetUrl(
+            await this.generateThumbnail(URL.createObjectURL(data.body)),
+            new Date().getTime().toString(),
+          );
+          this.fileDatabase.updateFile(file);
+        }
+      }),
+    );
+  }
+
   async getLastByObjectAndType(
     objectType: string,
     objectUuid: string,
@@ -132,28 +165,51 @@ export class FileService {
     objectUuid: string,
     page: number = 1,
     pageSize: number = null,
-    linkPersonWoId: number = null
+    onlyFilesWithExt: string = null,
+    onlyToDownload: boolean = false,
   ): Promise<FileInterface[]> {
 
+    let files = [];
     if (pageSize) {
-      return await this.fileDatabase.getByObjectAndTypeWithPagination(
+      files = await this.fileDatabase.getByObjectAndTypeWithPagination(
         objectType,
         objectUuid,
         page,
         pageSize,
       );
+    }else{
+      files = await this.fileDatabase.getByObjectAndType(objectType, objectUuid);
     }
 
-    return await this.fileDatabase.getByObjectAndType(objectType, objectUuid, linkPersonWoId);
+    if(onlyFilesWithExt){
+      const regex = new RegExp(`\.${onlyFilesWithExt}$`);
+      files = files.filter(file => regex.test(file.path));
+    }
+
+    if(onlyToDownload){
+      const regex = new RegExp('^https?');
+      files = files.filter(file => regex.test(file.path));
+    }
+
+    return await files;
   }
 
   async getTotalByObjectAndType(
     objectType: string,
     objectUuid: string,
     typeId: number = null,
-    linkPersonWoId: number = null
+    linkPersonWoId: number = null,
   ): Promise<number> {
     const files = await this.fileDatabase.getByObjectAndType(objectType, objectUuid, typeId, linkPersonWoId);
+
+    return files.length;
+  }
+
+  async getTotalByObjectAndTypeSkipPdf(
+    objectType: string,
+    objectUuid: string,
+  ): Promise<number> {
+    const files = await this.fileDatabase.getByObjectAndTypeSkipPdf(objectType, objectUuid);
 
     return files.length;
   }
@@ -192,7 +248,7 @@ export class FileService {
   async saveBase64Thumbnail(fileBase64: string, file: FileInterface) {
     file.thumbnail = await this.createFileAndGetUrl(fileBase64, file.uuid + '_thumbnail.jpg');
 
-    return this.fileDatabase.updateThumbnail(file);
+    return this.fileDatabase.updateFile(file);
   }
 
   async createFileAndGetUrl(fileBase64: string, fileName: string): Promise<string> {

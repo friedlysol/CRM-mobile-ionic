@@ -55,7 +55,7 @@ export class FileDatabase {
     objectType: string,
     objectUuid: string,
     typeId: number = null,
-    linkPersonWoId: number = null
+    linkPersonWoId: number = null,
   ): Promise<FileInterface[]> {
     let query = sqlBuilder
       .select('files.*')
@@ -76,12 +76,32 @@ export class FileDatabase {
       .findAsArray(query.toString(), query.toParams());
   }
 
+  getByObjectAndTypeSkipPdf(
+    objectType: string,
+    objectUuid: string,
+  ): Promise<FileInterface[]> {
+    return this.databaseService.findAsArray(`
+      select *
+      from files
+      where 
+        object_type = ? and
+        object_uuid = ? and
+        is_deleted = 0 and
+        path not like '%.pdf'
+      order by files.created_at desc
+    `, [
+      objectType,
+      objectUuid,
+    ]);
+  }
+
   getByObjectAndTypeWithPagination(
     objectType: string,
     objectUuid: string,
     page: number,
     pageSize: number,
   ): Promise<FileInterface[]> {
+
     return this.databaseService.findAsArray(`
       select *
       from files
@@ -140,14 +160,16 @@ export class FileDatabase {
   }
 
   /**
-   * Update thumbnail path
+   * Update file
    *
    * @param file
    */
-  updateThumbnail(file: FileInterface) {
-    const query = sqlBuilder.update('files')
-      .set('thumbnail', file.thumbnail)
-      .where('uuid', file.uuid);
+   updateFile(file: FileInterface) {
+    const query = sqlBuilder.update('files');
+    Object.keys(file).forEach(field => {
+      query.set(field, file[field]);
+    });
+    query.where('uuid', file.uuid);
 
     return this.databaseService.query(query.toString(), query.toParams());
   }
