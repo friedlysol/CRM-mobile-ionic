@@ -4,6 +4,7 @@ import { File } from '@ionic-native/file/ngx';
 import { UUID } from 'angular2-uuid';
 
 import * as moment from 'moment';
+import { Directory, Encoding, Filesystem } from '@capacitor/filesystem';
 
 @Injectable({
   providedIn: 'root'
@@ -23,7 +24,6 @@ export class DatabaseService {
       location: 'default'
     }).then((db) => {
       this.db = db;
-
       return this.query('CREATE TABLE IF NOT EXISTS `migrations` (`name` text, `migrated_at` text);');
     }).then(() => this.migrations()).then(() => {
       console.log('Database initiated');
@@ -90,6 +90,27 @@ export class DatabaseService {
     return this.query(query, parameters)
       .then((results) => this.getAll(results)
       );
+  }
+
+  public closeDatabase(){
+    return this.db.close().catch(() => {
+      console.log('database is already closed');
+    });
+  }
+
+  public openDatabase(){
+    return this.db.open().catch(() => {
+      console.log('database is not open');
+    });
+  }
+
+  public async getDatabaseFile(){
+    const databaseFile = await Filesystem.readFile({
+      path: `../databases/${DatabaseService.dbName}`,
+      directory: Directory.Data,
+    });
+
+    return databaseFile.data;
   }
 
   private async migrations() {
