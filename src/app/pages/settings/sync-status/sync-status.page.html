@@ -1,9 +1,38 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>sync-status</ion-title>
-  </ion-toolbar>
+  <app-header title='Sync status'></app-header>
 </ion-header>
 
 <ion-content>
+  <ion-grid>
 
+    <ion-row class="header">
+      <ion-col class="ion-text-center" size="4">Table name</ion-col>
+      <ion-col class="ion-text-center" size="4">Unsynchronized records</ion-col>
+      <ion-col class="ion-text-center" size="4">Actions</ion-col>
+    </ion-row>
+
+    <ion-row 
+      *ngFor="let row of tableData"
+      class="content">
+      <ion-col class="ion-text-center" size="4">{{row.table}}</ion-col>
+      <ion-col class="ion-text-center" size="4">{{row.total}}</ion-col>
+      <ion-col class="ion-text-center" size="4">
+        <ion-button
+          [disabled]="syncInProgress$ | async"
+          (click)="onSync(row.table)">
+          Sync now
+        </ion-button>
+        <ion-button
+          (click)="onClearHash(row.table)">
+          Clear hash
+        </ion-button>
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
+  <ion-button 
+    [disabled]="syncInProgress$ | async"
+    (click)="onSyncAll()">
+    Sync all
+  </ion-button>
 </ion-content>
