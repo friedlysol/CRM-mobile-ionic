@@ -47,15 +47,24 @@ export class FileService {
           console.log('uploader response: ', response);
 
           if (response.data) {
-            file.id = response.data.object_id;
-            file.sync = 1;
+            if(file.type === 'database'){
+              await Filesystem.deleteFile({
+                path: `../databases/${file.path.split(/(\\|\/)/g).pop()}`,
+                directory: Directory.Data,
+              });
+              await this.fileDatabase.remove(file.uuid);
+            }else{
+              file.id = response.data.object_id;
+              file.sync = 1;
+            }
           }
         } catch (err) {
           console.error('uploader - serverResponse', err);
         }
       }
-
-      await this.fileDatabase.updateSyncBgStatus(file, file.uuid);
+      if(file.type !== 'database'){
+        await this.fileDatabase.updateSyncBgStatus(file, file.uuid);
+      }
 
       if (event.eventId) {
         this.uploader.acknowledgeEvent(event.eventId);
@@ -69,6 +78,41 @@ export class FileService {
 
       return this.fileDatabase.updateSyncBgStatus(file, file.uuid);
     }, err => console.log('Error removing upload'));
+  }
+
+  async uploadDatabase(path: string){
+    const file = await this.fileDatabase.create({
+      type: 'database',
+      object_type: 'database',
+      object_uuid: 'database',
+      object_id: null,
+      sync: 1,
+      path
+    } as FileInterface);
+
+    const uploadData = {
+      id: file.uuid,
+      filePath: file.path,
+      fileKey: 'file',
+      serverUrl: `${environment.apiEndpoint}mobile/debug/db`,
+      notificationTitle: 'Uploading file',
+      headers: {
+        authorization: 'Bearer ' + this.authService.getToken()
+      },
+    };
+
+    try {
+      this.uploader.startUpload(uploadData);
+
+      file.sync_bg_status = 'QUEUED';
+
+      console.log('File added to queue: ', uploadData);
+
+      return this.fileDatabase.updateSyncBgStatus(file, file.uuid);
+    } catch (err) {
+
+      return file;
+    }
   }
 
   /**

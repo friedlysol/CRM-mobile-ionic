@@ -5,8 +5,11 @@ import { WorkOrderService } from '@app/services/workorder.service';
 import { TypeService } from '@app/services/type.service';
 import { StaticService } from '@app/services/static.service';
 import { DatabaseService } from './database.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '@env/environment';
+import { FileService } from './file.service';
+import { FileInterface } from '@app/interfaces/file.interface';
+import { Directory, Filesystem } from '@capacitor/filesystem';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +17,7 @@ import { environment } from '@env/environment';
 export class SyncService {
   constructor(
     private databaseService: DatabaseService,
+    private fileService: FileService,
     private http: HttpClient,
     private settingsService: SettingsService,
     private staticService: StaticService,
@@ -35,17 +39,22 @@ export class SyncService {
     if(!this.staticService.networkStatus.connected){
       return;
     }
-    EventService.databaseIsClosed.next(true);
 
-    await this.databaseService.closeDatabase();
-    const dbFileContent = await this.databaseService.getDatabaseFile();
-    const encoder = new TextEncoder();
-    const file = new File([encoder.encode(dbFileContent)], 'file');
-    await this.http.post(`${environment.apiEndpoint}mobile/debug/db`, {
-      file,
-    }).toPromise().then(e => console.log(e)).catch(e => console.log(e));
-    await this.databaseService.openDatabase();
+    const copyPath = await Filesystem.copy({
+      from: '../databases/database.db',
+      to: `../databases/database${new Date().getTime()}.db`,
+      directory: Directory.Data,
+      toDirectory: Directory.Data,
+    });
 
-    EventService.databaseIsOpen.next(true);
+    const res = await this.fileService.uploadDatabase(copyPath.uri);
+    console.log(res);
+    // await this.http.post(`${environment.apiEndpoint}mobile/debug/db`, formData,
+    // {
+    //   headers: {
+    //     'Content-Type': 'multipart/form-data'
+    //   }
+    // }).toPromise().then(e => console.log(e)).catch(e => console.log(e));
+
   }
 }

@@ -133,7 +133,7 @@ export class FileDatabase {
         gps_coords: this.utilsService.getCurrentCoords(),
         created_at: this.databaseService.getTimeStamp(),
         updated_at: null,
-        sync: 0
+        sync: file.sync || 0,
       }, _.pick(file, this.allowFields))
     );
 
