@@ -76,3 +76,5 @@ CREATE TABLE IF NOT EXISTS `types`
     `hash`       TEXT,
     PRIMARY KEY (id)
 );
+
+CREATE INDEX types_idx ON types (type_key);

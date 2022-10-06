@@ -81,7 +81,7 @@ export class FileService {
       id: file.uuid,
       filePath: file.path,
       fileKey: 'file',
-      serverUrl: environment.apiEndpoint + '/mobile/v2/files/sync',
+      serverUrl: environment.apiEndpoint + 'mobile/v2/files/sync',
       notificationTitle: 'Uploading file',
       headers: {
         authorization: 'Bearer ' + this.authService.getToken()
@@ -255,7 +255,7 @@ export class FileService {
     const writeFile = await Filesystem.writeFile({
       path: fileName,
       data: fileBase64,
-      directory: Directory.Data,
+      directory: Directory.Documents,
     });
 
     return writeFile.uri;
