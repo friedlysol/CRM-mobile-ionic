@@ -21,6 +21,8 @@ export class GalleryListPage implements OnInit {
   objectType: string;
   objectUuid: string;
   objectId: number;
+  photoType: string;
+
   readOnly = false;
   onlyFilesWithExt: string;
   allowSkipDescription = false;
@@ -51,6 +53,7 @@ export class GalleryListPage implements OnInit {
 
     this.route.queryParamMap.subscribe(async params => {
       this.objectId = params.get('objectId') ? Number(params.get('objectId')) : null;
+      this.photoType = params.get('photoType');
       this.readOnly = params.get('readOnly') === 'true';
       this.onlyFilesWithExt = params.get('onlyFilesWithExt');
       this.allowSkipDescription = params.get('allowSkipDescription') === 'true';
@@ -67,7 +70,7 @@ export class GalleryListPage implements OnInit {
       true,
     );
 
-    this.types = await this.typeService.getByType(this.objectType);
+    this.types = await this.typeService.getByType(this.photoType);
   }
 
   async loadFiles(): Promise<FileInterface[]> {
