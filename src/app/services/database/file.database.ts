@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { DatabaseService } from '@app/services/database.service';
 import { FileInterface } from '@app/interfaces/file.interface';
-import { UtilsService } from '@app/services/utils.service';
 import { PrevNextInterface } from '@app/interfaces/prev-next.interface';
 import { GeolocationService } from '@app/services/geolocation.service';
 
 import * as sqlBuilder from 'sql-bricks';
 import * as _ from 'underscore';
+import { Directory, Filesystem } from '@capacitor/filesystem';
 
 
 @Injectable({
@@ -192,11 +192,29 @@ export class FileDatabase {
   /**
    * Remove file form database
    *
-   * @param fileUuid
+   * @param file
    */
-  remove(fileUuid: string) {
+  async remove(file: FileInterface) {
+    if (file.path.search(/file:/) === 0) {
+      try {
+        await Filesystem.deleteFile({
+          path: file.path.split(/(\/)/g).pop(),
+          directory: Directory.Documents
+        });
+      } catch (err) {}
+
+      if (file.thumbnail && file.thumbnail.search(/file:/) === 0) {
+        try {
+          await Filesystem.deleteFile({
+            path: file.thumbnail.split(/(\/)/g).pop(),
+            directory: Directory.Documents
+          });
+        } catch (err) {}
+      }
+    }
+
     return this.databaseService
-      .query(`delete from files where uuid = ?`, [fileUuid]);
+      .query(`delete from files where uuid = ?`, [file.uuid]);
   }
 
   async getUnSyncFiles() {

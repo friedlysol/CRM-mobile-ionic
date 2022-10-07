@@ -25,7 +25,7 @@
       <ion-label>Database Query</ion-label>
     </ion-item>
 
-    <ion-item [routerLink]="['/settings', 'send-app-state']">
+    <ion-item (click)="exportDatabase()">
       <ion-icon name="file-tray-stacked-outline" size="small"></ion-icon>
       <ion-label>Send app state for inspection</ion-label>
     </ion-item>

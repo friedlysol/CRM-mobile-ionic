@@ -6,7 +6,6 @@ import { SettingsRoutingModule } from './settings-routing.module';
 import { SettingsListPage } from './settings-list/settings-list.page';
 import { SharedModule } from '@app/shared.module';
 import { DatabaseQueryPage } from '@app/pages/settings/database-query/database-query.page';
-import { SendAppStatePage } from '@app/pages/settings/send-app-state/send-app-state.page';
 import { SyncStatusPage } from '@app/pages/settings/sync-status/sync-status.page';
 import { UploadQueuePage } from '@app/pages/settings/upload-queue/upload-queue.page';
 
@@ -18,6 +17,6 @@ import { UploadQueuePage } from '@app/pages/settings/upload-queue/upload-queue.p
     SettingsRoutingModule,
     SharedModule,
   ],
-  declarations: [DatabaseQueryPage, UploadQueuePage, SendAppStatePage, SettingsListPage, SyncStatusPage]
+  declarations: [DatabaseQueryPage, UploadQueuePage, SettingsListPage, SyncStatusPage]
 })
 export class SettingsModule {}

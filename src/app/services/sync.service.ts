@@ -5,10 +5,8 @@ import { WorkOrderService } from '@app/services/workorder.service';
 import { TypeService } from '@app/services/type.service';
 import { StaticService } from '@app/services/static.service';
 import { DatabaseService } from './database.service';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from '@env/environment';
+import { HttpClient } from '@angular/common/http';
 import { FileService } from './file.service';
-import { FileInterface } from '@app/interfaces/file.interface';
 import { Directory, Filesystem } from '@capacitor/filesystem';
 
 @Injectable({
@@ -23,7 +21,8 @@ export class SyncService {
     private staticService: StaticService,
     private typeService: TypeService,
     private workOrderService: WorkOrderService,
-  ) { }
+  ) {
+  }
 
   async sync() {
     EventService.syncInProgress.next(true);
@@ -35,26 +34,18 @@ export class SyncService {
     EventService.endSync.next(true);
   }
 
-  async exportDatabase(){
-    if(!this.staticService.networkStatus.connected){
-      return;
+  async exportDatabase() {
+    if (!this.staticService.networkStatus.connected) {
+      return false;
     }
 
     const copyPath = await Filesystem.copy({
       from: '../databases/database.db',
-      to: `../databases/database${new Date().getTime()}.db`,
+      to: `database_${new Date().getTime()}.txt`, //files with db extension are not sent, so it was replaced with txt
       directory: Directory.Data,
-      toDirectory: Directory.Data,
+      toDirectory: Directory.Documents,
     });
 
-    const res = await this.fileService.uploadDatabase(copyPath.uri);
-    console.log(res);
-    // await this.http.post(`${environment.apiEndpoint}mobile/debug/db`, formData,
-    // {
-    //   headers: {
-    //     'Content-Type': 'multipart/form-data'
-    //   }
-    // }).toPromise().then(e => console.log(e)).catch(e => console.log(e));
-
+    return await this.fileService.uploadDatabase(copyPath.uri);
   }
 }

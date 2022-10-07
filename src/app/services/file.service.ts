@@ -6,7 +6,6 @@ import { PrevNextInterface } from '@app/interfaces/prev-next.interface';
 import { environment } from '@env/environment';
 import { AuthService } from '@app/services/auth.service';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 
 declare let FileTransferManager: any;
@@ -21,7 +20,8 @@ export class FileService {
     private authService: AuthService,
     private fileDatabase: FileDatabase,
     private http: HttpClient,
-  ) { }
+  ) {
+  }
 
   backgroundUploadInit(): void {
     console.log('Background uploader init');
@@ -42,28 +42,21 @@ export class FileService {
 
       if (event.state === 'UPLOADED') {
         try {
-          const response = JSON.parse(event.serverResponse);
+          if (file.type === 'database') {
+            await this.fileDatabase.remove(file);
+          } else {
+            const response = JSON.parse(event.serverResponse);
 
-          console.log('uploader response: ', response);
+            console.log('Uploader response: ', response);
 
-          if (response.data) {
-            if(file.type === 'database'){
-              await Filesystem.deleteFile({
-                path: `../databases/${file.path.split(/(\\|\/)/g).pop()}`,
-                directory: Directory.Data,
-              });
-              await this.fileDatabase.remove(file.uuid);
-            }else{
-              file.id = response.data.object_id;
-              file.sync = 1;
-            }
+            file.id = response.data.object_id;
+            file.sync = 1;
+
+            await this.fileDatabase.updateSyncBgStatus(file, file.uuid);
           }
         } catch (err) {
           console.error('uploader - serverResponse', err);
         }
-      }
-      if(file.type !== 'database'){
-        await this.fileDatabase.updateSyncBgStatus(file, file.uuid);
       }
 
       if (event.eventId) {
@@ -80,7 +73,7 @@ export class FileService {
     }, err => console.log('Error removing upload'));
   }
 
-  async uploadDatabase(path: string){
+  async uploadDatabase(path: string) {
     const file = await this.fileDatabase.create({
       type: 'database',
       object_type: 'database',
@@ -110,6 +103,7 @@ export class FileService {
 
       return this.fileDatabase.updateSyncBgStatus(file, file.uuid);
     } catch (err) {
+      console.error('startUpload', err, uploadData);
 
       return file;
     }
@@ -161,7 +155,7 @@ export class FileService {
     }
   }
 
-  downloadFile(file: FileInterface){
+  downloadFile(file: FileInterface) {
     return this.http.get(
       file.path,
       {
@@ -171,10 +165,10 @@ export class FileService {
       }
     ).pipe(
       tap(async data => {
-        if(data.type === 2){
+        if (data.type === 2) {
           file.download_attempts++;
         }
-        if(data.type === 4){
+        if (data.type === 4) {
           file.path = await this.createFileAndGetUrl(
             await data.body.text(),
             new Date().getTime().toString(),
@@ -221,16 +215,16 @@ export class FileService {
         page,
         pageSize,
       );
-    }else{
+    } else {
       files = await this.fileDatabase.getByObjectAndType(objectType, objectUuid);
     }
 
-    if(onlyFilesWithExt){
+    if (onlyFilesWithExt) {
       const regex = new RegExp(`\.${onlyFilesWithExt}$`);
       files = files.filter(file => regex.test(file.path));
     }
 
-    if(onlyToDownload){
+    if (onlyToDownload) {
       const regex = new RegExp('^https?');
       files = files.filter(file => regex.test(file.path));
     }
@@ -307,21 +301,7 @@ export class FileService {
 
   async removeFile(file: FileInterface) {
     if (file.sync === 1) {
-      if (file.path.search(/file:/) === 0) {
-        try {
-          await Filesystem.deleteFile({path: file.path});
-        } catch (err) {
-        }
-
-        if (file.thumbnail) {
-          try {
-            await Filesystem.deleteFile({path: file.thumbnail});
-          } catch (err) {
-          }
-        }
-      }
-
-      return this.fileDatabase.remove(file.uuid);
+      return this.fileDatabase.remove(file);
     }
 
     return Promise.resolve(false);

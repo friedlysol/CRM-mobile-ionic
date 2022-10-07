@@ -44,6 +44,8 @@
 </ion-content>
 
 <ion-footer>
+  <app-sync></app-sync>
+
   <ion-row class="tab-content">
     <ng-container *ngFor="let tab of tabs">
       <ion-col [class]="{active: tab.isActive}" (click)="setActiveTab(tab.key)">
@@ -51,6 +53,4 @@
       </ion-col>
     </ng-container>
   </ion-row>
-
-  <app-sync></app-sync>
 </ion-footer>

@@ -1,11 +1,10 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 
 import { SettingsListPage } from './settings-list/settings-list.page';
 import { SyncStatusPage } from '@app/pages/settings/sync-status/sync-status.page';
 import { UploadQueuePage } from '@app/pages/settings/upload-queue/upload-queue.page';
 import { DatabaseQueryPage } from '@app/pages/settings/database-query/database-query.page';
-import { SendAppStatePage } from '@app/pages/settings/send-app-state/send-app-state.page';
 
 const routes: Routes = [
   {
@@ -23,10 +22,6 @@ const routes: Routes = [
   {
     path: 'database-query',
     component: DatabaseQueryPage
-  },
-  {
-    path: 'send-app-state',
-    component: SendAppStatePage
   }
 ];
 
@@ -34,4 +29,5 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class SettingsRoutingModule {}
+export class SettingsRoutingModule {
+}
