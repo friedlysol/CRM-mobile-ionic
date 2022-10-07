@@ -4,6 +4,8 @@ import { DatabaseService } from './database.service';
 import { LoadingController, Platform } from '@ionic/angular';
 import { ConnectionStatus, Network } from '@capacitor/network';
 import { EventService } from '@app/services/event.service';
+import { Location } from '@capacitor-community/background-geolocation';
+import { environment } from '@env/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -25,6 +27,8 @@ export class StaticService {
     connectionType: 'unknown'
   };
 
+  public location: Location;
+
   public settings: Record<string, any> = {};
 
   private loading;
@@ -42,6 +46,10 @@ export class StaticService {
       });
   }
 
+  static isCompany(company: string) {
+    return environment.company === company;
+  }
+
   async init() {
     Network.addListener('networkStatusChange', status => {
       console.log('Network status changed', status);
@@ -55,6 +63,7 @@ export class StaticService {
       EventService.networkStatus.next(status);
     });
   }
+
 
   clearSyncStatus() {
     this.startSync.next(null);

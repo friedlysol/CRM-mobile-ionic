@@ -8,6 +8,7 @@ import { PushNotificationService } from '@app/services/push-notifications.servic
 import { AppVersion } from '@ionic-native/app-version/ngx';
 import { MenuItemInterface } from '@app/interfaces/menu-item-interface';
 import { FileService } from '@app/services/file.service';
+import { GeolocationService } from '@app/services/geolocation.service';
 
 @Component({
   selector: 'app-root',
@@ -23,6 +24,7 @@ export class AppComponent implements OnInit {
     private appVersion: AppVersion,
     private authService: AuthService,
     private fileService: FileService,
+    private geolocationService: GeolocationService,
     private platform: Platform,
     private pushNotificationService: PushNotificationService,
     private storageService: StorageService,
@@ -34,6 +36,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.geolocationService.init();
     this.storageService.init();
     this.initializeApp();
   }

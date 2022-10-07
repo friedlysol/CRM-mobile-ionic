@@ -6,7 +6,7 @@ export const environment = {
   appUrl: 'https://ahd.friendlysol.com/',
   apiEndpoint: 'https://ahd.friendlysol.com/',
   production: false,
-  tag: 'ahd',
+  company: 'ahd',
   companyName: 'American Home Design',
   authBy: 'email', //'device-id' | 'email' | 'phone-number'
   settings: {},

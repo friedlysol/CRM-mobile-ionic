@@ -3,6 +3,7 @@ import { DatabaseService } from '@app/services/database.service';
 import { FileInterface } from '@app/interfaces/file.interface';
 import { UtilsService } from '@app/services/utils.service';
 import { PrevNextInterface } from '@app/interfaces/prev-next.interface';
+import { GeolocationService } from '@app/services/geolocation.service';
 
 import * as sqlBuilder from 'sql-bricks';
 import * as _ from 'underscore';
@@ -30,7 +31,10 @@ export class FileDatabase {
     'sync_bg_status'
   ];
 
-  constructor(private databaseService: DatabaseService, private utilsService: UtilsService) {
+  constructor(
+    private databaseService: DatabaseService,
+    private geolocationService: GeolocationService
+  ) {
   }
 
   /**
@@ -127,10 +131,11 @@ export class FileDatabase {
    */
   async create(file: FileInterface): Promise<FileInterface> {
     const uuid = file.uuid || this.databaseService.getUuid();
+    const currentLocation = await this.geolocationService.getCurrentLocationAsString();
 
     const query = sqlBuilder.insert('files', Object.assign({
         uuid,
-        gps_coords: this.utilsService.getCurrentCoords(),
+        gps_coords: currentLocation,
         created_at: this.databaseService.getTimeStamp(),
         updated_at: null,
         sync: 0
@@ -164,7 +169,7 @@ export class FileDatabase {
    *
    * @param file
    */
-   updateFile(file: FileInterface) {
+  updateFile(file: FileInterface) {
     const query = sqlBuilder.update('files');
     Object.keys(file).forEach(field => {
       query.set(field, file[field]);

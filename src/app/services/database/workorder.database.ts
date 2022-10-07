@@ -6,11 +6,36 @@ import { WorkOrderApiInterface } from '@app/providers/api/interfaces/response-wo
 import { WorkOrderInterface } from '@app/interfaces/work-order.interface';
 
 import * as sqlBuilder from 'sql-bricks';
+import * as _ from 'underscore';
 
 @Injectable({
   providedIn: 'root'
 })
 export class WorkOrderDatabase {
+  public tableName = 'work_orders';
+
+  private allowFields: Array<string> = [
+    'canceled_at',
+    'completed_at',
+    'conditions_comment',
+    'conditions_type_id',
+    'confirmed_at',
+    'covered_area_type_id',
+    'estimated_install_time',
+    'exterior_comment',
+    'exterior_type_id',
+    'foundation_comment',
+    'foundation_type_id',
+    'hash',
+    'payment_capture',
+    'status',
+    'structure_comment',
+    'structure_type_id',
+    'sync',
+    'tech_status_type_id',
+    `covered_area_comment`,
+  ];
+
   constructor(private databaseService: DatabaseService) {
   }
 
@@ -119,6 +144,29 @@ export class WorkOrderDatabase {
   }
 
   /**
+   * Update work order data based on allowed columns in allowFileds array
+   *
+   * @param uuid
+   * @param workOrderData
+   */
+  update(uuid, workOrderData: any) {
+    const allowData = _.pick(workOrderData, this.allowFields);
+
+    if (!allowData.hasOwnProperty('sync')) {
+      allowData.sync = 0;
+    }
+
+    allowData.updated_at = this.databaseService.getTimeStamp();
+
+    const query = sqlBuilder
+      .update('work_orders', allowData)
+      .where({uuid});
+
+    return this.databaseService
+      .query(query.toString(), query.toParams());
+  }
+
+  /**
    * Remove work_order from uuid
    *
    * @param uuid
@@ -157,6 +205,11 @@ export class WorkOrderDatabase {
       .where(condition);
   }
 
+  /**
+   * Update sync status
+   *
+   * @param sync
+   */
   getSqlForUpdateSyncStatus(sync: SyncApiInterface) {
     return sqlBuilder
       .update('work_orders', {id: sync.object_id, sync: 1})
@@ -174,15 +227,24 @@ export class WorkOrderDatabase {
       client: workOrder.client || null,
       company_person_id: workOrder.company_person_id || null,
       completed_at: workOrder.completed_at || null,
+      conditions_comment: workOrder.conditions_comment || null,
+      conditions_type_id: workOrder.conditions_type_id || null,
       confirmed_at: workOrder.confirmed_at || null,
       count_files: workOrder.count_files || 0,
+      covered_area_comment: workOrder.covered_area_comment || null,
+      covered_area_type_id: workOrder.covered_area_type_id || null,
       current_time_sheet_reason: workOrder.current_time_sheet_reason || null,
       customer_id: workOrder.customer_id || null,
       description: workOrder.description || null,
+      estimated_install_time: workOrder.estimated_install_time || null,
       estimated_time: workOrder.estimated_time || null,
       expected_completion_date: workOrder.expected_completion_date || null,
+      exterior_comment: workOrder.exterior_comment || null,
+      exterior_type_id: workOrder.exterior_type_id || null,
       external_app_url: workOrder.external_app_url || null,
       fax: workOrder.fax || null,
+      foundation_comment: workOrder.foundation_comment || null,
+      foundation_type_id: workOrder.foundation_type_id || null,
       hash: workOrder.hash || null,
       hazard_assessment: workOrder.hazard_assessment ? JSON.stringify(workOrder.hazard_assessment) : null,
       id: workOrder.id,
@@ -197,6 +259,7 @@ export class WorkOrderDatabase {
       ivr_number_forward: workOrder.ivr_number_forward || null,
       ivr_pin: workOrder.ivr_pin || null,
       link_person_wo_id: workOrder.link_person_wo_id,
+      payment_capture: workOrder.payment_capture || null,
       phone: workOrder.phone || null,
       pleatlink_approved: workOrder.pleatlink_approved || null,
       primary_technician: workOrder.primary_technician || null,
@@ -214,6 +277,8 @@ export class WorkOrderDatabase {
       site_issue_required: workOrder.site_issue_required || null,
       site_note: workOrder.site_note || null,
       status: workOrder.status || null,
+      structure_comment: workOrder.structure_comment || null,
+      structure_type_id: workOrder.structure_type_id || null,
       tech_status_type_id: workOrder.tech_status_type_id || null,
       trade_type_id: workOrder.trade_type_id || null,
       wo_type_id: workOrder.wo_type_id || null,
