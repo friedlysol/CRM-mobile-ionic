@@ -79,7 +79,10 @@ export const environment = {
       key: 'completed',
       label: 'Completed',
     },
-  ]
+  ],
+  tableToServiceMap: {
+      work_order: 'WorkOrderService',
+  }
 };
 /*
  * For easier debugging in development mode, you can import the following file

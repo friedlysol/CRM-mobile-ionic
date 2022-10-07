@@ -114,7 +114,6 @@ export class GalleryListPage implements OnInit {
     alert.present();
     alert.onDidDismiss().then((data) => {
       if (data.role === 'submit') {
-        file.sync = 1;
         this.fileService.removeFile(file).then((res) => {
           this.files = this.files.filter(el => el.uuid !== file.uuid);
         });

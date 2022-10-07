@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SyncService } from '@app/services/sync.service';
 
 @Component({
   selector: 'app-send-app-state',
@@ -7,9 +8,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SendAppStatePage implements OnInit {
 
-  constructor() { }
+  constructor(
+    private syncService: SyncService,
+  ) { }
 
   ngOnInit() {
+  }
+
+  onSendAppStateClick(){
+    this.syncService.exportDatabase();
   }
 
 }
