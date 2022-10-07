@@ -15,6 +15,9 @@ export class EventService {
   static syncDetailsDone = new Subject<boolean | null>();
   static endSync = new Subject<boolean | null>();
 
+  static databaseIsOpen = new Subject<boolean | null>();
+  static databaseIsClosed = new Subject<boolean | null>();
+
   constructor() {
   }
 }
