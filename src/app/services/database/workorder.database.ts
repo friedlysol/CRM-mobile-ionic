@@ -163,6 +163,12 @@ export class WorkOrderDatabase {
       .where({uuid: sync.object_uuid});
   }
 
+  clearHash(){
+    return sqlBuilder
+      .update('work_orders')
+      .set('hash', null);
+  }
+
   private workOrderDatabaseObj(workOrder: WorkOrderApiInterface): WorkOrderInterface {
     return {
       address_id: workOrder.address_id || null,

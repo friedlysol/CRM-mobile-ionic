@@ -73,6 +73,14 @@ export class WorkOrderService implements SyncInterface {
     console.log('tabs', tabs);
   }
 
+  public async getUnsynchronizedWorkOrders() {
+    return await this.workOrderDatabase.getUnsynchronized();
+  }
+
+  public async clearHash(){
+    return await this.workOrderDatabase.clearHash();
+  }
+
   private async syncStatus(res: ResponseWorkOrderApiInterface) {
     if (res?.response?.syncs?.length) {
       const queue = [];
