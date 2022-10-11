@@ -6,6 +6,9 @@
   <ion-list *ngIf="workOrder">
     <ion-item lines="none">
       <ion-label>#{{ workOrder.work_order_number }}</ion-label>
+
+
+      <a [routerLink]="['/survey', 'list', workOrder.uuid]">Survey</a>
     </ion-item>
   </ion-list>
 </ion-content>

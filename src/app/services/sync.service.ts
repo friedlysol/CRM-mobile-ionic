@@ -8,6 +8,7 @@ import { DatabaseService } from './database.service';
 import { HttpClient } from '@angular/common/http';
 import { FileService } from './file.service';
 import { Directory, Filesystem } from '@capacitor/filesystem';
+import { SurveyService } from '@app/services/survey.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +20,7 @@ export class SyncService {
     private http: HttpClient,
     private settingsService: SettingsService,
     private staticService: StaticService,
+    private surveyService: SurveyService,
     private typeService: TypeService,
     private workOrderService: WorkOrderService,
   ) {
@@ -30,6 +32,7 @@ export class SyncService {
     await this.settingsService.sync();
     await this.typeService.sync();
     await this.workOrderService.sync();
+    await this.surveyService.sync();
 
     EventService.endSync.next(true);
   }

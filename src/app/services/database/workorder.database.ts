@@ -135,6 +135,21 @@ export class WorkOrderDatabase {
   }
 
   /**
+   * Get all work order ids
+   */
+  async getAllWorkOrderIds() {
+    return this.databaseService
+      .findAsArray(`select work_order_id from work_orders`)
+      .then(result => {
+        if (result) {
+          return result.map(item => +item.work_order_id);
+        }
+
+        return [];
+      });
+  }
+
+  /**
    * Get work order record by uuid
    *
    * @param uuid
@@ -216,7 +231,7 @@ export class WorkOrderDatabase {
       .where({uuid: sync.object_uuid});
   }
 
-  clearHash(){
+  clearHash() {
     return sqlBuilder
       .update('work_orders')
       .set('hash', null);

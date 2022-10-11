@@ -1,0 +1,27 @@
+<ion-header>
+  <app-header *ngIf="workOrder" [title]="'For #' + workOrder.work_order_number"></app-header>
+</ion-header>
+
+<ion-content>
+  <div class="p-2" *ngFor="let survey of surveys" [routerLink]="['/survey', 'view', survey.uuid, workOrderUuid]">
+    <ion-row>
+      <ion-col>
+        <ion-label>{{ survey.id + ' - ' + survey.name }}</ion-label>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col class="col-6">
+        Answers:
+        <span class="text-red" [class]="{'text-green': survey.answered === survey.total}">
+            {{ survey.answered > survey.total ? survey.total : survey.answered }} / {{ survey.total }}
+          </span>
+      </ion-col>
+      <ion-col class="col-6" *ngIf="survey.total_photos">
+        Photos:
+        <span class="text-red" [class]="{'text-green': survey.photos === survey.total_photos}">
+            {{ survey.photos > survey.total_photos ? survey.total_photos : survey.photos }} / {{ survey.total_photos }}
+          </span>
+      </ion-col>
+    </ion-row>
+  </div>
+</ion-content>
