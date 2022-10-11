@@ -14,20 +14,24 @@ const routes: Routes = [
     loadChildren: () => import('./pages/supplies-request/supplies-request.module').then(m => m.SuppliesRequestModule)
   },
   {
+    path: 'survey',
+    loadChildren: () => import('./pages/survey/survey.module').then(m => m.SurveyPageModule)
+  },
+  {
     path: 'vehicle-inspection',
-    loadChildren: () => import('./pages/vehicle-inspection/vehicle-inspection.module').then( m => m.VehicleInspectionModule)
+    loadChildren: () => import('./pages/vehicle-inspection/vehicle-inspection.module').then(m => m.VehicleInspectionModule)
   },
   {
     path: 'message-center',
-    loadChildren: () => import('./pages/message-center/message-center.module').then( m => m.MessageCenterModule)
+    loadChildren: () => import('./pages/message-center/message-center.module').then(m => m.MessageCenterModule)
   },
   {
     path: 'gallery',
-    loadChildren: () => import('./pages/gallery/gallery.module').then( m => m.GalleryModule),
+    loadChildren: () => import('./pages/gallery/gallery.module').then(m => m.GalleryModule),
   },
   {
     path: 'settings',
-    loadChildren: () => import('./pages/settings/settings.module').then( m => m.SettingsModule),
+    loadChildren: () => import('./pages/settings/settings.module').then(m => m.SettingsModule),
     canActivate: [AuthGuard]
   },
   {
@@ -40,7 +44,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes, { preloadingStrategy: PreloadAllModules })
+    RouterModule.forRoot(routes, {preloadingStrategy: PreloadAllModules})
   ],
   exports: [RouterModule]
 })

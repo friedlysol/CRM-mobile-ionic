@@ -1,0 +1,29 @@
+<ion-header>
+  <app-header *ngIf="survey" [title]="survey.name"></app-header>
+</ion-header>
+
+<ion-content>
+  <ion-list *ngIf="questions.length">
+    <ion-item lines="none" class="" *ngFor="let question of questions">
+      <p *ngIf="question.group_name">
+        <small><b>{{ question.group_name }}</b></small>
+      </p>
+      <span>
+        {{ question.title }}
+        <span class="required" *ngIf="question.required && question.type !== 'photo_only'">*</span>
+      </span>
+    </ion-item>
+
+  </ion-list>
+
+</ion-content>
+<ion-footer>
+
+<!--  <select class="timer-dropdown" style="border: 1px solid #b9b5b5; font-size: 15px" ng-model="group.selected" ng-change="changeGroup($event)" ng-options="group.id as group.type_value for group in groupTypes">-->
+<!--    <option value=""> All questions</option>-->
+<!--  </select>-->
+
+<!--  <button class="button button-positive pull-right" ng-click="submit(true)">Save</button>-->
+
+
+</ion-footer>

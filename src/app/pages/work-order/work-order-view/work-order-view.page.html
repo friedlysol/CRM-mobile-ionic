@@ -27,7 +27,7 @@
         </ion-col>
       </ion-row>
     </ion-grid>
-    
+
     <ion-item lines="none" *ngIf="workOrder.phone">
       <ion-label>
         <strong>Phone number:</strong>
@@ -45,81 +45,81 @@
     <ng-container *ngIf="isWorking()">
       <ion-item lines="none" *ngIf="exteriorTypes.length > 0">
         <ion-label position="stacked"><strong>Exterior Type:</strong></ion-label>
-        <ion-select 
+        <ion-select
           placeholder="Select type"
           [(ngModel)]="workOrder.exterior_type_id"
           (ionChange)="updateWorkOrder()">
-          <ion-select-option 
+          <ion-select-option
             *ngFor="let type of exteriorTypes"
             [value]="type.id">
             {{ type.type_value }}
           </ion-select-option>
         </ion-select>
       </ion-item>
-  
+
       <ion-item lines="none" *ngIf="structureTypes.length > 0">
         <ion-label position="floating"><strong>Structure Type:</strong></ion-label>
-        <ion-select 
+        <ion-select
           placeholder="Select type"
           [(ngModel)]="workOrder.structure_type_id"
           (ionChange)="updateWorkOrder()">
-          <ion-select-option 
+          <ion-select-option
             *ngFor="let type of structureTypes"
             [value]="type.id">
             {{ type.type_value }}
           </ion-select-option>
         </ion-select>
       </ion-item>
-  
+
       <ion-item lines="none" *ngIf="foundationTypes.length > 0">
         <ion-label position="floating"><strong>Foundation Type:</strong></ion-label>
-        <ion-select 
+        <ion-select
           placeholder="Select type"
           [(ngModel)]="workOrder.foundation_type_id"
           (ionChange)="updateWorkOrder()">
-          <ion-select-option 
+          <ion-select-option
             *ngFor="let type of foundationTypes"
             [value]="type.id">
             {{ type.type_value }}
           </ion-select-option>
         </ion-select>
       </ion-item>
-  
+
       <ion-item lines="none" *ngIf="conditionsTypes.length > 0">
         <ion-label position="floating"><strong>Conditions:</strong></ion-label>
-        <ion-select 
+        <ion-select
           placeholder="Select type"
           [(ngModel)]="workOrder.conditions_type_id"
           (ionChange)="updateWorkOrder()">
-          <ion-select-option 
+          <ion-select-option
             *ngFor="let type of conditionsTypes"
             [value]="type.id">
             {{ type.type_value }}
           </ion-select-option>
         </ion-select>
       </ion-item>
-  
+
       <ion-item lines="none" *ngIf="coveredAreaTypes.length > 0">
         <ion-label position="floating"><strong>Covered Area:</strong></ion-label>
-        <ion-select 
+        <ion-select
           placeholder="Select type"
           [(ngModel)]="workOrder.covered_area_type_id"
           (ionChange)="updateWorkOrder()">
-          <ion-select-option 
+          <ion-select-option
             *ngFor="let type of coveredAreaTypes"
             [value]="type.id">
             {{ type.type_value }}
           </ion-select-option>
         </ion-select>
       </ion-item>
-  
+
       <ion-item lines="none">
         <ion-label position="floating"><strong>Estimated Install Time:</strong></ion-label>
-        <ion-select 
+        <ion-select
           placeholder="Select time"
           [(ngModel)]="workOrder.estimated_install_time"
           (ionChange)="updateWorkOrder()">
-          <ion-select-option 
+          <ion-select-option
             *ngFor="let hours of [4, 8, 12, 24]"
             [value]="hours">
             {{ hours }} hours
@@ -129,12 +129,12 @@
     </ng-container>
 
     <ion-item class="margin-top-5vh" lines="none" *ngIf="woTypes.length > 0">
-      <ion-select 
+      <ion-select
         class="status-select"
-        placeholder="Select status" 
+        placeholder="Select status"
         [(ngModel)]="workOrder.tech_status_type_id"
         (ionChange)="updateWorkOrder()">
-        <ion-select-option 
+        <ion-select-option
           *ngFor="let type of woTypes"
           [value]="type.id">
           {{ type.type_value }}
@@ -145,8 +145,8 @@
     <ion-grid>
       <ion-row *ngIf="photoType" class="ion-align-items-center">
         <ion-col class="ion-text-center">
-          <a 
-            [routerLink]="['/gallery', 'list', 'asset_pictures', '32134']" 
+          <a
+            [routerLink]="['/gallery', 'list', 'asset_pictures', '32134']"
             [queryParams]="{
               objectType: 'work_order',
               objectUuid: workOrder.uuid,
@@ -158,7 +158,7 @@
           </a>
         </ion-col>
         <ion-col class="ion-text-center">
-          <app-capture-media 
+          <app-capture-media
             objectType="work_order"
             type="photo"
             [typeId]="photoType.id"
@@ -173,7 +173,7 @@
       <ion-row class="ion-align-items-center">
         <ion-col class="ion-text-center">
           <a
-            [routerLink]="['/gallery', 'list', 'asset_pictures', '32134']" 
+            [routerLink]="['/gallery', 'list', 'asset_pictures', '32134']"
             [queryParams]="{
               objectType: 'work_order',
               objectUuid: workOrder.uuid,
@@ -190,7 +190,7 @@
       </ion-row>
       <ion-row class="ion-align-items-center">
         <ion-col class="ion-text-center">
-          <ion-button>Certificate of Completion</ion-button>
+          <ion-button [routerLink]="['/survey', 'list', workOrder.uuid]">Certificate of Completion</ion-button>
         </ion-col>
       </ion-row>
       <ion-row class="ion-align-items-center">
