@@ -1,4 +1,5 @@
 export interface WorkOrderInterface {
+  uuid?: string;
   address_id: number;
   address_uuid: string;
   assigned_techs_vendors: string | object;

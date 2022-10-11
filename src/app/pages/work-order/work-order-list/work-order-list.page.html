@@ -19,9 +19,9 @@
   </div>
 </ion-header>
 
-<ion-content id="main">
+<ion-content>
   <ion-list>
-    <ion-card *ngFor="let workOrder of workOrders">
+    <ion-card *ngFor="let workOrder of workOrders" (click)="goToWorkOrder(workOrder.uuid)">
       <ion-card-header>
         <ion-card-title>#{{ workOrder.work_order_number }}</ion-card-title>
       </ion-card-header>

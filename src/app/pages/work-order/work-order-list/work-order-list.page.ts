@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AuthService } from '@app/services/auth.service';
 import { AlertController } from '@ionic/angular';
 import { WorkOrderService } from '@app/services/workorder.service';
-import { SettingsService } from '@app/services/settings.service';
 import { EventService } from '@app/services/event.service';
 import { TabInterface } from '@app/interfaces/tab.interface';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -57,7 +56,7 @@ export class WorkOrderListPage implements OnInit, OnDestroy {
     });
 
     this.subscriptions.add(EventService.endSync.subscribe(status => {
-      if(status) {
+      if (status) {
         this.loadList();
       }
     }));
@@ -144,6 +143,10 @@ export class WorkOrderListPage implements OnInit, OnDestroy {
         replaceUrl: true
       });
     }
+  }
+
+  async goToWorkOrder(uuid: string) {
+    this.router.navigateByUrl('/work-order/view/' + uuid);
   }
 
   private setTabs() {

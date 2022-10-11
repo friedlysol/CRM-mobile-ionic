@@ -7,6 +7,7 @@ import { WorkOrderRoutingModule } from './work-order.routing.module';
 import { WorkOrderListPage } from './work-order-list/work-order-list.page';
 import { SharedModule } from '@app/shared.module';
 import { AddressComponent } from '@app/components/address/address.component';
+import { WorkOrderViewPage } from '@app/pages/work-order/work-order-view/work-order-view.page';
 
 @NgModule({
   imports: [
@@ -16,6 +17,6 @@ import { AddressComponent } from '@app/components/address/address.component';
     SharedModule,
     WorkOrderRoutingModule
   ],
-  declarations: [WorkOrderListPage, AddressComponent],
+  declarations: [WorkOrderListPage, WorkOrderViewPage, AddressComponent],
 })
 export class  WorkOrderModule {}
