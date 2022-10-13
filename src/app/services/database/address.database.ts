@@ -44,6 +44,10 @@ export class AddressDatabase {
     return Promise.resolve({});
   }
 
+  getByUuid(uuid: string){
+    return this.databaseService.findOrNull(`select * from addresses where uuid = ?`, [uuid]);
+  }
+
   /**
    * Remove address from db
    *

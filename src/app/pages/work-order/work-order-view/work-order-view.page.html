@@ -5,8 +5,210 @@
 <ion-content>
   <ion-list *ngIf="workOrder">
     <ion-item lines="none">
-      <ion-label>#{{ workOrder.work_order_number }}</ion-label>
+      <ion-label><strong>#{{ workOrder.work_order_number }}</strong></ion-label>
     </ion-item>
+
+    <ion-item lines="none" *ngIf="woAddress">
+      <ion-label>
+        <strong>Address:</strong>
+        <ng-container *ngIf="woAddress.address"><br/>{{ woAddress.address }}</ng-container>
+        <ng-container *ngIf="woAddress.city"><br/>{{ woAddress.city }}</ng-container>
+        <ng-container *ngIf="woAddress.address_name"><br/>{{ woAddress.address_name }}</ng-container>
+      </ion-label>
+    </ion-item>
+
+    <ion-grid>
+      <ion-row *ngIf="photoType" class="ion-align-items-center">
+        <ion-col class="ion-text-center">
+          <ion-button href="geo:0,0?q={{getLocationQueryString()}}">Show on map</ion-button>
+        </ion-col>
+        <ion-col class="ion-text-center">
+          <ion-button (click)="navigateToMap()">Get directions</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    
+    <ion-item lines="none" *ngIf="workOrder.phone">
+      <ion-label>
+        <strong>Phone number:</strong>
+      </ion-label>
+      {{ workOrder.phone }}
+    </ion-item>
+
+    <ion-item lines="none" *ngIf="workOrder.received_date">
+      <ion-label>
+        <strong>Contract Date:</strong>
+      </ion-label>
+      {{ workOrder.received_date }}
+    </ion-item>
+
+    <ng-container *ngIf="isWorking()">
+      <ion-item lines="none" *ngIf="exteriorTypes.length > 0">
+        <ion-label position="stacked"><strong>Exterior Type:</strong></ion-label>
+        <ion-select 
+          placeholder="Select type"
+          [(ngModel)]="workOrder.exterior_type_id"
+          (ionChange)="updateWorkOrder()">
+          <ion-select-option 
+            *ngFor="let type of exteriorTypes"
+            [value]="type.id">
+            {{ type.type_value }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+  
+      <ion-item lines="none" *ngIf="structureTypes.length > 0">
+        <ion-label position="floating"><strong>Structure Type:</strong></ion-label>
+        <ion-select 
+          placeholder="Select type"
+          [(ngModel)]="workOrder.structure_type_id"
+          (ionChange)="updateWorkOrder()">
+          <ion-select-option 
+            *ngFor="let type of structureTypes"
+            [value]="type.id">
+            {{ type.type_value }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+  
+      <ion-item lines="none" *ngIf="foundationTypes.length > 0">
+        <ion-label position="floating"><strong>Foundation Type:</strong></ion-label>
+        <ion-select 
+          placeholder="Select type"
+          [(ngModel)]="workOrder.foundation_type_id"
+          (ionChange)="updateWorkOrder()">
+          <ion-select-option 
+            *ngFor="let type of foundationTypes"
+            [value]="type.id">
+            {{ type.type_value }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+  
+      <ion-item lines="none" *ngIf="conditionsTypes.length > 0">
+        <ion-label position="floating"><strong>Conditions:</strong></ion-label>
+        <ion-select 
+          placeholder="Select type"
+          [(ngModel)]="workOrder.conditions_type_id"
+          (ionChange)="updateWorkOrder()">
+          <ion-select-option 
+            *ngFor="let type of conditionsTypes"
+            [value]="type.id">
+            {{ type.type_value }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+  
+      <ion-item lines="none" *ngIf="coveredAreaTypes.length > 0">
+        <ion-label position="floating"><strong>Covered Area:</strong></ion-label>
+        <ion-select 
+          placeholder="Select type"
+          [(ngModel)]="workOrder.covered_area_type_id"
+          (ionChange)="updateWorkOrder()">
+          <ion-select-option 
+            *ngFor="let type of coveredAreaTypes"
+            [value]="type.id">
+            {{ type.type_value }}
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+  
+      <ion-item lines="none">
+        <ion-label position="floating"><strong>Estimated Install Time:</strong></ion-label>
+        <ion-select 
+          placeholder="Select time"
+          [(ngModel)]="workOrder.estimated_install_time"
+          (ionChange)="updateWorkOrder()">
+          <ion-select-option 
+            *ngFor="let hours of [4, 8, 12, 24]"
+            [value]="hours">
+            {{ hours }} hours
+          </ion-select-option>
+        </ion-select>
+      </ion-item>
+    </ng-container>
+
+    <ion-item class="margin-top-5vh" lines="none" *ngIf="woTypes.length > 0">
+      <ion-select 
+        class="status-select"
+        placeholder="Select status" 
+        [(ngModel)]="workOrder.tech_status_type_id"
+        (ionChange)="updateWorkOrder()">
+        <ion-select-option 
+          *ngFor="let type of woTypes"
+          [value]="type.id">
+          {{ type.type_value }}
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-grid>
+      <ion-row *ngIf="photoType" class="ion-align-items-center">
+        <ion-col class="ion-text-center">
+          <a 
+            [routerLink]="['/gallery', 'list', 'asset_pictures', '32134']" 
+            [queryParams]="{
+              objectType: 'work_order',
+              objectUuid: workOrder.uuid,
+              objectId: workOrder.id,
+              photoType: 'wo_pictures',
+              onlyFilesWithExt: 'jpg'
+            }">
+            <ion-button>Browse photos</ion-button>
+          </a>
+        </ion-col>
+        <ion-col class="ion-text-center">
+          <app-capture-media 
+            objectType="work_order"
+            type="photo"
+            [typeId]="photoType.id"
+            [objectUuid]="workOrder.uuid"
+            [objectId]="workOrder.id"
+            [mediaOptions]="{
+              buttonLabel: 'Add photo'
+            }">
+          </app-capture-media>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-align-items-center">
+        <ion-col class="ion-text-center">
+          <a
+            [routerLink]="['/gallery', 'list', 'asset_pictures', '32134']" 
+            [queryParams]="{
+              objectType: 'work_order',
+              objectUuid: workOrder.uuid,
+              objectId: workOrder.id,
+              onlyFilesWithExt: 'pdf',
+              readOnly: 'true'
+            }">
+            <ion-button>Documents</ion-button>
+          </a>
+        </ion-col>
+        <ion-col class="ion-text-center">
+          <ion-button>Notes</ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-align-items-center">
+        <ion-col class="ion-text-center">
+          <ion-button>Certificate of Completion</ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-align-items-center">
+        <ion-col class="ion-text-center">
+          <ion-button>Job Evaluation Form</ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-align-items-center">
+        <ion-col class="ion-text-center">
+          <ion-button>Parts Request Form</ion-button>
+        </ion-col>
+      </ion-row>
+      <ion-row class="ion-align-items-center">
+        <ion-col class="ion-text-center">
+          <ion-button>Assets</ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </ion-list>
 </ion-content>
 
