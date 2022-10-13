@@ -153,7 +153,7 @@ export class CaptureMediaComponent implements OnInit {
       const time = new Date().getTime();
       this.fileService.saveBase64File(
         source,
-        `${this.type}_${file.object_id}_${file.description}_${time}.png`,
+        `${this.type}_${file.object_id}_${file.description}_${time}.jpg`,
         file,
       );
     } catch (e) {

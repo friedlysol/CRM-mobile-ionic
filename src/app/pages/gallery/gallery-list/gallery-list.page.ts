@@ -115,6 +115,9 @@ export class GalleryListPage implements OnInit {
     alert.onDidDismiss().then((data) => {
       if (data.role === 'submit') {
         this.fileService.removeFile(file).then((res) => {
+          if(!res){
+            return;
+          }
           this.files = this.files.filter(el => el.uuid !== file.uuid);
         });
       }
@@ -161,7 +164,7 @@ export class GalleryListPage implements OnInit {
   }
 
   async savePhoto(photo: Photo, typeId: number) {
-    const typeLabel = this.types.find(type => type.id === typeId).type_value;
+    const typeLabel = this.types.find(type => type.id === typeId)?.type_value || '';
 
     const file: FileInterface = {
       uuid: this.databaseService.getUuid(),
@@ -183,7 +186,7 @@ export class GalleryListPage implements OnInit {
       const time = new Date().getTime();
       this.fileService.saveBase64File(
         source,
-        `${typeLabel}_${file.object_id}_${file.description}_${time}.png`,
+        `${typeLabel}_${file.object_id}_${file.description}_${time}.jpg`,
         file,
       ).then(() => {
         this.files.unshift(file);
@@ -193,6 +196,7 @@ export class GalleryListPage implements OnInit {
   }
 
   async showDescriptionAlert(): Promise<string> {
+    const minLengthDescription = 5;
     const buttons: any = [
       {
         text: 'Submit',
@@ -211,7 +215,6 @@ export class GalleryListPage implements OnInit {
         role: 'skip',
       });
     }
-    const minLengthDescription = 5;
     const alert = await this.alertController.create({
       header: 'Enter description',
       backdropDismiss: false,
