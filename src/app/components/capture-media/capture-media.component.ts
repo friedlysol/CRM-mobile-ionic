@@ -6,6 +6,7 @@ import { MediaOptionsInterface } from '@app/interfaces/media-options.interface';
 import { DatabaseService } from '@app/services/database.service';
 import { FileService } from '@app/services/file.service';
 import { Camera, CameraResultType, CameraSource, Photo } from '@capacitor/camera';
+import { Capacitor } from '@capacitor/core';
 import { AlertController, ToastController } from '@ionic/angular';
 
 @Component({
@@ -20,6 +21,7 @@ export class CaptureMediaComponent implements OnInit {
   @Input() typeId: number;
   @Input() type: 'photo' | 'video';
   @Input() linkPersonWoId?: number;
+  @Input() allowRemove?: boolean;
 
   @Input()
   get mediaOptions(): MediaOptionsInterface {
@@ -30,7 +32,7 @@ export class CaptureMediaComponent implements OnInit {
     this._mediaOptions = {
       buttonLabel: options.buttonLabel != null ? options.buttonLabel : 'Media',
       required: options.required != null ? options.required : false,
-      requiredOnce: options.required != null ? options.required : false,
+      requiredOnce: options.requiredOnce != null ? options.requiredOnce : false,
       minQuantity: options.minQuantity != null ? options.minQuantity : 0,
       onlyNewPhoto: options.onlyNewPhoto != null ? options.onlyNewPhoto : true,
       height: options.height != null ? options.height : null,
@@ -50,6 +52,7 @@ export class CaptureMediaComponent implements OnInit {
 
   quantity = 0;
   description: string;
+  photo: FileInterface;
 
   constructor(
     private alertController: AlertController,
@@ -151,11 +154,12 @@ export class CaptureMediaComponent implements OnInit {
       }
 
       const time = new Date().getTime();
-      this.fileService.saveBase64File(
+      await this.fileService.saveBase64File(
         source,
         `${this.type}_${file.object_id}_${file.description}_${time}.jpg`,
         file,
       );
+      this.photo = file;
     } catch (e) {
     }
   }
@@ -203,4 +207,38 @@ export class CaptureMediaComponent implements OnInit {
     toast.present();
   }
 
+  async onRemoveClick(){
+    const alert = await this.alertController.create({
+      header: 'Confirm',
+      message: 'Are you sure you want to delete this file?',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+        },
+        {
+          text: 'Submit',
+          role: 'submit',
+        },
+      ]
+    });
+
+    alert.present();
+    alert.onDidDismiss().then((data) => {
+      if (data.role === 'submit') {
+        this.fileService.removeFile(this.photo).then((res) => {
+          if(!res){
+            return;
+          }
+          this.photo = null;
+          this.quantity--;
+        });
+      }
+    });
+  }
+
+  getFilePath(){
+    const source = this.photo.thumbnail? this.photo.thumbnail: this.photo.path;
+    return Capacitor.convertFileSrc(source);
+  }
 }

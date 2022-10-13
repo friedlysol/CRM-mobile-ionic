@@ -5,6 +5,18 @@
 <ion-content>
   <ion-row>
     <ion-col>
+      <app-capture-media
+          [typeId]="81"
+          type="photo"
+          [objectId]="120"
+          objectUuid="31341"
+          objectType="asset_pictures"
+          [mediaOptions]="buttonLabel">
+      </app-capture-media>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col>
       <a [routerLink]="['/gallery', 'list', 'asset_pictures', '32134']" [queryParams]="{
         objectId: 0, 
         readOnly: false, 
@@ -14,16 +26,6 @@
       }">
         <ion-button>Browser photos</ion-button>
       </a>
-    </ion-col>
-    <ion-col>
-      <app-capture-media
-          [typeId]="808"
-          type="photo"
-          [objectId]="0"
-          objectUuid="32134"
-          objectType="asset_pictures"
-          [mediaOptions]="buttonLabel">
-      </app-capture-media>
     </ion-col>
   </ion-row>
 </ion-content>

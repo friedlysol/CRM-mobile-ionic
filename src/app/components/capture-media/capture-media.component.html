@@ -1,3 +1,17 @@
-<ion-button (click)="onClick()" [color]="getButtonColor()" [class]="mediaOptions.class">
-  {{getButtonLabel()}}
-</ion-button>
+<ion-img *ngIf="photo && allowRemove" [src]="getFilePath()"></ion-img>
+
+<ion-row>
+  <ion-col>
+    <ion-button (click)="onClick()" [color]="getButtonColor()" [class]="mediaOptions.class">
+      {{getButtonLabel()}}
+    </ion-button>
+  </ion-col>
+  <ion-col 
+    *ngIf="photo && allowRemove">
+    <ion-button 
+      color="danger"
+      (click)="onRemoveClick()">
+      Remove photo
+    </ion-button>
+  </ion-col>
+</ion-row>
