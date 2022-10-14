@@ -41,7 +41,7 @@
     "@capacitor/keyboard": "^4.0.1",
     "@capacitor/local-notifications": "^4.0.1",
     "@capacitor/network": "^4.0.1",
-    "@capacitor/push-notifications": "^4.0.1",
+    "@capacitor/push-notifications": "^4.1.0",
     "@capacitor/splash-screen": "^4.0.1",
     "@ionic-native/android-permissions": "^5.36.0",
     "@ionic-native/app-version": "^5.36.0",
