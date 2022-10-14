@@ -41,6 +41,7 @@ export class SyncService {
     if (!this.staticService.networkStatus.connected) {
       return false;
     }
+    await this.databaseService.closeDatabase();
 
     const copyPath = await Filesystem.copy({
       from: '../databases/database.db',
@@ -49,6 +50,7 @@ export class SyncService {
       toDirectory: Directory.Documents,
     });
 
+    await this.databaseService.openDatabase();
     return await this.fileService.uploadDatabase(copyPath.uri);
   }
 }

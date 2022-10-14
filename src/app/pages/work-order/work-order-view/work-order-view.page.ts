@@ -43,13 +43,11 @@ export class WorkOrderViewPage implements OnInit, OnDestroy {
     this.route.paramMap.subscribe(async params => {
       this.workOrderUuid = params.get('workOrderUuid');
       this.workOrder = await this.workOrderDatabase.getByUuid(this.workOrderUuid);
-      console.log(this.workOrder);
-
       this.woAddress = await this.addressDatabase.getByUuid(this.workOrder.address_uuid);
-      console.log(this.woAddress)
     });
 
     this.woTypes = await this.typeService.getByType('tech_status');
+    console.log(this.woTypes)
     this.exteriorTypes = await this.typeService.getByType('wo_exterior_type');
     this.structureTypes = await this.typeService.getByType('wo_structure_type');
     this.foundationTypes = await this.typeService.getByType('wo_foundation_type');
@@ -65,7 +63,14 @@ export class WorkOrderViewPage implements OnInit, OnDestroy {
     if (!this.workOrder || !this.woTypes) {
       return false;
     }
-    return this.workOrder.tech_status_type_id === this.woTypes.find(e => e.type_value === 'WIP')?.id;
+    return this.workOrder.tech_status_type_id === this.woTypes.find(e => e.type_key=== 'tech_status.work_in_progress')?.id;
+  }
+
+  isCompleted(){
+    if(!this.workOrder || !this.woTypes){
+      return false;
+    }
+    return this.workOrder.tech_status_type_id === this.woTypes.find(e => e.type_key === 'tech_status.completed')?.id;
   }
 
   updateWorkOrder() {
@@ -84,4 +89,15 @@ export class WorkOrderViewPage implements OnInit, OnDestroy {
   navigateToMap() {
     this.launchNavigator.navigate(this.getLocationQueryString());
   }
+
+  isDisabledSelectStatusOption(index: number){
+    if(this.woTypes[index].type_key === 'tech_status.incomplete'){
+      return !(this.woTypes[index].id === this.workOrder.tech_status_type_id);
+    }
+
+    return !(this.woTypes[index].id === this.workOrder.tech_status_type_id ||
+      index > 0 && this.woTypes[index-1].id === this.workOrder.tech_status_type_id ||
+      index < this.woTypes.length-1 && this.woTypes[index+1].id === this.workOrder.tech_status_type_id);
+  }
+
 }

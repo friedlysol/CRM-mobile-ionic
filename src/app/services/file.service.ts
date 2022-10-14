@@ -173,10 +173,12 @@ export class FileService {
             await data.body.text(),
             new Date().getTime().toString(),
           );
+
           file.thumbnail = await this.createFileAndGetUrl(
             await this.generateThumbnail(URL.createObjectURL(data.body)),
             new Date().getTime().toString(),
           );
+
           this.fileDatabase.updateFile(file);
         }
       }),
@@ -229,7 +231,7 @@ export class FileService {
       files = files.filter(file => regex.test(file.path));
     }
 
-    return await files;
+    return files;
   }
 
   async getTotalByObjectAndType(
@@ -300,7 +302,12 @@ export class FileService {
   }
 
   async removeFile(file: FileInterface) {
-    if (file.sync === 1) {
+    if (file.sync === 1 || file.sync_bg_status != null) {
+      file.is_deleted = 1;
+      file.sync = 0;
+
+      return this.fileDatabase.updateFile(file);
+    }else if(file.sync === 0 && file.sync_bg_status == null){
       return this.fileDatabase.remove(file);
     }
 

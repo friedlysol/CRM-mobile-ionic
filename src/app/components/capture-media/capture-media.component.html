@@ -1,3 +1,16 @@
-<ion-button (click)="onClick()" [color]="getButtonColor()" [class]="mediaOptions.class">
-  {{getButtonLabel()}}
-</ion-button>
+<ion-img class="ion-margin-bottom" *ngIf="photo && _mediaOptions.allowRemove" [src]="getFilePath()"></ion-img>
+
+<ion-row class="ion-no-padding">
+  <ion-col class="ion-no-padding" [class]="{padding: photo && _mediaOptions.allowRemove}">
+    <ion-button (click)="onClick()" [color]="getButtonColor()" [class]="mediaOptions.class">
+      {{getButtonLabel()}}
+    </ion-button>
+  </ion-col>
+  <ion-col class="ion-no-padding" [class]="{padding: photo && _mediaOptions.allowRemove}" *ngIf="photo && _mediaOptions.allowRemove">
+    <ion-button
+      color="danger"
+      (click)="onRemoveClick()">
+      Remove photo
+    </ion-button>
+  </ion-col>
+</ion-row>

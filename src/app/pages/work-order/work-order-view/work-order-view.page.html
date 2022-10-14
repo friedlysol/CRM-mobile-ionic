@@ -43,19 +43,26 @@
       {{ workOrder.received_date }}
     </ion-item>
 
-    <ion-item lines="none" *ngIf="woTypes.length > 0">
-      <ion-select
-          class="status-select"
-          placeholder="Select status"
-          interface="action-sheet"
-          [(ngModel)]="workOrder.tech_status_type_id"
-          (ionChange)="updateWorkOrder()">
-        <ion-select-option
-            *ngFor="let type of woTypes"
-            [value]="type.id">
-          {{ type.type_value }}
-        </ion-select-option>
-      </ion-select>
+    <ion-item class="margin-top-5vh" lines="none" *ngIf="woTypes.length > 0">
+      <ng-container *ngIf="isCompleted(); else notCompletedStatus">
+        <ion-label class="completed-label">COMPLETED</ion-label>
+      </ng-container>
+
+      <ng-template #notCompletedStatus>
+        <ion-select
+            interface="popover"
+            class="status-select"
+            placeholder="Select status"
+            [(ngModel)]="workOrder.tech_status_type_id"
+            (ionChange)="updateWorkOrder()">
+          <ion-select-option
+              *ngFor="let type of woTypes; index as i"
+              [disabled]="isDisabledSelectStatusOption(i)"
+              [value]="type.id">
+            {{ type.type_value }}
+          </ion-select-option>
+        </ion-select>
+      </ng-template>
     </ion-item>
 
     <ng-container *ngIf="isWorking()">
@@ -151,7 +158,7 @@
     </ng-container>
 
     <ion-grid class="mx-1">
-      <ion-row *ngIf="photoType" class="ion-align-items-center">
+      <ion-row *ngIf="photoType" class="ion-align-items-center ion-no-padding">
         <ion-col class="ion-text-center">
           <a
               [routerLink]="['/gallery', 'list', 'work_order', workOrder.uuid]"
@@ -173,11 +180,13 @@
               [objectUuid]="workOrder.uuid"
               [objectId]="workOrder.id"
               [mediaOptions]="{
-              buttonLabel: 'Add photo'
-            }">
+                buttonLabel: 'Add photo',
+                class: 'w-full'
+              }">
           </app-capture-media>
         </ion-col>
       </ion-row>
+
       <ion-row class="ion-align-items-center">
         <ion-col class="ion-text-center">
           <a

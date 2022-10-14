@@ -58,9 +58,9 @@ export interface SurveyResultInterface {
   survey_question_id: number;
   answer: string;
   comment: string;
-  object_type: string;
+  object_type?: string;
   object_uuid?: string;
-  object_id: number;
+  object_id?: number;
   sync?: number;
   hash: string;
   created_at?: string;
