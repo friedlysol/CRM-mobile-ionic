@@ -1,15 +1,24 @@
-ion-select{
-    width: 100%;
-    padding-left: 4vw;
-    margin-top: 1vh;
-    border: 1px solid var(--ion-color-grey-shade);
+:host {
+  font-size: 0.8rem;
 }
 
-ion-button{
-    --background: var(--ion-color-grey-shade);
-    width: 100%;
+ion-label {
+  font-size: 0.8rem;
 }
 
-.margin-top-5vh{
-    margin-top: 5vh;
+ion-select {
+  width: 100%;
+  margin-top: 5px;
+  border: 1px solid var(--ion-color-grey-shade);
+  font-size: 0.8rem;
+  padding: 5px;
+}
+
+ion-button {
+  --background: var(--ion-color-grey-shade);
+  width: 100%;
+}
+
+.margin-top-5vh {
+  margin-top: 5vh;
 }

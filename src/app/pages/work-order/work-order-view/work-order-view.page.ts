@@ -8,7 +8,7 @@ import { TypeService } from '@app/services/type.service';
 import { TypeInterface } from '@app/interfaces/type.interface';
 import { AddressInterface } from '@app/interfaces/address.interface';
 import { AddressDatabase } from '@app/services/database/address.database';
-import { LaunchNavigator, LaunchNavigatorOptions } from '@awesome-cordova-plugins/launch-navigator/ngx';
+import { LaunchNavigator } from '@awesome-cordova-plugins/launch-navigator/ngx';
 
 @Component({
   selector: 'app-work-order-view',
@@ -48,7 +48,7 @@ export class WorkOrderViewPage implements OnInit, OnDestroy {
       this.woAddress = await this.addressDatabase.getByUuid(this.workOrder.address_uuid);
       console.log(this.woAddress)
     });
-    
+
     this.woTypes = await this.typeService.getByType('tech_status');
     this.exteriorTypes = await this.typeService.getByType('wo_exterior_type');
     this.structureTypes = await this.typeService.getByType('wo_structure_type');
@@ -61,27 +61,27 @@ export class WorkOrderViewPage implements OnInit, OnDestroy {
   ngOnDestroy() {
   }
 
-  isWorking(){
-    if(!this.workOrder || !this.woTypes){
+  isWorking() {
+    if (!this.workOrder || !this.woTypes) {
       return false;
     }
     return this.workOrder.tech_status_type_id === this.woTypes.find(e => e.type_value === 'WIP')?.id;
   }
 
-  updateWorkOrder(){
+  updateWorkOrder() {
     this.workOrderDatabase.update(this.workOrder.uuid, this.workOrder);
   }
 
-  getLocationQueryString(){
-    if(!this.woAddress){
+  getLocationQueryString() {
+    if (!this.woAddress) {
       return '';
     }
-    return (this.woAddress.address? this.woAddress.address + ', ': '')+
-    (this.woAddress.city? this.woAddress.city + ', ': '')+
-    (this.woAddress.state? this.woAddress.state + ', ': '');
+    return (this.woAddress.address ? this.woAddress.address + ', ' : '') +
+      (this.woAddress.city ? this.woAddress.city + ', ' : '') +
+      (this.woAddress.state ? this.woAddress.state + ', ' : '');
   }
 
-  navigateToMap(){
+  navigateToMap() {
     this.launchNavigator.navigate(this.getLocationQueryString());
   }
 }

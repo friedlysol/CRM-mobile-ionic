@@ -29,7 +29,7 @@ export class TypeDatabase {
    */
   getByType(type: string): Promise<TypeInterface[]> {
     return this.databaseService
-      .findAsArray(`select * from types where type = ? order by type_order`, [type]);
+      .findAsArray(`select * from types where type = ? order by type_order asc, type_value asc`, [type]);
   }
 
   /**

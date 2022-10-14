@@ -44,7 +44,11 @@
 //#bc997e
 //#d2a27c
 
-
+ion-item,
+ion-label,
+ion-button {
+  font-size: 0.85rem;
+}
 
 :root {
   --ion-background-color: #fcfcfb;
@@ -103,6 +107,10 @@
 
 ion-card-title {
   font-size: 1.1rem;
+}
+
+.ion-item-small {
+  height: 32px;
 }
 
 ion-button {
