@@ -9,6 +9,7 @@ import { SurveyPageRoutingModule } from './survey-routing.module';
 import { SurveyListPage } from './survey-list/survey-list.page';
 import { SurveyViewPage } from '@app/pages/survey/survey-view/survey-view.page';
 import { SharedModule } from '@app/shared.module';
+import { CommentModalComponent } from './survey-view/comment-modal/comment-modal.component';
 
 @NgModule({
   imports: [
@@ -18,6 +19,6 @@ import { SharedModule } from '@app/shared.module';
     SurveyPageRoutingModule,
     SharedModule,
   ],
-  declarations: [SurveyListPage, SurveyViewPage]
+  declarations: [SurveyListPage, SurveyViewPage, CommentModalComponent]
 })
 export class SurveyPageModule {}

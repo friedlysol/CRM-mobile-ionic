@@ -4,14 +4,71 @@
 
 <ion-content>
   <ion-list *ngIf="questions.length">
-    <ion-item lines="none" class="" *ngFor="let question of questions">
-      <p *ngIf="question.group_name">
+
+    <ion-item lines="none" *ngFor="let question of questions">
+      <div class="question" *ngIf="question.active === 1">
         <small><b>{{ question.group_name }}</b></small>
-      </p>
-      <span>
-        {{ question.title }}
-        <span class="required" *ngIf="question.required && question.type !== 'photo_only'">*</span>
-      </span>
+        <span>
+          {{ question.title }}
+          <span class="required" *ngIf="question.required && question.type !== 'photo_only'">*</span>
+        </span>
+        <div *ngIf="question.help_text">
+          <small>{{ question.help_text }}</small>
+        </div>
+
+        <ion-radio-group 
+          *ngIf="question.type === 'option' || 
+            question.type === 'option_with_comment_for_no' || 
+            question.type === 'option_with_comment_for_yes'"
+          [value]="question.answer">
+          <ion-item lines="none">
+            <ion-label>Yes</ion-label>
+            <ion-radio 
+              value="yes"
+              (click)="onYesOptionClick(question)">
+            </ion-radio>
+          </ion-item>
+          <ion-item lines="none">
+            <ion-label>No</ion-label>
+            <ion-radio 
+              value="no"
+              (click)="onNoOptionClick(question)">
+            </ion-radio>
+          </ion-item>
+        </ion-radio-group>
+
+        <app-capture-media
+          *ngIf="question.type === 'photo_only'"
+          type="photo"
+          objectType="survey_results"
+          [objectUuid]="question.answer_uuid"
+          [typeId]="1"
+          [mediaOptions]="{
+            buttonLabel: 'Add photo',
+            requiredOnce: true
+          }">
+        </app-capture-media>
+
+        <app-signature
+          *ngIf="question.type === 'signature'"
+          objectType="survey_results"
+          [objectUuid]="question.answer_uuid"
+          [typeId]="1"
+          label="Add signature">
+        </app-signature>
+
+        <ion-input
+          (ionBlur)="onInputBlur($event, question)"
+          *ngIf="question.type === 'input'"
+          [value]="question.answer">
+        </ion-input>
+
+        <ion-textarea
+          (ionBlur)="onInputBlur($event, question)"
+          *ngIf="question.type === 'textarea'"
+          [value]="question.answer">
+        </ion-textarea>
+      </div>
     </ion-item>
 
   </ion-list>

@@ -14,7 +14,7 @@ export class SurveyListPage implements OnInit {
   public surveys: SurveyInterface[] = [];
   public workOrder: WorkOrderInterface = null;
 
-  private workOrderUuid: string;
+  public workOrderUuid: string;
 
   constructor(
     private route: ActivatedRoute,

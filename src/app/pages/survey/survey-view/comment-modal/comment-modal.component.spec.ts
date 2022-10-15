@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { SurveyViewPage } from './survey-view.page';
+import { CommentModalComponent } from './comment-modal.component';
 
-describe('SurveyPage', () => {
-  let component: SurveyViewPage;
-  let fixture: ComponentFixture<SurveyViewPage>;
+describe('CommentModalComponent', () => {
+  let component: CommentModalComponent;
+  let fixture: ComponentFixture<CommentModalComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ SurveyViewPage ],
+      declarations: [ CommentModalComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(SurveyViewPage);
+    fixture = TestBed.createComponent(CommentModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

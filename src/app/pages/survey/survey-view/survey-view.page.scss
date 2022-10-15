@@ -7,5 +7,17 @@
 }
 
 ion-item {
+  width: 100%;
   font-size: 12px;
+}
+
+.question{
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2vh;
+  width: 100%;
+}
+
+ion-radio-group ion-item, ion-input, ion-textarea{
+  border: 1px solid var(--ion-color-grey-shade);
 }

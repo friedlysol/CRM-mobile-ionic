@@ -446,6 +446,67 @@ export class SurveyDatabase {
   }
 
   /**
+   * Get result by survey and question
+   *
+   * @param surveyId
+   * @param questionId
+   */
+  async getResultBySurveyAndQuestion(
+    surveyId: number,
+    questionId: number
+    ): Promise<SurveyResultInterface> {
+    const query = sqlBuilder
+    .select()
+    .from('survey_results')
+    .where('survey_instance_id', surveyId)
+    .where('survey_question_id', questionId);
+
+    return this.databaseService.findOrNull(query.toString(), query.toParams());
+  }
+
+  /**
+   * Create result in db
+   *
+   * @param surveyUuid
+   * @param surveyId
+   * @param questionId
+   */
+   async createResult(surveyUuid: string, surveyId: number, questionId: number): Promise<SurveyResultInterface | SurveyInterface> {
+    const uuid = this.databaseService.getUuid();
+
+    const query = sqlBuilder.insert('survey_results', Object.assign({
+        uuid,
+        survey_instance_uuid: surveyUuid,
+        survey_instance_id: surveyId,
+        survey_question_id: questionId,
+        created_at: this.databaseService.getTimeStamp(),
+        updated_at: null,
+        comment: null,
+        answer: null,
+      })
+    );
+
+    return this.databaseService.query(query.toString(), query.toParams())
+      .then(() => this.getByUuid(uuid));
+  }
+
+  /**
+   * Update result
+   *
+   * @param result
+   */
+   updateResult(result: SurveyResultInterface) {
+    const query = sqlBuilder.update('survey_results');
+    Object.keys(result).forEach(field => {
+      query.set(field, result[field]);
+    });
+    query.set('updated_at', this.databaseService.getTimeStamp());
+    query.where('uuid', result.uuid);
+
+    return this.databaseService.query(query.toString(), query.toParams());
+  }
+
+  /**
    * Create sql query as string
    *
    * @param answer
