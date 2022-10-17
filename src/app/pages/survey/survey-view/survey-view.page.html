@@ -21,20 +21,26 @@
             question.type === 'option_with_comment_for_no' || 
             question.type === 'option_with_comment_for_yes'"
           [value]="question.answer">
-          <ion-item lines="none">
-            <ion-label>Yes</ion-label>
-            <ion-radio 
-              value="yes"
-              (click)="onYesOptionClick(question)">
-            </ion-radio>
-          </ion-item>
-          <ion-item lines="none">
-            <ion-label>No</ion-label>
-            <ion-radio 
-              value="no"
-              (click)="onNoOptionClick(question)">
-            </ion-radio>
-          </ion-item>
+          <ion-row>
+            <ion-col>
+              <ion-item lines="none">
+                <ion-label>Yes</ion-label>
+                <ion-radio 
+                  value="yes"
+                  (click)="onYesOptionClick(question)">
+                </ion-radio>
+              </ion-item>
+            </ion-col>
+            <ion-col>
+              <ion-item lines="none">
+                <ion-label>No</ion-label>
+                <ion-radio 
+                  value="no"
+                  (click)="onNoOptionClick(question)">
+                </ion-radio>
+              </ion-item>
+            </ion-col>
+          </ion-row>
         </ion-radio-group>
 
         <app-capture-media
