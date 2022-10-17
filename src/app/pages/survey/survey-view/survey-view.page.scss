@@ -21,3 +21,19 @@ ion-item {
 ion-radio-group ion-item, ion-input, ion-textarea{
   border: 1px solid var(--ion-color-grey-shade);
 }
+
+.pagination ion-col{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  ion-button{
+    --background: var(--ion-color-grey-shade);
+    width: 100%;
+  }
+}
+
+.filter{
+  border: 1px solid #b9b5b5; 
+  font-size: 15px;
+}

@@ -38,15 +38,16 @@
         </ion-radio-group>
 
         <app-capture-media
-          *ngIf="question.type === 'photo_only'"
+          *ngIf="question.type === 'photo_only' || question.photo !== 'skip'"
           type="photo"
           objectType="survey_results"
           [objectUuid]="question.answer_uuid"
           [typeId]="1"
           [mediaOptions]="{
             buttonLabel: 'Add photo',
-            requiredOnce: true
-          }">
+            requiredOnce: question.photo === 'required'
+          }"
+          (saveFile)="onFileSave($event, question)">
         </app-capture-media>
 
         <app-signature
@@ -54,7 +55,8 @@
           objectType="survey_results"
           [objectUuid]="question.answer_uuid"
           [typeId]="1"
-          label="Add signature">
+          label="Add signature"
+          (saveFile)="onFileSave($event, question)">
         </app-signature>
 
         <ion-input
@@ -73,14 +75,39 @@
 
   </ion-list>
 
+  <ion-row *ngIf="pagination.totalPages > 1" class="pagination">
+    <ion-col>
+      <ion-button 
+        *ngIf="pagination.currentPage > 1"
+        (click)="onGroupChange(groupSelect, pagination.currentPage-1)">Prev</ion-button>
+    </ion-col>
+    <ion-col>
+      {{pagination.currentPage}}/{{pagination.totalPages}}
+    </ion-col>
+    <ion-col>
+      <ion-button 
+        *ngIf="pagination.currentPage < pagination.totalPages"
+        (click)="onGroupChange(groupSelect, pagination.currentPage+1)">Next</ion-button>
+    </ion-col>
+  </ion-row>
 </ion-content>
+
 <ion-footer>
 
-<!--  <select class="timer-dropdown" style="border: 1px solid #b9b5b5; font-size: 15px" ng-model="group.selected" ng-change="changeGroup($event)" ng-options="group.id as group.type_value for group in groupTypes">-->
-<!--    <option value=""> All questions</option>-->
-<!--  </select>-->
-
-<!--  <button class="button button-positive pull-right" ng-click="submit(true)">Save</button>-->
-
+  <ion-select
+    #groupSelect
+    placeholder="Select group"
+    [value]="null"
+    (ionChange)="onGroupChange($event.target)">
+    <ion-select-option
+      [value]="null">
+      All questions
+    </ion-select-option>
+    <ion-select-option
+      *ngFor="let group of groups"
+      [value]="group">
+      {{ group.type_value }}
+    </ion-select-option>
+  </ion-select>
 
 </ion-footer>

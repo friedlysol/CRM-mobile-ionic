@@ -4,6 +4,9 @@ import { ActivatedRoute } from '@angular/router';
 import { SurveyDatabase } from '@app/services/database/survey.database';
 import { ModalController } from '@ionic/angular';
 import { CommentModalComponent } from './comment-modal/comment-modal.component';
+import { FileInterface } from '@app/interfaces/file.interface';
+import { TypeInterface } from '@app/interfaces/type.interface';
+import { TypeService } from '@app/services/type.service';
 
 @Component({
   selector: 'app-survey-view',
@@ -19,6 +22,7 @@ export class SurveyViewPage implements OnInit {
     totalPages: 1,
     totalRows: 0
   };
+  public groups: TypeInterface[] = [];
 
   private objectUuid: string;
   private surveyUuid: string;
@@ -27,10 +31,11 @@ export class SurveyViewPage implements OnInit {
     private route: ActivatedRoute,
     private modalCtrl: ModalController,
     private surveyDatabase: SurveyDatabase,
+    private typeService: TypeService,
   ) {
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.route.paramMap.subscribe(async params => {
       this.objectUuid = params.get('objectUuid');
       this.surveyUuid = params.get('surveyUuid');
@@ -40,6 +45,7 @@ export class SurveyViewPage implements OnInit {
       await this.getSurveyQuestions();
       this.initResults();
     });
+    this.groups = await this.typeService.getByType('survey_groups');
   }
 
   getSurveyQuestions(page = 1, groupTypeId = null) {
@@ -64,7 +70,7 @@ export class SurveyViewPage implements OnInit {
     }
   }
 
-  async onYesOptionClick(question){
+  async onYesOptionClick(question: SurveyQuestionInterface){
     const answer = this.getAnswer(question);
     answer.answer = 'yes';
     if(question.type === 'option_with_comment_for_yes'){
@@ -73,7 +79,7 @@ export class SurveyViewPage implements OnInit {
     this.updateAnswer(answer);
   }
 
-  async onNoOptionClick(question){
+  async onNoOptionClick(question: SurveyQuestionInterface){
     const answer = this.getAnswer(question);
     answer.answer = 'no';
     if(question.type === 'option_with_comment_for_no'){
@@ -82,10 +88,25 @@ export class SurveyViewPage implements OnInit {
     this.updateAnswer(answer);
   }
 
-  onInputBlur(event, question){
+  onInputBlur(event, question: SurveyQuestionInterface){
     const answer = this.getAnswer(question);
     answer.answer = event.target.value;
     this.updateAnswer(answer);
+  }
+
+  onFileSave(file: FileInterface, question: SurveyQuestionInterface){
+    const answer = this.getAnswer(question);
+    answer.answer = file.thumbnail? file.thumbnail: file.path;
+    this.updateAnswer(answer);
+  }
+
+  onGroupChange(select, page = 1){
+    const value: TypeInterface | null = select.value;
+    if(value){
+      this.getSurveyQuestions(page, value.id);
+    }else{
+      this.getSurveyQuestions();
+    }
   }
 
   updateAnswer(answer: SurveyResultInterface){

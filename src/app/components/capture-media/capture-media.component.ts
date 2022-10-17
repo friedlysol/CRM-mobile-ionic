@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FileInterface } from '@app/interfaces/file.interface';
 import { MediaOptionsInterface } from '@app/interfaces/media-options.interface';
 import { DatabaseService } from '@app/services/database.service';
@@ -19,6 +19,7 @@ export class CaptureMediaComponent implements OnInit {
   @Input() typeId: number;
   @Input() type: 'photo' | 'video';
   @Input() linkPersonWoId?: number;
+  @Output() saveFile = new EventEmitter<FileInterface>();
 
   @Input()
   get mediaOptions(): MediaOptionsInterface {
@@ -161,6 +162,7 @@ export class CaptureMediaComponent implements OnInit {
         file,
       );
       this.photo = file;
+      this.saveFile.next(file);
     } catch (e) {
     }
   }

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { FileInterface } from '@app/interfaces/file.interface';
 import { FileService } from '@app/services/file.service';
 import { IonModal} from '@ionic/angular';
@@ -17,6 +17,7 @@ export class SignatureComponent implements OnInit {
   @Input() typeId: number;
   @Input() objectId?: number;
   @Input() label?: string;
+  @Output() saveFile = new EventEmitter<FileInterface>();
 
   file: FileInterface;
   ownerName = '';
@@ -67,7 +68,7 @@ export class SignatureComponent implements OnInit {
     });
   }
 
-  saveSignature(){
+  async saveSignature(){
     this.file = {
       object_type: this.objectType,
       object_uuid: this.objectUuid,
@@ -81,10 +82,12 @@ export class SignatureComponent implements OnInit {
 
     const time = new Date().getTime();
 
-    this.fileService.saveBase64File(
+    await this.fileService.saveBase64File(
       this.image,
       `signature_${this.file.object_id}_${this.file.description}_${time}.png`,
       this.file,
     );
+
+    this.saveFile.next(this.file);
   }
 }
