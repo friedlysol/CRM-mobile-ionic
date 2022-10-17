@@ -19,7 +19,9 @@
   <ng-template>
     <app-signature-form 
       (cancel)="onFormCancel()"
-      (next)="onFormNext($event)">
+      (next)="onFormNext($event)"
+      [name]="ownerName"
+      [title]="ownerTitle">
     </app-signature-form>
   </ng-template>
 </ion-modal>

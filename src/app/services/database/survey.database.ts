@@ -296,7 +296,7 @@ export class SurveyDatabase {
           const surveysMap = {};
 
           if (surveys && surveys.length) {
-            surveys.forEach(survey => surveysMap[Number(survey.survey_instance_id)] = {
+            surveys.forEach(survey => surveysMap[Number(survey.id)] = {
               hash: survey.hash,
               uuid: survey.uuid
             });

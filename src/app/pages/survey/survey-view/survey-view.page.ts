@@ -7,6 +7,7 @@ import { CommentModalComponent } from './comment-modal/comment-modal.component';
 import { FileInterface } from '@app/interfaces/file.interface';
 import { TypeInterface } from '@app/interfaces/type.interface';
 import { TypeService } from '@app/services/type.service';
+import { SubquestionsModalComponent } from './subquestions-modal/subquestions-modal.component';
 
 @Component({
   selector: 'app-survey-view',
@@ -43,7 +44,6 @@ export class SurveyViewPage implements OnInit {
       this.survey = await this.surveyDatabase.getByUuid(this.surveyUuid);
 
       await this.getSurveyQuestions();
-      this.initResults();
     });
     this.groups = await this.typeService.getByType('survey_groups');
   }
@@ -53,7 +53,7 @@ export class SurveyViewPage implements OnInit {
       .then(result => {
         this.questions = result.questions;
         this.pagination = result.pagination;
-
+        this.initResults();
 
         console.log('questions', this.questions, this.pagination);
       });
@@ -70,33 +70,35 @@ export class SurveyViewPage implements OnInit {
     }
   }
 
-  async onYesOptionClick(question: SurveyQuestionInterface){
+  async onOptionClick(question: SurveyQuestionInterface, type: 'comment' | 'questions', option: 'yes' | 'no'){
     const answer = this.getAnswer(question);
-    answer.answer = 'yes';
-    if(question.type === 'option_with_comment_for_yes'){
-      answer.comment = await this.openCommentModal(answer.comment);
+    answer.answer = option;
+    question.answer = option;
+    if(question.type === `option_with_${type}_for_${option}`){
+      answer.comment = type === 'comment'?
+        await this.openCommentModal(answer.comment):
+        await this.openSubquestionsModal(JSON.parse(answer.comment) || question.options);
+      question.comment = answer.comment;
+      if(!answer.comment){
+        answer.answer = null;
+        question.answer = answer.answer;
+      }
+    }else{
+      answer.comment = null;
+      question.comment = answer.comment;
     }
     this.updateAnswer(answer);
   }
 
-  async onNoOptionClick(question: SurveyQuestionInterface){
-    const answer = this.getAnswer(question);
-    answer.answer = 'no';
-    if(question.type === 'option_with_comment_for_no'){
-      answer.comment = await this.openCommentModal(answer.comment);
-    }
-    this.updateAnswer(answer);
-  }
-
-  onInputBlur(event, question: SurveyQuestionInterface){
+  onInputChange(event, question: SurveyQuestionInterface){
     const answer = this.getAnswer(question);
     answer.answer = event.target.value;
     this.updateAnswer(answer);
   }
 
-  onFileSave(file: FileInterface, question: SurveyQuestionInterface){
+  onFileSave(question: SurveyQuestionInterface){
     const answer = this.getAnswer(question);
-    answer.answer = file.thumbnail? file.thumbnail: file.path;
+    answer.answer = '-';
     this.updateAnswer(answer);
   }
 
@@ -105,7 +107,7 @@ export class SurveyViewPage implements OnInit {
     if(value){
       this.getSurveyQuestions(page, value.id);
     }else{
-      this.getSurveyQuestions();
+      this.getSurveyQuestions(page);
     }
   }
 
@@ -114,7 +116,7 @@ export class SurveyViewPage implements OnInit {
   }
 
   getAnswer(question){
-    return this.answers.find(e => e.survey_question_id === question.id);
+    return this.answers.find(e => e.uuid === question.answer_uuid);
   }
 
   async openCommentModal(comment: string){
@@ -126,5 +128,21 @@ export class SurveyViewPage implements OnInit {
     });
     modal.present();
     return modal.onDidDismiss().then(e => e.role === 'submit'? e.data: comment);
+  }
+
+  async openSubquestionsModal(options){
+    console.log(options)
+    const modal = await this.modalCtrl.create({
+      component: SubquestionsModalComponent,
+      componentProps: {
+        subquestions: options.subquestions,
+      }
+    });
+    modal.present();
+    return modal.onDidDismiss().then(e => e.role === 'submit'? JSON.stringify({subquestions: e.data}): null);
+  }
+
+  jsonParse(str: string){
+    return JSON.parse(str);
   }
 }

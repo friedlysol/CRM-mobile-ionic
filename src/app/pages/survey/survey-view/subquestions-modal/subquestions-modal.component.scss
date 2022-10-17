@@ -1,6 +1,7 @@
-ion-textarea{
+ion-input, ion-textarea{
     border: 1px solid var(--ion-color-grey-shade);
     padding: 0 5px !important;
+    margin-top: 5px;
 }
 
 ion-button{

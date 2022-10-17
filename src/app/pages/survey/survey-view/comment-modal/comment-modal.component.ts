@@ -14,11 +14,11 @@ export class CommentModalComponent {
     params: NavParams,
     private toastController: ToastController,
   ) {
-    this.comment = params.data.comment || this.comment;
+    this.comment = params.data.comment != null? params.data.comment: '';
   }
 
   onSubmit(){
-    if(this.comment.length < 1){
+    if(!this.comment || this.comment.length < 1){
       this.showErrorToast('You must provide a comment');
       return;
     }

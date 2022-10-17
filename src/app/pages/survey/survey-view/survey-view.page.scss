@@ -18,8 +18,27 @@ ion-item {
   width: 100%;
 }
 
-ion-radio-group ion-item, ion-input, ion-textarea{
+ion-input, ion-textarea{
   border: 1px solid var(--ion-color-grey-shade);
+  padding: 0 5px !important;
+}
+
+.options{
+  gap: 5px;
+  ion-col{
+    padding: 0;
+  
+    .option-btn{
+      --background: var(--ion-color-grey-contrast);
+      --color: --ion-color-grey-shade;
+      width: 100%;
+    }
+
+    .selected-option{
+      --background: var(--ion-color-grey-shade);
+      --color: white;
+    }
+  }
 }
 
 .pagination ion-col{
@@ -33,7 +52,7 @@ ion-radio-group ion-item, ion-input, ion-textarea{
   }
 }
 
-.filter{
-  border: 1px solid #b9b5b5; 
-  font-size: 15px;
+.group-select{
+  --padding-end: 16px;
+  --padding-start: 16px;
 }

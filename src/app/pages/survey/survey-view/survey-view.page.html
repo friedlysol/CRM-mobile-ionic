@@ -16,32 +16,46 @@
           <small>{{ question.help_text }}</small>
         </div>
 
-        <ion-radio-group 
+        <ion-row 
           *ngIf="question.type === 'option' || 
             question.type === 'option_with_comment_for_no' || 
             question.type === 'option_with_comment_for_yes'"
-          [value]="question.answer">
-          <ion-row>
-            <ion-col>
-              <ion-item lines="none">
-                <ion-label>Yes</ion-label>
-                <ion-radio 
-                  value="yes"
-                  (click)="onYesOptionClick(question)">
-                </ion-radio>
-              </ion-item>
-            </ion-col>
-            <ion-col>
-              <ion-item lines="none">
-                <ion-label>No</ion-label>
-                <ion-radio 
-                  value="no"
-                  (click)="onNoOptionClick(question)">
-                </ion-radio>
-              </ion-item>
-            </ion-col>
-          </ion-row>
-        </ion-radio-group>
+          class="options">
+          <ion-col>
+            <ion-button 
+              class="option-btn {{question.answer === 'yes'? 'selected-option': ''}}"
+              (click)="onOptionClick(question, 'comment', 'yes')">
+              Yes
+            </ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button 
+              class="option-btn {{question.answer === 'no'? 'selected-option': ''}}"
+              (click)="onOptionClick(question, 'comment', 'no')">
+              No
+            </ion-button>
+          </ion-col>
+        </ion-row>
+
+        <ion-row 
+          *ngIf="question.type === 'option_with_questions_for_no' || 
+            question.type === 'option_with_questions_for_yes'"
+          class="options">
+          <ion-col>
+            <ion-button 
+              class="option-btn {{question.answer === 'yes'? 'selected-option': ''}}"
+              (click)="onOptionClick(question, 'questions','yes')">
+              Yes
+            </ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button 
+              class="option-btn {{question.answer === 'no'? 'selected-option': ''}}"
+              (click)="onOptionClick(question, 'questions','no')">
+              No
+            </ion-button>
+          </ion-col>
+        </ion-row>
 
         <app-capture-media
           *ngIf="question.type === 'photo_only' || question.photo !== 'skip'"
@@ -51,9 +65,10 @@
           [typeId]="1"
           [mediaOptions]="{
             buttonLabel: 'Add photo',
-            requiredOnce: question.photo === 'required'
+            requiredOnce: question.photo === 'required',
+            allowRemove: true
           }"
-          (saveFile)="onFileSave($event, question)">
+          (saveFile)="onFileSave(question)">
         </app-capture-media>
 
         <app-signature
@@ -62,20 +77,40 @@
           [objectUuid]="question.answer_uuid"
           [typeId]="1"
           label="Add signature"
-          (saveFile)="onFileSave($event, question)">
+          (saveFile)="onFileSave(question)">
         </app-signature>
 
         <ion-input
-          (ionBlur)="onInputBlur($event, question)"
           *ngIf="question.type === 'input'"
+          (ionChange)="onInputChange($event, question)"
+          [debounce]="500"
           [value]="question.answer">
         </ion-input>
 
         <ion-textarea
-          (ionBlur)="onInputBlur($event, question)"
           *ngIf="question.type === 'textarea'"
+          (ionChange)="onInputChange($event, question)"
+          [debounce]="500"
           [value]="question.answer">
         </ion-textarea>
+
+        <ion-text
+          *ngIf="question.comment &&
+            (question.type === 'option_with_comment_for_no' || 
+            question.type === 'option_with_comment_for_yes')">
+          Comment: {{question.comment}}
+        </ion-text>
+        <ng-container
+          *ngIf="question.comment &&
+          (question.type === 'option_with_questions_for_no' || 
+          question.type === 'option_with_questions_for_yes')">
+          <ion-text>
+            Details: 
+          </ion-text>
+          <ion-text *ngFor="let field of jsonParse(question.comment).subquestions">
+            <b>{{field.label}}:</b> {{field.answer}}
+          </ion-text>
+        </ng-container>
       </div>
     </ion-item>
 
@@ -102,6 +137,7 @@
 
   <ion-select
     #groupSelect
+    class="group-select"
     placeholder="Select group"
     [value]="null"
     (ionChange)="onGroupChange($event.target)">
