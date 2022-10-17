@@ -1,0 +1,37 @@
+CREATE TABLE `daily_inspections`
+(
+    `uuid`                TEXT,
+    `id`                  INTEGER,
+    `status_type_id`      INTEGER          DEFAULT NULL,
+    `route`               TEXT,
+    `vehicle_number`      TEXT,
+    `odometer_reading`    TEXT,
+    `note`                TEXT,
+    `head_lights`         INTEGER NOT NULL DEFAULT 0,
+    `mirror`              INTEGER NOT NULL DEFAULT 0,
+    `horn`                INTEGER NOT NULL DEFAULT 0,
+    `seat_belts`          INTEGER NOT NULL DEFAULT 0,
+    `turn_signals`        INTEGER NOT NULL DEFAULT 0,
+    `lanyard`             INTEGER NOT NULL DEFAULT 0,
+    `brake_lights`        INTEGER NOT NULL DEFAULT 0,
+    `breakers`            INTEGER NOT NULL DEFAULT 0,
+    `windshield_wipers`   INTEGER NOT NULL DEFAULT 0,
+    `harness`             INTEGER NOT NULL DEFAULT 0,
+    `ladder_inspection`   INTEGER NOT NULL DEFAULT 0,
+    `ladder_rock_topper`  INTEGER NOT NULL DEFAULT 0,
+    `license_plate_light` INTEGER NOT NULL DEFAULT 0,
+    `hand_brake`          INTEGER NOT NULL DEFAULT 0,
+    `steering_mechanism`  INTEGER NOT NULL DEFAULT 0,
+    `tires`               INTEGER NOT NULL DEFAULT 0,
+    `coupling_devices`    INTEGER NOT NULL DEFAULT 0,
+    `wheels_and_rims`     INTEGER NOT NULL DEFAULT 0,
+    `emergency_equipment` INTEGER NOT NULL DEFAULT 0,
+    `car_service`         INTEGER NOT NULL DEFAULT 0,
+    `app_lock`            INTEGER NOT NULL DEFAULT 0,
+    `sync`                INTEGER NOT NULL DEFAULT 0,
+    `created_at`          TEXT,
+    `updated_at`          TEXT,
+    PRIMARY KEY (uuid)
+)
+
+CREATE INDEX daily_inspections_idx ON daily_inspections (created_at, id, sync)
