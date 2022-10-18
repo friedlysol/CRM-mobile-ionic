@@ -1,7 +1,23 @@
+:host{
+    padding: 0 5vw;
+}
+
+h1{
+    text-align: center;
+}
+
 .field{
-    margin: 1vh 3vw;
+    margin: 1vh 0;
 }
 
 ion-input, ion-select{
     border: 1px solid var(--ion-color-grey-shade);
+}
+
+ion-button{
+    --background: var(--ion-color-grey-shade);
+    --color: white;
+    width: 100%;
+    margin-inline: 0;
+    margin-bottom: 2vh;
 }

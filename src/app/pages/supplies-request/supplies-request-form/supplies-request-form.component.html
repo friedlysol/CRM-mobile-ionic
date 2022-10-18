@@ -1,4 +1,58 @@
-<div class="field">
+<h1><b>Create new request</b></h1>
+
+<form [formGroup]="requestForm" (ngSubmit)="onSubmit()">
+  <div class="field">
+    <strong>Job type</strong>
+    <ion-select
+      #jobTypeSelect
+      formControlName="jobType"
+      interface="popover"
+      class="job-type-select">
+      <ion-select-option
+        *ngFor="let type of jobTypes"
+        [value]="type">
+        {{ type.type_value }}
+      </ion-select-option>
+    </ion-select>
+    <ion-note 
+      color="danger"
+      *ngIf="jobType.invalid && (jobType.dirty)">
+      This field is required
+    </ion-note>
+  </div>
+
+  <div class="field">
+    <strong>Type</strong>
+    <ion-input 
+      formControlName="type">
+    </ion-input>
+    <ion-note 
+      color="danger"
+      *ngIf="type.invalid && (type.dirty || type.touched)">
+      This field is required
+    </ion-note>
+  </div>
+  
+  <div class="field">
+    <strong>Quantity</strong>
+    <ion-input 
+      type="number" 
+      formControlName="quantity"
+      required>
+    </ion-input>
+    <ion-note 
+      color="danger"
+      *ngIf="quantity.invalid && (quantity.dirty || quantity.touched)">
+      {{quantity.errors?.required? 'This field is required': 'Quantity should be larger than 0'}}
+    </ion-note>
+  </div>
+
+  <ion-button type="submit">
+    Submit
+  </ion-button>
+</form>
+
+<!-- <div class="field">
   <strong>Job type</strong>
   <ion-select
     interface="popover"
@@ -20,3 +74,8 @@
   <strong>Quantity</strong>
   <ion-input></ion-input>
 </div>
+
+<ion-button
+  (click)="onSubmit()">
+  Submit
+</ion-button> -->
