@@ -32,6 +32,7 @@ ion-input, ion-textarea{
       --background: var(--ion-color-grey-contrast);
       --color: --ion-color-grey-shade;
       width: 100%;
+      margin-inline: 0;
     }
 
     .selected-option{
