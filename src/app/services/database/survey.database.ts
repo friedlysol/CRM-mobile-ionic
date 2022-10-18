@@ -483,6 +483,7 @@ export class SurveyDatabase {
         updated_at: null,
         comment: null,
         answer: null,
+        sync: 0,
       })
     );
 
@@ -501,6 +502,7 @@ export class SurveyDatabase {
       query.set(field, result[field]);
     });
     query.set('updated_at', this.databaseService.getTimeStamp());
+    query.set('sync', 0);
     query.where('uuid', result.uuid);
 
     return this.databaseService.query(query.toString(), query.toParams());

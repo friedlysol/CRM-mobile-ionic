@@ -68,6 +68,7 @@ export class SurveyViewPage implements OnInit {
       }
       this.answers.push(answer);
     }
+    console.log(this.answers)
   }
 
   async onOptionClick(question: SurveyQuestionInterface, type: 'comment' | 'questions', option: 'yes' | 'no'){
@@ -131,7 +132,6 @@ export class SurveyViewPage implements OnInit {
   }
 
   async openSubquestionsModal(options){
-    console.log(options)
     const modal = await this.modalCtrl.create({
       component: SubquestionsModalComponent,
       componentProps: {
