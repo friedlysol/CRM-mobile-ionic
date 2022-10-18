@@ -30,7 +30,9 @@ export class SignatureComponent implements OnInit {
 
   async ngOnInit() {
     await this.readSignature();
-    [this.ownerName, this.ownerTitle] = this.file.description.split('_');
+    if(this.file){
+      [this.ownerName, this.ownerTitle] = this.file.description.split('_');
+    }
   }
 
   onGetSignatureClick(){
