@@ -4,9 +4,13 @@ ion-input, ion-textarea{
     margin-top: 5px;
 }
 
-ion-button{
+.submit-btn{
     --background: var(--ion-color-grey-shade);
     --color: white;
     width: 100%;
     margin-inline: 0;
+}
+
+.back-btn{
+    --color: black
 }

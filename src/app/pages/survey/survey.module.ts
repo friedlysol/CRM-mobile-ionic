@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, IonNav } from '@ionic/angular';
 
 import { SurveyPageRoutingModule } from './survey-routing.module';
 
@@ -26,6 +26,7 @@ import { SubquestionsModalComponent } from './survey-view/subquestions-modal/sub
     SurveyViewPage,
     CommentModalComponent,
     SubquestionsModalComponent,
-  ]
+  ],
+  providers: [IonNav]
 })
 export class SurveyPageModule {}

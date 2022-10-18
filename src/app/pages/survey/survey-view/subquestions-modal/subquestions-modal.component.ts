@@ -10,12 +10,11 @@ export class SubquestionsModalComponent implements OnInit {
   subquestions = [];
 
   constructor(
-    private modalCtrl: ModalController,
     params: NavParams,
+    private modalCtrl: ModalController,
     private toastController: ToastController,
   ) {
     this.subquestions= params.data.subquestions != null? params.data.subquestions: [];
-    console.log(this.subquestions)
   }
 
   ngOnInit() {}
@@ -44,4 +43,7 @@ export class SubquestionsModalComponent implements OnInit {
     toast.present();
   }
 
+  goBack(){
+    this.modalCtrl.dismiss(null, 'back');
+  }
 }

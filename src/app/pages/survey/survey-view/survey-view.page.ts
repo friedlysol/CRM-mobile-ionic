@@ -67,6 +67,8 @@ export class SurveyViewPage implements OnInit {
         answer = await this.surveyDatabase.getResultBySurveyAndQuestion(this.survey.id, question.id);
       }
       this.answers.push(answer);
+      question.answer_uuid = answer.uuid;
+      question.answer = answer.answer;
     }
   }
 
@@ -122,6 +124,7 @@ export class SurveyViewPage implements OnInit {
   async openCommentModal(comment: string){
     const modal = await this.modalCtrl.create({
       component: CommentModalComponent,
+      cssClass: 'popup',
       componentProps: {
         comment,
       }
@@ -131,7 +134,6 @@ export class SurveyViewPage implements OnInit {
   }
 
   async openSubquestionsModal(options){
-    console.log(options)
     const modal = await this.modalCtrl.create({
       component: SubquestionsModalComponent,
       componentProps: {

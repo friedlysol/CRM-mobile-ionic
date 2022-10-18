@@ -1,4 +1,17 @@
-<div>
+<ion-header>
+  <ion-toolbar>
+    <ion-button
+      slot="start"
+      fill="clear"
+      class="back-btn"
+      (click)="goBack()">
+      <ion-icon name="arrow-back-outline"></ion-icon>
+    </ion-button>
+    <ion-title>Questions</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
   <ion-item
     lines="none"
     *ngFor="let subquestion of subquestions">
@@ -21,10 +34,14 @@
     <ion-note slot="error">{{subquestion.label}} is required</ion-note>
   </ion-item>
 
-  
+
   <ion-item lines="none">
-    <ion-button (click)="onSubmit()">
+    <ion-button (click)="onSubmit()" class="submit-btn">
       Submit
     </ion-button>
   </ion-item>
-</div>
+</ion-content>
+
+<ion-footer>
+  <app-sync></app-sync>
+</ion-footer>
