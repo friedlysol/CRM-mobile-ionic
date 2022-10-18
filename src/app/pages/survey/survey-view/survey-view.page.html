@@ -134,9 +134,11 @@
 </ion-content>
 
 <ion-footer>
+  <app-sync></app-sync>
 
   <ion-select
     #groupSelect
+    interface="popover"
     class="group-select"
     placeholder="Select group"
     [value]="null"

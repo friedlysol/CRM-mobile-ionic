@@ -15,7 +15,7 @@
   </ion-button>
 </ng-template>
 
-<ion-modal #formModal>
+<ion-modal #formModal id="form-modal" class="popup">
   <ng-template>
     <app-signature-form 
       (cancel)="onFormCancel()"
@@ -26,7 +26,7 @@
   </ng-template>
 </ion-modal>
 
-<ion-modal #canvasModal>
+<ion-modal #canvasModal id="canvas-modal">
   <ng-template>
     <app-signature-canvas
       (cancel)="onCanvasCancel()"

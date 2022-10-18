@@ -1,43 +1,43 @@
-<ion-content>
+<ion-item>
+  <ion-label position="stacked">Signature owner name</ion-label>
+  <ion-input type="text" [formControl]="ownerName"></ion-input>
+  <span 
+    *ngIf="ownerName.invalid && ownerName.touched" 
+    slot="error">
+    Name is required
+  </span>
+</ion-item>
 
-  <ion-item>
-    <ion-label position="stacked">Signature owner name</ion-label>
-    <ion-input type="text" [formControl]="ownerName"></ion-input>
-    <span 
-      *ngIf="ownerName.invalid && ownerName.touched" 
-      slot="error">
-      Name is required
-    </span>
-  </ion-item>
+<ion-item>
+  <ion-label position="stacked">Signature owner title</ion-label>
+  <ion-input type="text" [formControl]="ownerTitle"></ion-input>
+  <span 
+    *ngIf="ownerTitle.invalid && ownerTitle.touched" 
+    slot="error">
+    Title is required
+  </span>
+</ion-item>
 
-  <ion-item>
-    <ion-label position="stacked">Signature owner title</ion-label>
-    <ion-input type="text" [formControl]="ownerTitle"></ion-input>
-    <span 
-      *ngIf="ownerTitle.invalid && ownerTitle.touched" 
-      slot="error">
-      Title is required
-    </span>
-  </ion-item>
+<ion-row>
+  <ion-col>
+    <ion-button 
+      expand="full"
+      color="danger"
+      (click)="onCancelClick()">
+      Cancel
+    </ion-button>
+  </ion-col>
 
-  <ion-row>
-    <ion-col>
-      <ion-button 
-        expand="full"
-        color="danger"
-        (click)="onCancelClick()">
-        Cancel
-      </ion-button>
-    </ion-col>
+  <ion-col>
+    <ion-button 
+      expand="full"
+      color="primary"
+      (click)="onNextClick()">
+      Next
+    </ion-button>
+  </ion-col>
+</ion-row>
 
-    <ion-col>
-      <ion-button 
-        expand="full"
-        color="primary"
-        (click)="onNextClick()">
-        Next
-      </ion-button>
-    </ion-col>
-  </ion-row>
+
   
-</ion-content>
+

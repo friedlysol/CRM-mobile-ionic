@@ -20,6 +20,6 @@ CREATE TABLE `work_order_labors`
     `created_at`       TEXT    DEFAULT NULL,
     `updated_at`       TEXT    DEFAULT NULL,
     PRIMARY KEY (uuid)
-)
+);
 
-CREATE INDEX work_order_labors_idx ON work_order_labors (work_order_uuid, inventory_id, sync)
+CREATE INDEX work_order_labors_idx ON work_order_labors (work_order_uuid, inventory_id, sync);
