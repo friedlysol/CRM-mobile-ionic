@@ -57,8 +57,6 @@ export class TypeService implements SyncInterface {
 
       let query = null;
 
-      console.log('type', existingTypesHashMap, typeId);
-
       if (existingTypesHashMap.hasOwnProperty(typeId)) {
         const existingTypeHash = existingTypesHashMap[typeId];
 

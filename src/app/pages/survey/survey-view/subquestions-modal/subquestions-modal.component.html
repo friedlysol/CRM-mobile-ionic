@@ -1,12 +1,11 @@
 <ion-header>
   <ion-toolbar>
-    <ion-button 
-      slot="start" 
+    <ion-button
+      slot="start"
       fill="clear"
       class="back-btn"
       (click)="goBack()">
       <ion-icon name="arrow-back-outline"></ion-icon>
-      Back
     </ion-button>
     <ion-title>Questions</ion-title>
   </ion-toolbar>
@@ -35,7 +34,7 @@
     <ion-note slot="error">{{subquestion.label}} is required</ion-note>
   </ion-item>
 
-  
+
   <ion-item lines="none">
     <ion-button (click)="onSubmit()" class="submit-btn">
       Submit

@@ -4,6 +4,7 @@ import { AuthService } from '@app/services/auth.service';
 import { Router } from '@angular/router';
 import { StorageService } from '@app/services/storage.service';
 import { Device } from '@capacitor/device';
+import { EventService } from '@app/services/event.service';
 
 @Component({
   selector: 'app-sign-in-by-device-id',
@@ -41,6 +42,8 @@ export class SignInByDeviceIdComponent implements OnInit {
 
         if (res) {
           await this.router.navigateByUrl('/', {replaceUrl: true});
+
+          EventService.startSync.next(true);
         } else {
           return this.loginFailed();
         }

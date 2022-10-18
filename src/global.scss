@@ -220,6 +220,7 @@ ion-button {
 
 .bg-frame {
   font-size: 0.9rem;
+
   label {
     span {
       display: inline-block;
@@ -275,6 +276,15 @@ ion-button {
   .buttons {
     text-align: right;
   }
+}
+
+.button-small {
+  height: 2.7em;
+}
+
+.button-solid {
+  --border-radius: 0;
+  --box-shadow: none;
 }
 
 ion-modal.popup {

@@ -52,17 +52,6 @@ CREATE TABLE `assets`
     `condition_type_id`          INTEGER          DEFAULT NULL,
     `floor_type_id`              INTEGER          DEFAULT NULL,
     `floor_comment`              TEXT             DEFAULT NULL,
-
-
-    Wall                         Material
-        Existing Bath Wall Material
-        Removal of Material
-        Condo Conditions/ Select
-        Dimensions (Bath Door)
-        Dimensions (Bath Hallway)
-        Bath Door Type
-        Bath Conditions (Select Boxes)
-        `delete_action_uuid` TEXT,
     `hash`                       TEXT,
     `sync`                       INTEGER NOT NULL DEFAULT 0,
     `created_at`                 TEXT,
