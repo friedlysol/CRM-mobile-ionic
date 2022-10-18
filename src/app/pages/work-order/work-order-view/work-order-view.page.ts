@@ -47,7 +47,6 @@ export class WorkOrderViewPage implements OnInit, OnDestroy {
     });
 
     this.woTypes = await this.typeService.getByType('tech_status');
-    console.log(this.woTypes)
     this.exteriorTypes = await this.typeService.getByType('wo_exterior_type');
     this.structureTypes = await this.typeService.getByType('wo_structure_type');
     this.foundationTypes = await this.typeService.getByType('wo_foundation_type');

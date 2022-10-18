@@ -7,5 +7,53 @@
 }
 
 ion-item {
+  width: 100%;
   font-size: 12px;
+}
+
+.question{
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2vh;
+  width: 100%;
+}
+
+ion-input, ion-textarea{
+  border: 1px solid var(--ion-color-grey-shade);
+  padding: 0 5px !important;
+}
+
+.options{
+  gap: 5px;
+  ion-col{
+    padding: 0;
+  
+    .option-btn{
+      --background: var(--ion-color-grey-contrast);
+      --color: --ion-color-grey-shade;
+      width: 100%;
+      margin-inline: 0;
+    }
+
+    .selected-option{
+      --background: var(--ion-color-grey-shade);
+      --color: white;
+    }
+  }
+}
+
+.pagination ion-col{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  ion-button{
+    --background: var(--ion-color-grey-shade);
+    width: 100%;
+  }
+}
+
+.group-select{
+  --padding-end: 16px;
+  --padding-start: 16px;
 }

@@ -65,7 +65,7 @@ export class GalleryListPage implements OnInit {
       this.objectType,
       this.objectUuid,
       this.page,
-      environment.pageSize,
+      environment.galleryPageSize,
       this.onlyFilesWithExt,
       true,
     );
@@ -78,7 +78,7 @@ export class GalleryListPage implements OnInit {
       this.objectType,
       this.objectUuid,
       this.page,
-      environment.pageSize,
+      environment.galleryPageSize,
       this.onlyFilesWithExt,
     );
   }
@@ -90,7 +90,7 @@ export class GalleryListPage implements OnInit {
 
     event.target.complete();
 
-    if (newFiles.length < environment.pageSize) {
+    if (newFiles.length < environment.galleryPageSize) {
       event.target.disabled = true;
     }
   }

@@ -10,7 +10,8 @@ export const environment = {
   companyName: 'American Home Design',
   authBy: 'email', //'device-id' | 'email' | 'phone-number'
   settings: {},
-  pageSize: 15,
+  galleryPageSize: 15,
+  surveyPageSize: 10,
   countryCodes: [
     {
       label: 'USA (+1)',

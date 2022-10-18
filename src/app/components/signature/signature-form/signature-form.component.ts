@@ -1,7 +1,7 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 
-export interface ISignatureFromData{
+export interface ISignatureFormData{
   ownerName: string;
   ownerTitle: string;
 }
@@ -11,14 +11,21 @@ export interface ISignatureFromData{
   templateUrl: './signature-form.component.html',
   styleUrls: ['./signature-form.component.scss'],
 })
-export class SignatureFormComponent {
+export class SignatureFormComponent implements OnInit{
   @Output() cancel = new EventEmitter<void>();
-  @Output() next = new EventEmitter<ISignatureFromData>();
+  @Output() next = new EventEmitter<ISignatureFormData>();
+  @Input() name = '';
+  @Input() title = '';
 
   ownerName = new FormControl('', [Validators.required]);
   ownerTitle = new FormControl('', [Validators.required]);
 
   constructor() { }
+
+  ngOnInit() {
+    this.ownerName.setValue(this.name);
+    this.ownerTitle.setValue(this.title);
+  }
 
   onCancelClick(){
     this.cancel.emit();

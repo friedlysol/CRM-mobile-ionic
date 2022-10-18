@@ -4,26 +4,152 @@
 
 <ion-content>
   <ion-list *ngIf="questions.length">
-    <ion-item lines="none" class="" *ngFor="let question of questions">
-      <p *ngIf="question.group_name">
+
+    <ion-item lines="none" *ngFor="let question of questions">
+      <div class="question" *ngIf="question.active === 1">
         <small><b>{{ question.group_name }}</b></small>
-      </p>
-      <span>
-        {{ question.title }}
-        <span class="required" *ngIf="question.required && question.type !== 'photo_only'">*</span>
-      </span>
+        <span>
+          {{ question.title }}
+          <span class="required" *ngIf="question.required && question.type !== 'photo_only'">*</span>
+        </span>
+        <div *ngIf="question.help_text">
+          <small>{{ question.help_text }}</small>
+        </div>
+
+        <ion-row 
+          *ngIf="question.type === 'option' || 
+            question.type === 'option_with_comment_for_no' || 
+            question.type === 'option_with_comment_for_yes'"
+          class="options">
+          <ion-col>
+            <ion-button 
+              class="option-btn {{question.answer === 'yes'? 'selected-option': ''}}"
+              (click)="onOptionClick(question, 'comment', 'yes')">
+              Yes
+            </ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button 
+              class="option-btn {{question.answer === 'no'? 'selected-option': ''}}"
+              (click)="onOptionClick(question, 'comment', 'no')">
+              No
+            </ion-button>
+          </ion-col>
+        </ion-row>
+
+        <ion-row 
+          *ngIf="question.type === 'option_with_questions_for_no' || 
+            question.type === 'option_with_questions_for_yes'"
+          class="options">
+          <ion-col>
+            <ion-button 
+              class="option-btn {{question.answer === 'yes'? 'selected-option': ''}}"
+              (click)="onOptionClick(question, 'questions','yes')">
+              Yes
+            </ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button 
+              class="option-btn {{question.answer === 'no'? 'selected-option': ''}}"
+              (click)="onOptionClick(question, 'questions','no')">
+              No
+            </ion-button>
+          </ion-col>
+        </ion-row>
+
+        <app-capture-media
+          *ngIf="question.type === 'photo_only' || question.photo !== 'skip'"
+          type="photo"
+          objectType="survey_results"
+          [objectUuid]="question.answer_uuid"
+          [typeId]="1"
+          [mediaOptions]="{
+            buttonLabel: 'Add photo',
+            requiredOnce: question.photo === 'required',
+            allowRemove: true
+          }"
+          (saveFile)="onFileSave(question)">
+        </app-capture-media>
+
+        <app-signature
+          *ngIf="question.type === 'signature'"
+          objectType="survey_results"
+          [objectUuid]="question.answer_uuid"
+          [typeId]="1"
+          label="Add signature"
+          (saveFile)="onFileSave(question)">
+        </app-signature>
+
+        <ion-input
+          *ngIf="question.type === 'input'"
+          (ionChange)="onInputChange($event, question)"
+          [debounce]="500"
+          [value]="question.answer">
+        </ion-input>
+
+        <ion-textarea
+          *ngIf="question.type === 'textarea'"
+          (ionChange)="onInputChange($event, question)"
+          [debounce]="500"
+          [value]="question.answer">
+        </ion-textarea>
+
+        <ion-text
+          *ngIf="question.comment &&
+            (question.type === 'option_with_comment_for_no' || 
+            question.type === 'option_with_comment_for_yes')">
+          Comment: {{question.comment}}
+        </ion-text>
+        <ng-container
+          *ngIf="question.comment &&
+          (question.type === 'option_with_questions_for_no' || 
+          question.type === 'option_with_questions_for_yes')">
+          <ion-text>
+            Details: 
+          </ion-text>
+          <ion-text *ngFor="let field of jsonParse(question.comment).subquestions">
+            <b>{{field.label}}:</b> {{field.answer}}
+          </ion-text>
+        </ng-container>
+      </div>
     </ion-item>
 
   </ion-list>
 
+  <ion-row *ngIf="pagination.totalPages > 1" class="pagination">
+    <ion-col>
+      <ion-button 
+        *ngIf="pagination.currentPage > 1"
+        (click)="onGroupChange(groupSelect, pagination.currentPage-1)">Prev</ion-button>
+    </ion-col>
+    <ion-col>
+      {{pagination.currentPage}}/{{pagination.totalPages}}
+    </ion-col>
+    <ion-col>
+      <ion-button 
+        *ngIf="pagination.currentPage < pagination.totalPages"
+        (click)="onGroupChange(groupSelect, pagination.currentPage+1)">Next</ion-button>
+    </ion-col>
+  </ion-row>
 </ion-content>
+
 <ion-footer>
 
-<!--  <select class="timer-dropdown" style="border: 1px solid #b9b5b5; font-size: 15px" ng-model="group.selected" ng-change="changeGroup($event)" ng-options="group.id as group.type_value for group in groupTypes">-->
-<!--    <option value=""> All questions</option>-->
-<!--  </select>-->
-
-<!--  <button class="button button-positive pull-right" ng-click="submit(true)">Save</button>-->
-
+  <ion-select
+    #groupSelect
+    class="group-select"
+    placeholder="Select group"
+    [value]="null"
+    (ionChange)="onGroupChange($event.target)">
+    <ion-select-option
+      [value]="null">
+      All questions
+    </ion-select-option>
+    <ion-select-option
+      *ngFor="let group of groups"
+      [value]="group">
+      {{ group.type_value }}
+    </ion-select-option>
+  </ion-select>
 
 </ion-footer>
