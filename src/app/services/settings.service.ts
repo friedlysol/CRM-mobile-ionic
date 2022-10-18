@@ -6,7 +6,7 @@ import { SettingsApi } from '@app/providers/api/settings-api';
 import { ResponseSettingsApiInterface } from '@app/providers/api/interfaces/response-settings-api.interface';
 import { TimeSheetTypesDatabase } from '@app/services/database/time-sheet-types.database';
 import { PermissionsDatabase } from '@app/services/database/permissions.database';
-import { PermissionInterface } from '@app/interfaces/permission-interface';
+import { PermissionInterface } from '@app/interfaces/permission.interface';
 import { AppVersion } from '@ionic-native/app-version/ngx';
 import { StaticService } from '@app/services/static.service';
 import { LoggerService } from '@app/services/logger.service';

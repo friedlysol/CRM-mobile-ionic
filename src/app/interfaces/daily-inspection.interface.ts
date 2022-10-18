@@ -1,0 +1,33 @@
+export interface DailyInspectionInterface {
+  uuid?: string;
+  id?: number;
+  status_type_id?: number;
+  route?: string;
+  vehicle_number: string;
+  odometer_reading: string;
+  note: string;
+  head_lights?: number;
+  mirror?: number;
+  horn?: number;
+  seat_belts?: number;
+  turn_signals?: number;
+  lanyard?: number;
+  brake_lights?: number;
+  breakers?: number;
+  windshield_wipers?: number;
+  harness?: number;
+  ladder_inspection?: number;
+  ladder_rock_topper?: number;
+  license_plate_light?: number;
+  hand_brake?: number;
+  steering_mechanism?: number;
+  tires?: number;
+  coupling_devices?: number;
+  wheels_and_rims?: number;
+  emergency_equipment?: number;
+  car_service?: number;
+  app_lock?: number;
+  sync?: number;
+  created_at?: string;
+  updated_at?: string;
+}

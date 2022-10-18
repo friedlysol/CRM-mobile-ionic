@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { DatabaseService } from '@app/services/database.service';
-import { PermissionInterface } from '@app/interfaces/permission-interface';
+import { PermissionInterface } from '@app/interfaces/permission.interface';
 
 import * as _ from 'underscore';
 import * as sqlBuilder from 'sql-bricks';

@@ -1,12 +1,16 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-
-import { VehicleInspectionListPage } from './vehicle-inspection-list/vehicle-inspection-list.page';
+import { DailyInspectionPage } from '@app/pages/vehicle-inspection/daily-inspection/daily-inspection.page';
+import { WeeklyInspectionPage } from '@app/pages/vehicle-inspection/weekly-inspection/weekly-inspection.page';
 
 const routes: Routes = [
   {
-    path: 'list',
-    component: VehicleInspectionListPage
+    path: 'daily',
+    component: DailyInspectionPage
+  },
+  {
+    path: 'weekly',
+    component: WeeklyInspectionPage
   }
 ];
 
@@ -14,4 +18,5 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class VehicleInspectionsRoutingModule {}
+export class VehicleInspectionsRoutingModule {
+}

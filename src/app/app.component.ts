@@ -6,7 +6,7 @@ import { App } from '@capacitor/app';
 import { environment } from '@env/environment';
 import { PushNotificationService } from '@app/services/push-notifications.service';
 import { AppVersion } from '@ionic-native/app-version/ngx';
-import { MenuItemInterface } from '@app/interfaces/menu-item-interface';
+import { MenuItemInterface } from '@app/interfaces/menu-item.interface';
 import { FileService } from '@app/services/file.service';
 import { GeolocationService } from '@app/services/geolocation.service';
 

@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { SyncDetailsInterface } from '@app/interfaces/sync.details-interface';
+import { SyncDetailsInterface } from '@app/interfaces/sync.details.interface';
 import { Subscription } from 'rxjs';
 import { EventService } from '@app/services/event.service';
 import { SyncService } from '@app/services/sync.service';

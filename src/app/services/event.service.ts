@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 import { ConnectionStatus } from '@capacitor/network';
-import { SyncDetailsInterface } from '@app/interfaces/sync.details-interface';
+import { SyncDetailsInterface } from '@app/interfaces/sync.details.interface';
 
 @Injectable({
   providedIn: 'root'

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { LogInterface } from '@app/interfaces/log-interface';
+import { LogInterface } from '@app/interfaces/log.interface';
 import { DatabaseService } from '@app/services/database.service';
 
 import * as sqlBuilder from 'sql-bricks';

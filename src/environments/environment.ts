@@ -40,7 +40,7 @@ export const environment = {
       key: 'vehicle-inspection',
       label: 'Vehicle Inspection',
       icon: 'car-sport-outline',
-      url: ['/vehicle-inspection', 'list'],
+      url: ['/vehicle-inspection', 'daily'],
       isActive: true
     },
     {
