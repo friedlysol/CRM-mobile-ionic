@@ -29,7 +29,6 @@
 @import 'font-quicksand.css';
 
 
-
 //#ffffff - background
 //#fcfcfb - background
 //#e8e4dc - background form/frame
@@ -215,11 +214,12 @@ ion-button {
 }
 
 .bg-logo {
-  background: linear-gradient(180deg, rgba(130,129,126,1) 0%, rgba(232,228,220,1) 65%, rgba(252,252,251,1) 100%);
+  background: linear-gradient(180deg, rgba(130, 129, 126, 1) 0%, rgba(232, 228, 220, 1) 65%, rgba(252, 252, 251, 1) 100%);
 }
 
 .bg-frame {
   font-size: 0.9rem;
+
   label {
     span {
       display: inline-block;
@@ -275,4 +275,13 @@ ion-button {
   .buttons {
     text-align: right;
   }
+}
+
+.button-small {
+  height: 2.7em;
+}
+
+.button-solid {
+  --border-radius: 0;
+  --box-shadow: none;
 }

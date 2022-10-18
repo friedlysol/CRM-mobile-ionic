@@ -25,7 +25,6 @@
     "@awesome-cordova-plugins/launch-navigator": "^5.46.0",
     "@capacitor-community/background-geolocation": "^1.2.4",
     "@capacitor-community/camera-preview": "^3.1.1",
-    "@capacitor-community/date-picker": "^0.2.3",
     "@capacitor-community/file-opener": "^1.0.1",
     "@capacitor-community/sqlite": "^4.0.1",
     "@capacitor-mobi/cordova-plugin-inappbrowser": "^5.0.3",

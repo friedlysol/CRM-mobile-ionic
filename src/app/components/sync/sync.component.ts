@@ -32,6 +32,12 @@ export class SyncComponent implements OnInit, OnDestroy {
   ngOnInit() {
     const startSync = EventService.startSync
       .subscribe((status: boolean) => {
+
+        console.log('startSync', {
+          status: status,
+          syncInProgress: this.syncInProgress
+        });
+
         if(status && !this.syncInProgress) {
           EventService.syncInProgress.next(true);
 

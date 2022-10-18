@@ -54,17 +54,6 @@ CREATE TABLE IF NOT EXISTS `settings`
     PRIMARY KEY (name)
 );
 
-CREATE TABLE IF NOT EXISTS `time_sheet_types`
-(
-    `id`                      INTEGER NOT NULL,
-    `time_sheet_reason_id`    INTEGER NOT NULL,
-    `reason_type_id`          INTEGER NOT NULL,
-    `name`                    TEXT    NOT NULL,
-    `is_description_required` INTEGER NOT NULL,
-    `is_work_order_related`   INTEGER NOT NULL,
-    PRIMARY KEY (id)
-);
-
 CREATE TABLE IF NOT EXISTS `types`
 (
     `id`         INTEGER NOT NULL,

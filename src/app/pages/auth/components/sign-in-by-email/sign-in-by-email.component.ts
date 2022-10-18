@@ -5,6 +5,7 @@ import { AuthService } from '@app/services/auth.service';
 import { Router } from '@angular/router';
 import { CredentialsInterface } from '@app/interfaces/credentials.interface';
 import { StorageService } from '@app/services/storage.service';
+import { EventService } from '@app/services/event.service';
 
 @Component({
   selector: 'app-sign-in-by-email',
@@ -55,6 +56,8 @@ export class SignInByEmailComponent implements OnInit {
 
         if (res) {
           await this.router.navigateByUrl('/', {replaceUrl: true});
+
+          EventService.startSync.next(true);
         } else {
           return this.loginFailed();
         }

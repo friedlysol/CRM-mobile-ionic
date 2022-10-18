@@ -8,6 +8,7 @@ import { SmsRetriever } from '@ionic-native/sms-retriever/ngx';
 
 import { environment } from '@env/environment';
 import { Keyboard } from '@capacitor/keyboard';
+import { EventService } from '@app/services/event.service';
 
 @Component({
   selector: 'app-sign-in-by-phone-number',
@@ -94,6 +95,8 @@ export class SignInByPhoneNumberComponent implements OnInit {
 
         if (res) {
           await this.router.navigateByUrl('/', {replaceUrl: true});
+
+          EventService.startSync.next(true);
         } else {
           return this.incorrectCode();
         }

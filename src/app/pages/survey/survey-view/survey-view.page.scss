@@ -25,12 +25,14 @@ ion-input, ion-textarea{
 
 .options{
   gap: 5px;
+
   ion-col{
     padding: 0;
-  
+
     .option-btn{
       --background: var(--ion-color-grey-contrast);
-      --color: --ion-color-grey-shade;
+      --color: var(--ion-color-grey-shade);
+      border: 1px solid var(--ion-color-grey-shade);
       width: 100%;
       margin-inline: 0;
     }
@@ -38,6 +40,7 @@ ion-input, ion-textarea{
     .selected-option{
       --background: var(--ion-color-grey-shade);
       --color: white;
+      border: 0;
     }
   }
 }
