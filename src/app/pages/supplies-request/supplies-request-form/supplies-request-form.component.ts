@@ -4,10 +4,10 @@ import { TypeService } from '@app/services/type.service';
 
 @Component({
   selector: 'app-supplies-request-form',
-  templateUrl: './supplies-request-form.page.html',
-  styleUrls: ['./supplies-request-form.page.scss'],
+  templateUrl: './supplies-request-form.component.html',
+  styleUrls: ['./supplies-request-form.component.scss'],
 })
-export class SuppliesRequestFormPage implements OnInit {
+export class SuppliesRequestFormComponent implements OnInit {
   jobTypes: TypeInterface[] = [];
 
   constructor(

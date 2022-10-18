@@ -5,7 +5,7 @@ import { IonicModule } from '@ionic/angular';
 import { SuppliesRequestRoutingModule } from './supplies-request-routing.module';
 import { SuppliesRequestListPage } from './supplies-request-list/supplies-request-list.page';
 import { SharedModule } from '@app/shared.module';
-import { SuppliesRequestFormPage } from './supplies-request-form/supplies-request-form.page';
+import { SuppliesRequestFormComponent } from './supplies-request-form/supplies-request-form.component';
 
 @NgModule({
   imports: [
@@ -15,6 +15,6 @@ import { SuppliesRequestFormPage } from './supplies-request-form/supplies-reques
     SharedModule,
     SuppliesRequestRoutingModule
   ],
-  declarations: [SuppliesRequestListPage, SuppliesRequestFormPage]
+  declarations: [SuppliesRequestListPage, SuppliesRequestFormComponent]
 })
 export class SuppliesRequestModule {}

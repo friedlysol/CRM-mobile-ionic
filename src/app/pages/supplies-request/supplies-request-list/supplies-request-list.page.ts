@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { SupplyInterface } from '@app/interfaces/supply.interface';
 import { TypeInterface } from '@app/interfaces/type.interface';
 import { TypeService } from '@app/services/type.service';
-import { AlertController, ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-supplies-request-list',

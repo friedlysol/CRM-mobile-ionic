@@ -35,9 +35,15 @@
     <ion-col>
       <ion-button 
         class="new-request-btn"
-        [routerLink]="['/supplies-request', 'form']">
+        (click)="formModal.present()">
         New request
       </ion-button>
     </ion-col>
   </ion-row>
 </ion-footer>
+
+<ion-modal #formModal id="form-modal" class="popup">
+  <ng-template>
+    <app-supplies-request-form></app-supplies-request-form>
+  </ng-template>
+</ion-modal>
