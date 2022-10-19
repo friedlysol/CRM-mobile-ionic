@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>AHD CRM</string>
+        <string>AHD Mobile</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -28,13 +28,13 @@
 		<true/>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string>need camera access to take pictures</string>
+	<string>Enable camera access to be able to take photos then add them to your records.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>need location access to find things nearby</string>
+	<string>Used when retrieving the current location in forms</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>need photo library access to save pictures there</string>
+	<string>Allow access to photos to upload photos from your library</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>need photo library access to get pictures from there</string>
+	<string>Allow access to photos to upload photos from your library</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -58,5 +58,35 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<true/>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>$LOCATION_USAGE_DESCRIPTION</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>citymapper</string>
+		<string>comgooglemaps</string>
+		<string>navigon</string>
+		<string>transit</string>
+		<string>waze</string>
+		<string>yandexnavi</string>
+		<string>uber</string>
+		<string>tomtomhome</string>
+		<string>com.sygic.aura</string>
+		<string>here-route</string>
+		<string>moovit</string>
+		<string>lyft</string>
+		<string>mapsme</string>
+		<string>cabify</string>
+		<string>baidumap</string>
+		<string>taxis99</string>
+		<string>iosamap</string>
+	</array>
+	<key>NSLocationWhenInUseUsageDescription</key>
+  	<string>We need to track your location</string>
+  	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+  	<string>We need to track your location while your device is locked.</string>
+  	<key>UIBackgroundModes</key>
+  	<array>
+    	<string>location</string>
+  	</array>
 </dict>
 </plist>
