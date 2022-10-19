@@ -8,30 +8,23 @@ import { ModalController, NavParams, ToastController } from '@ionic/angular';
 })
 export class CommentModalComponent {
   comment = '';
+  submitted = false;
 
-  constructor(
-    private modalCtrl: ModalController,
-    params: NavParams,
-    private toastController: ToastController,
-  ) {
-    this.comment = params.data.comment != null? params.data.comment: '';
+  constructor(params: NavParams, private modalCtrl: ModalController) {
+    this.comment = params.data.comment != null ? params.data.comment : '';
   }
 
-  onSubmit(){
-    if(!this.comment || this.comment.length < 1){
-      this.showErrorToast('You must provide a comment');
+  onCancel() {
+    this.modalCtrl.dismiss();
+  }
+
+  onSubmit() {
+    this.submitted = true;
+
+    if (!this.comment) {
       return;
     }
+
     this.modalCtrl.dismiss(this.comment, 'submit');
-  }
-
-  async showErrorToast(message: string) {
-    const toast = await this.toastController.create({
-      message,
-      duration: 3000,
-      position: 'top',
-    });
-
-    toast.present();
   }
 }

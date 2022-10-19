@@ -29,7 +29,6 @@
 @import 'font-quicksand.css';
 
 
-
 //#ffffff - background
 //#fcfcfb - background
 //#e8e4dc - background form/frame
@@ -115,6 +114,42 @@ ion-card-title {
 
 ion-button {
   text-transform: none;
+
+  &[expand="full"] {
+    width: 100%;
+    margin-inline: 0;
+    margin: 0;
+  }
+}
+
+ion-item {
+  &.ion-no-padding {
+    --inner-padding-end: 0;
+  }
+}
+
+ion-input {
+  border: 1px solid var(--ion-color-grey-shade);
+  margin-top: 8px;
+  padding: 0 5px !important;
+  --padding-start: 8px !important;
+  --padding-end: 8px !important;
+
+  &.clear {
+    border: 0;
+    margin: 0;
+  }
+}
+
+ion-select {
+  border: 1px solid var(--ion-color-grey-shade);
+  --padding-bottom: 6px;
+  --padding-top: 6px;
+}
+
+ion-textarea {
+  border: 1px solid var(--ion-color-grey-shade);
+  padding: 0 5px !important;
 }
 
 .mt-6 {
@@ -215,7 +250,7 @@ ion-button {
 }
 
 .bg-logo {
-  background: linear-gradient(180deg, rgba(130,129,126,1) 0%, rgba(232,228,220,1) 65%, rgba(252,252,251,1) 100%);
+  background: linear-gradient(180deg, rgba(130, 129, 126, 1) 0%, rgba(232, 228, 220, 1) 65%, rgba(252, 252, 251, 1) 100%);
 }
 
 .bg-frame {

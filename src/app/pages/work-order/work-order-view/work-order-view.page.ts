@@ -9,6 +9,7 @@ import { TypeInterface } from '@app/interfaces/type.interface';
 import { AddressInterface } from '@app/interfaces/address.interface';
 import { AddressDatabase } from '@app/services/database/address.database';
 import { LaunchNavigator } from '@awesome-cordova-plugins/launch-navigator/ngx';
+import { StaticService } from '@app/services/static.service';
 
 @Component({
   selector: 'app-work-order-view',
@@ -32,9 +33,9 @@ export class WorkOrderViewPage implements OnInit, OnDestroy {
     private addressDatabase: AddressDatabase,
     private launchNavigator: LaunchNavigator,
     private route: ActivatedRoute,
+    private staticService: StaticService,
     private typeService: TypeService,
     private workOrderDatabase: WorkOrderDatabase,
-    private workOrderService: WorkOrderService,
     public addressService: AddressService
   ) {
   }
@@ -85,6 +86,14 @@ export class WorkOrderViewPage implements OnInit, OnDestroy {
       (this.woAddress.state ? this.woAddress.state + ', ' : '');
   }
 
+  getMapLink() {
+    if(this.staticService.isIos) {
+      return 'maps://?q=' + this.getLocationQueryString();
+    } else {
+      return 'geo:0,0?q=' + this.getLocationQueryString();
+    }
+  }
+
   navigateToMap() {
     this.launchNavigator.navigate(this.getLocationQueryString());
   }
@@ -98,5 +107,4 @@ export class WorkOrderViewPage implements OnInit, OnDestroy {
       index > 0 && this.woTypes[index-1].id === this.workOrder.tech_status_type_id ||
       index < this.woTypes.length-1 && this.woTypes[index+1].id === this.workOrder.tech_status_type_id);
   }
-
 }

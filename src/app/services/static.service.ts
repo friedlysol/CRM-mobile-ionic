@@ -19,8 +19,9 @@ export class StaticService {
   public deviceTokenType: string = null;
 
   public isFirstSync = true;
+  public isAndroid = false;
+  public isIos = false;
   public isTablet = !!navigator.userAgent.match(/iPad/i);
-
 
   public networkStatus: ConnectionStatus = {
     connected: false,
@@ -40,9 +41,15 @@ export class StaticService {
   ) {
     this.platform.ready()
       .then(() => {
+        this.isAndroid = this.platform.is('android')
+        this.isIos = this.platform.is('ios')
         this.isTablet = this.platform.is('tablet');
 
-        console.log('isTablet', this.isTablet);
+        console.log('platform', {
+          isAndroid: this.isAndroid,
+          isIos: this.isIos,
+          isTablet: this.isTablet
+        })
       });
   }
 

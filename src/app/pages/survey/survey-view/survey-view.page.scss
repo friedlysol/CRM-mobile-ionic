@@ -11,25 +11,20 @@ ion-item {
   font-size: 12px;
 }
 
-.question{
+.question {
   display: flex;
   flex-direction: column;
-  margin-bottom: 2vh;
+  margin-bottom: 5px;
   width: 100%;
 }
 
-ion-input, ion-textarea{
-  border: 1px solid var(--ion-color-grey-shade);
-  padding: 0 5px !important;
-}
-
-.options{
+.options {
   gap: 5px;
 
-  ion-col{
+  ion-col {
     padding: 0;
 
-    .option-btn{
+    .option-btn {
       --background: var(--ion-color-grey-contrast);
       --color: var(--ion-color-grey-shade);
       border: 1px solid var(--ion-color-grey-shade);
@@ -37,7 +32,7 @@ ion-input, ion-textarea{
       margin-inline: 0;
     }
 
-    .selected-option{
+    .selected-option {
       --background: var(--ion-color-grey-shade);
       --color: white;
       border: 0;
@@ -45,18 +40,18 @@ ion-input, ion-textarea{
   }
 }
 
-.pagination ion-col{
+.pagination ion-col {
   display: flex;
   justify-content: center;
   align-items: center;
 
-  ion-button{
+  ion-button {
     --background: var(--ion-color-grey-shade);
     width: 100%;
   }
 }
 
-.group-select{
+.group-select {
   --padding-end: 16px;
   --padding-start: 16px;
 }

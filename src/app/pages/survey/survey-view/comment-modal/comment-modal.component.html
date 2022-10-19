@@ -1,7 +1,18 @@
-<ion-item lines="none">
-  <ion-label position="stacked">
-    <b>Write your comment</b>
-  </ion-label>
-  <ion-textarea [(ngModel)]="comment" placeholder="Comment"></ion-textarea>
-  <ion-button (click)="onSubmit()">Submit</ion-button>
-</ion-item>
+<div class="ion-padding">
+  <ion-item class="ion-no-padding" lines="none">
+    <ion-label position="stacked" class="bold">Write your comment</ion-label>
+    <ion-textarea [(ngModel)]="comment" placeholder="Comment"></ion-textarea>
+    <ion-text class="small" color="danger" *ngIf="submitted && !comment">
+      Comment is required
+    </ion-text>
+  </ion-item>
+
+  <ion-row class="gap-2">
+    <ion-col class="ion-no-padding">
+      <ion-button (click)="onCancel()" color="light" expand="full">Cancel</ion-button>
+    </ion-col>
+    <ion-col class="ion-no-padding">
+      <ion-button (click)="onSubmit()" color="medium" expand="full">Submit</ion-button>
+    </ion-col>
+  </ion-row>
+</div>

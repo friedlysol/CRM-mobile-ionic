@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 
-export interface ISignatureFormData{
+export interface ISignatureFormData {
   ownerName: string;
   ownerTitle: string;
 }
@@ -11,7 +11,7 @@ export interface ISignatureFormData{
   templateUrl: './signature-form.component.html',
   styleUrls: ['./signature-form.component.scss'],
 })
-export class SignatureFormComponent implements OnInit{
+export class SignatureFormComponent implements OnInit {
   @Output() cancel = new EventEmitter<void>();
   @Output() next = new EventEmitter<ISignatureFormData>();
   @Input() name = '';
@@ -20,19 +20,20 @@ export class SignatureFormComponent implements OnInit{
   ownerName = new FormControl('', [Validators.required]);
   ownerTitle = new FormControl('', [Validators.required]);
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit() {
     this.ownerName.setValue(this.name);
     this.ownerTitle.setValue(this.title);
   }
 
-  onCancelClick(){
+  onCancel() {
     this.cancel.emit();
   }
 
-  onNextClick(){
-    if(this.ownerName.invalid || this.ownerTitle.invalid) {
+  onNext() {
+    if (this.ownerName.invalid || this.ownerTitle.invalid) {
       this.ownerName.markAsTouched();
       this.ownerTitle.markAsTouched();
       return;
