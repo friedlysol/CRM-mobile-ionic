@@ -8,3 +8,40 @@
     width: 100%;
     margin-inline: 0;
 }
+
+ion-col{
+    display: flex;
+    align-items: center;
+
+    ion-select{
+        width: 100%;
+    }
+}
+
+ion-card-title{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.description-label{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.acknowledgment-pending, .status-partially-delivered{
+    color: var(--ion-color-status-in-progress);
+}
+
+.acknowledgment-yes, .status-delivered{
+    color: var(--ion-color-status-done);
+}
+
+.status-not-delivered{
+    color: var(--ion-color-status-stoped);
+}
+
+.confirm-btn{
+    --background: var(--ion-color-green-tint);
+    width: 100%;
+}

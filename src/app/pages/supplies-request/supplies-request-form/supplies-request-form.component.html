@@ -1,8 +1,8 @@
-<h1><b>Create new request</b></h1>
+<h1 class="ion-text-center"><b>Create new request</b></h1>
 
-<form [formGroup]="requestForm" (ngSubmit)="onSubmit()">
+<form [formGroup]="requestForm" (ngSubmit)="onSubmit()" class="ion-padding">
   <div class="field">
-    <strong>Job type</strong>
+    <strong class="ion-margin-top">Job type</strong>
     <ion-select
       #jobTypeSelect
       formControlName="jobType"
@@ -24,7 +24,8 @@
   <div class="field">
     <strong>Type</strong>
     <ion-input 
-      formControlName="type">
+      formControlName="type"
+      class="ion-no-margin">
     </ion-input>
     <ion-note 
       color="danger"
@@ -38,7 +39,7 @@
     <ion-input 
       type="number" 
       formControlName="quantity"
-      required>
+      class="ion-no-margin">
     </ion-input>
     <ion-note 
       color="danger"
@@ -47,35 +48,11 @@
     </ion-note>
   </div>
 
-  <ion-button type="submit">
-    Submit
-  </ion-button>
+  <ion-row class="gap-2 ion-padding-top">
+    <ion-col class="ion-no-padding">
+      <ion-button type="submit" color="medium" expand="full">
+        Submit
+      </ion-button>
+    </ion-col>
+  </ion-row>
 </form>
-
-<!-- <div class="field">
-  <strong>Job type</strong>
-  <ion-select
-    interface="popover"
-    class="job-type-select">
-    <ion-select-option
-      *ngFor="let type of jobTypes"
-      [value]="type.id">
-      {{ type.type_value }}
-    </ion-select-option>
-  </ion-select>
-</div>
-
-<div class="field">
-  <strong>Type</strong>
-  <ion-input></ion-input>
-</div>
-
-<div class="field">
-  <strong>Quantity</strong>
-  <ion-input></ion-input>
-</div>
-
-<ion-button
-  (click)="onSubmit()">
-  Submit
-</ion-button> -->

@@ -81,7 +81,6 @@ export class SurveyViewPage implements OnInit {
       question.answer_uuid = answer.uuid;
       question.answer = answer.answer;
     }
-    console.log(this.answers)
   }
 
   async onOptionClick(question: SurveyQuestionInterface, type: 'comment' | 'questions', option: 'yes' | 'no') {

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { SupplyInterface } from '@app/interfaces/supply.interface';
 import { TypeInterface } from '@app/interfaces/type.interface';
+import { SupplyDatabase } from '@app/services/database/supply.database';
 import { TypeService } from '@app/services/type.service';
 import { ModalController } from '@ionic/angular';
 
@@ -21,6 +22,7 @@ export class SuppliesRequestFormComponent implements OnInit {
 
   constructor(
     private modalCtrl: ModalController,
+    private supplyDatabase: SupplyDatabase,
     private typeService: TypeService,
     ) { }
 
@@ -33,18 +35,22 @@ export class SuppliesRequestFormComponent implements OnInit {
     console.log(this.jobTypes);
   }
 
-  onSubmit(){
-    console.log(this.requestForm);
+  async onSubmit(){
     if(this.requestForm.invalid){
       this.requestForm.markAllAsTouched();
       this.requestForm.controls.jobType.markAsDirty();
       return;
     }
 
-    const request: SupplyInterface = {
+    let request: SupplyInterface = {
       quantity: this.requestForm.value.quantity,
-      created_at: ''
+      job_type_id: this.requestForm.value.jobType.id,
+      type: this.requestForm.value.type,
+      created_at: '',
     };
-    this.modalCtrl.dismiss(null, 'submit');
+
+    request = await this.supplyDatabase.createRequest(request);
+
+    this.modalCtrl.dismiss(request, 'submit');
   }
 }
