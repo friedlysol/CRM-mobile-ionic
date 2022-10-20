@@ -8,42 +8,41 @@ import { ModalController, NavParams, ToastController } from '@ionic/angular';
 })
 export class SubquestionsModalComponent implements OnInit {
   subquestions = [];
+  submitted = false;
 
   constructor(
     params: NavParams,
     private modalCtrl: ModalController,
     private toastController: ToastController,
   ) {
-    this.subquestions= params.data.subquestions != null? params.data.subquestions: [];
+    this.subquestions = params.data.subquestions != null ? params.data.subquestions : [];
   }
 
-  ngOnInit() {}
-
-  onInputChange(event, subquestion){
-    subquestion.answer = event.target.value;
+  ngOnInit() {
   }
 
-  onSubmit(){
-    for(const subquestion of this.subquestions){
-      if(subquestion.required && (!subquestion.answer || subquestion.answer.length < 1)){
-        this.showErrorToast('You must provide all required fields.');
+  onInputChange(event, subQuestion) {
+    subQuestion.answer = event.target.value;
+  }
+
+  onCancel() {
+    this.modalCtrl.dismiss(null, 'back');
+  }
+
+  onSubmit() {
+    this.submitted = true;
+
+    for (const subQuestion of this.subquestions) {
+      if (subQuestion.required && !subQuestion.answer) {
         return;
       }
     }
+
     this.modalCtrl.dismiss(this.subquestions, 'submit');
   }
 
-  async showErrorToast(message: string) {
-    const toast = await this.toastController.create({
-      message,
-      duration: 3000,
-      position: 'top',
-    });
 
-    toast.present();
-  }
-
-  goBack(){
+  goBack() {
     this.modalCtrl.dismiss(null, 'back');
   }
 }

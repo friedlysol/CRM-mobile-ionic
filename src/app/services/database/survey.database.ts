@@ -15,6 +15,7 @@ import {
   SurveyApiInterface,
   SurveyQuestionApiInterface
 } from '@app/providers/api/interfaces/response-survey-api.interface';
+import * as _ from 'underscore';
 
 @Injectable({
   providedIn: 'root'
@@ -24,47 +25,53 @@ export class SurveyDatabase {
   }
 
   getById(id): Promise<SurveyInterface> {
-    return this.databaseService.findOrNull(`select * from surveys where id = ?`, [
+    return this.databaseService.findOrNull(`select *
+                                            from surveys
+                                            where id = ?`, [
       id
     ]);
   };
 
   async getByUuid(uuid: string): Promise<SurveyInterface> {
-    return this.databaseService.findOrNull(`select * from surveys where uuid = ?`, [
+    return this.databaseService.findOrNull(`select *
+                                            from surveys
+                                            where uuid = ?`, [
       uuid
     ]);
   };
 
   getAllSurveysForWorkOrderId(workOrderId): Promise<SurveyInterface[]> {
     return this.databaseService.findAsArray(`
-        select 
-          *,
-          (select count(1) from survey_questions sq where sq.survey_id = s.survey_id and sq.active = 1) total,
-          (select count(1)
-            from survey_results sr
-            where sr.survey_instance_id = s.id
-              and sr.answer is not null
-              and (s.require_every_day = 0 or (s.require_every_day = 1 and date(sr.created_at) = date()))
+                select *,
+                       (select count(1) from survey_questions sq where sq.survey_id = s.survey_id and sq.active = 1) total,
+                       (select count(1)
+                        from survey_results sr
+                        where sr.survey_instance_id = s.id
+                          and sr.answer is not null
+                          and (s.require_every_day = 0 or (s.require_every_day = 1 and date (sr.created_at) = date ()))
               and length(trim(sr.answer)) > 0
           ) answered,
-          (select count(1)
-            from survey_questions sq
-            where sq.survey_id = s.survey_id
-              and sq.active = 1
-              and sq.photo = "required"
-          ) total_photos,
-          (select count(1) OVER ()
-            from survey_results sr
-            inner join files f on f.object_uuid = sr.uuid 
-              and f.object_type = "survey_results" 
-              and f.is_deleted = 0 and (
-                s.require_every_day = 0 or (s.require_every_day = 1 and date(f.created_at) = date()))
-            where sr.survey_instance_id = s.id
-            group by f.object_uuid
-          ) photos
-        from surveys s
-        where table_name = "work_order"
-          and record_id = ?
+          (
+                select count (1)
+                from survey_questions sq
+                where sq.survey_id = s.survey_id
+                  and sq.active = 1
+                  and sq.photo = "required"
+                    ) total_photos
+                    , (
+                select count (1) OVER ()
+                from survey_results sr
+                    inner join files f
+                on f.object_uuid = sr.uuid
+                    and f.object_type = "survey_results"
+                    and f.is_deleted = 0 and (
+                    s.require_every_day = 0 or (s.require_every_day = 1 and date (f.created_at) = date ()))
+                where sr.survey_instance_id = s.id
+                group by f.object_uuid
+                    ) photos
+                from surveys s
+                where table_name = "work_order"
+                  and record_id = ?
       `,
       [
         workOrderId
@@ -80,22 +87,21 @@ export class SurveyDatabase {
 
   getAllSurveysForObjectType(objectType, objectUuid): Promise<SurveyInterface[]> {
     return this.databaseService.findAsArray(`
-      select *,
-        (select count(1)
-          from survey_questions sq
-          where sq.survey_id = s.survey_id
-            and sq.active = 1
-        ) total,
-        (select count(1)
-          from survey_results sr
-          where sr.object_uuid = ?
-            and sr.survey_instance_id = s.id
-              and sr.answer is not null
-              and (s.require_every_day = 0 or (s.require_every_day = 1 and date(sr.created_at) = date()))
+        select *,
+               (select count(1)
+                from survey_questions sq
+                where sq.survey_id = s.survey_id
+                  and sq.active = 1) total,
+               (select count(1)
+                from survey_results sr
+                where sr.object_uuid = ?
+                  and sr.survey_instance_id = s.id
+                  and sr.answer is not null
+                  and (s.require_every_day = 0 or (s.require_every_day = 1 and date (sr.created_at) = date ()))
               and length(trim(sr.answer)) > 0
         ) answered
-      from surveys s
-      where table_name = ?
+        from surveys s
+        where table_name = ?
     `, [
       objectUuid,
       objectType
@@ -104,15 +110,14 @@ export class SurveyDatabase {
 
   checkNumberOfQuestionsForWorkOrderId(workOrderId): Promise<boolean> {
     return this.databaseService.findAsArray(`
-      select 
-        surveys.survey_id,
-        surveys.number_of_questions,
-        count(survey_questions.survey_question_id) as total_questions
-      from surveys
-      left join survey_questions ON surveys.survey_id = survey_questions.survey_id
-      where table_name = 'work_order'
-        and record_id = ?
-      group by surveys.id
+        select surveys.survey_id,
+               surveys.number_of_questions,
+               count(survey_questions.survey_question_id) as total_questions
+        from surveys
+                 left join survey_questions ON surveys.survey_id = survey_questions.survey_id
+        where table_name = 'work_order'
+          and record_id = ?
+        group by surveys.id
     `, [
       workOrderId
     ]).then(surveys => {
@@ -136,24 +141,21 @@ export class SurveyDatabase {
 
   getUnansweredSurveysForWorkOrderId(workOrderId) {
     return this.databaseService.findOrNull(`
-      select (
-        select count(1) from surveys s where s.record_id = wo.work_order_id) as total,
-        (select count(1)
-          from surveys s2
-          where s2.record_id = wo.work_order_id
-            and (
-              select count(1)
-              from survey_results sr
-              where sr.survey_instance_id = s2.survey_instance_id
-                and sr.answer is not null
-                and length(trim(sr.answer)) > 0
-                and (
-                  s2.require_every_day = 0 or (
-                    s2.require_every_day = 1 
-                    and date(sr.created_at) = date()
-                  )
-                )
-            ) >= (
+        select (select count(1)
+                from surveys s
+                where s.record_id = wo.work_order_id) as total,
+               (select count(1)
+                from surveys s2
+                where s2.record_id = wo.work_order_id
+                  and (select count(1)
+                       from survey_results sr
+                       where sr.survey_instance_id = s2.survey_instance_id
+                         and sr.answer is not null
+                         and length(trim(sr.answer)) > 0
+                         and (
+                                   s2.require_every_day = 0 or (
+                                                                           s2.require_every_day = 1
+                                                                       and date (sr.created_at) = date ())) ) >= (
               select count(1)
               from survey_questions sq
               where sq.survey_id = s2.survey_id
@@ -161,32 +163,35 @@ export class SurveyDatabase {
                 and sq.active = 1
             )
         ) as answered,
-        (select count(1)
-          from surveys s
-          inner join survey_questions sq
-          where s.record_id = wo.work_order_id
-            and sq.survey_id = s.survey_id
-            and sq.active = 1
-            and sq.photo = "required"
-        ) as total_photos,
-        (select count(1) OVER ()
-          from surveys s
-          inner join survey_results sr
-          inner join files f on f.object_uuid = sr.uuid
+        (
+        select count (1)
+        from surveys s
+            inner join survey_questions sq
+        where s.record_id = wo.work_order_id
+          and sq.survey_id = s.survey_id
+          and sq.active = 1
+          and sq.photo = "required"
+            ) as total_photos
+            , (
+        select count (1) OVER ()
+        from surveys s
+            inner join survey_results sr
+            inner join files f
+        on f.object_uuid = sr.uuid
             and f.object_type = "survey_results"
             and f.is_deleted = 0
             and (
-              s.require_every_day = 0 or (
-                s.require_every_day = 1 
-                and date(f.created_at) = date()
-              )
+            s.require_every_day = 0 or (
+            s.require_every_day = 1
+            and date (f.created_at) = date ()
             )
-          where s.record_id = wo.work_order_id
-            and sr.survey_instance_id = s.id
-          group by f.object_uuid
-        ) as photos
-      from work_orders wo
-      where wo.work_order_id = ?
+            )
+        where s.record_id = wo.work_order_id
+          and sr.survey_instance_id = s.id
+        group by f.object_uuid
+            ) as photos
+        from work_orders wo
+        where wo.work_order_id = ?
     `, [
       workOrderId
     ]);
@@ -194,10 +199,11 @@ export class SurveyDatabase {
 
   async getUnsynchronizedAnswers(): Promise<SurveyResultInterface[]> {
     return this.databaseService.findAsArray(`
-      select survey_results.*, surveys.table_name
-      from survey_results
-      left join surveys on survey_results.survey_instance_id = surveys.id
-      where survey_results.survey_instance_id is not null and survey_results.sync = 0
+        select survey_results.*, surveys.table_name
+        from survey_results
+                 left join surveys on survey_results.survey_instance_id = surveys.id
+        where survey_results.survey_instance_id is not null
+          and survey_results.sync = 0
     `);
   }
 
@@ -221,18 +227,18 @@ export class SurveyDatabase {
     }
 
     query = `
-      select sq.*, sr.uuid as answer_uuid, sr.answer, sr.comment, t.type_value as group_name
-      from surveys s
-      join survey_questions sq on s.survey_id = sq.survey_id and sq.active = 1
-      left join types t on sq.group_type_id = t.id
-      left join survey_results sr on sr.survey_question_id = sq.id
-         and sr.survey_instance_id = s.id
-         and (
-            s.require_every_day = 0 or (s.require_every_day = 1 and date(sr.created_at) = date())
-         )
-         ${objectUuidConditions}
-      where s.uuid = ?
-        and sq.active = 1
+        select sq.*, sr.uuid as answer_uuid, sr.answer, sr.comment, t.type_value as group_name
+        from surveys s
+                 join survey_questions sq on s.survey_id = sq.survey_id and sq.active = 1
+                 left join types t on sq.group_type_id = t.id
+                 left join survey_results sr on sr.survey_question_id = sq.id
+            and sr.survey_instance_id = s.id
+            and (
+                                                            s.require_every_day = 0 or
+                                                            (s.require_every_day = 1 and date (sr.created_at) = date ())
+         ) ${objectUuidConditions}
+        where s.uuid = ?
+          and sq.active = 1
     `;
 
     params.push(uuid);
@@ -454,12 +460,12 @@ export class SurveyDatabase {
   async getResultBySurveyAndQuestion(
     surveyId: number,
     questionId: number
-    ): Promise<SurveyResultInterface> {
+  ): Promise<SurveyResultInterface> {
     const query = sqlBuilder
-    .select()
-    .from('survey_results')
-    .where('survey_instance_id', surveyId)
-    .where('survey_question_id', questionId);
+      .select()
+      .from('survey_results')
+      .where('survey_instance_id', surveyId)
+      .where('survey_question_id', questionId);
 
     return this.databaseService.findOrNull(query.toString(), query.toParams());
   }
@@ -471,7 +477,7 @@ export class SurveyDatabase {
    * @param surveyId
    * @param questionId
    */
-   async createResult(surveyUuid: string, surveyId: number, questionId: number): Promise<SurveyResultInterface | SurveyInterface> {
+  async createResult(surveyUuid: string, surveyId: number, questionId: number): Promise<SurveyResultInterface | SurveyInterface> {
     const uuid = this.databaseService.getUuid();
 
     const query = sqlBuilder.insert('survey_results', Object.assign({
@@ -496,14 +502,14 @@ export class SurveyDatabase {
    *
    * @param result
    */
-   updateResult(result: SurveyResultInterface) {
-    const query = sqlBuilder.update('survey_results');
-    Object.keys(result).forEach(field => {
-      query.set(field, result[field]);
-    });
-    query.set('updated_at', this.databaseService.getTimeStamp());
-    query.set('sync', 0);
-    query.where('uuid', result.uuid);
+  updateResult(result: SurveyResultInterface) {
+    const query = sqlBuilder
+      .update('survey_results', Object.assign({
+          sync: 0,
+          updated_at: this.databaseService.getTimeStamp()
+        }, _.pick(result, ['answer', 'comment']))
+      )
+      .where('uuid', result.uuid);
 
     return this.databaseService.query(query.toString(), query.toParams());
   }

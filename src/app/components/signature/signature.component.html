@@ -1,7 +1,7 @@
 <ion-button
   *ngIf="file; else getSignatureBtn"
   (click)="onGetSignatureClick()"
-  expand="block"
+  expand="full"
   color="success">
   Signed by {{ file.description }}
 </ion-button>
@@ -9,7 +9,7 @@
 <ng-template #getSignatureBtn>
   <ion-button
     (click)="onGetSignatureClick()"
-    expand="block"
+    expand="full"
     color="danger">
     {{ label? label: 'Get a signature'}}
   </ion-button>
@@ -17,7 +17,7 @@
 
 <ion-modal #formModal id="form-modal" class="popup">
   <ng-template>
-    <app-signature-form 
+    <app-signature-form
       (cancel)="onFormCancel()"
       (next)="onFormNext($event)"
       [name]="ownerName"

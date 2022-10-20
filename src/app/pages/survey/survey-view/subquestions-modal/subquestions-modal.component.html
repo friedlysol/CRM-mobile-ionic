@@ -1,47 +1,51 @@
 <ion-header>
   <ion-toolbar>
     <ion-button
-      slot="start"
-      fill="clear"
-      class="back-btn"
-      (click)="goBack()">
+        slot="start"
+        fill="clear"
+        class="back-btn"
+        (click)="onCancel()"
+    >
       <ion-icon name="arrow-back-outline"></ion-icon>
     </ion-button>
     <ion-title>Questions</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ion-item
-    lines="none"
-    *ngFor="let subquestion of subquestions">
+<ion-content class="ion-padding">
+  <ion-item class="ion-no-padding" lines="none" *ngFor="let subquestion of subquestions">
     <ion-label position="stacked">
       {{ subquestion.label }}
       <span class="required" *ngIf="subquestion.required">*</span>
     </ion-label>
+
     <ion-input
-      *ngIf="subquestion.type === 'input'"
-      (ionChange)="onInputChange($event, subquestion)"
-      [debounce]="500"
-      [value]="subquestion.answer">
+        *ngIf="subquestion.type === 'input'"
+        (ionChange)="onInputChange($event, subquestion)"
+        [debounce]="500"
+        [value]="subquestion.answer">
     </ion-input>
+
     <ion-textarea
-      *ngIf="subquestion.type === 'textarea'"
-      (ionChange)="onInputChange($event, subquestion)"
-      [debounce]="500"
-      [value]="subquestion.answer">
+        *ngIf="subquestion.type === 'textarea'"
+        (ionChange)="onInputChange($event, subquestion)"
+        [debounce]="500"
+        [value]="subquestion.answer">
     </ion-textarea>
-    <ion-note slot="error">{{subquestion.label}} is required</ion-note>
-  </ion-item>
 
-
-  <ion-item lines="none">
-    <ion-button (click)="onSubmit()" class="submit-btn">
-      Submit
-    </ion-button>
+    <ion-text class="small" color="danger" *ngIf="submitted && subquestion.required && !subquestion.answer">
+      {{subquestion.label}} is required
+    </ion-text>
   </ion-item>
 </ion-content>
 
 <ion-footer>
-  <app-sync></app-sync>
+  <ion-row>
+    <ion-col>
+      <ion-button (click)="onCancel()" color="light" expand="full">Cancel</ion-button>
+    </ion-col>
+    <ion-col>
+      <ion-button (click)="onSubmit()" color="medium" expand="full">Submit</ion-button>
+    </ion-col>
+  </ion-row>
 </ion-footer>

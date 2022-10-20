@@ -4,6 +4,7 @@
     <ion-row>
       <ion-col>
         <ion-input
+            class="clear"
             [(ngModel)]="params.query"
             [debounce]="300"
             (ionChange)="loadList()" placeholder="Type to search">

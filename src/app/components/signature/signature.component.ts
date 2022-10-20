@@ -55,7 +55,7 @@ export class SignatureComponent implements OnInit {
 
   onSave(image: string){
     this.image = image;
-    console.log({image: this.image});
+
     this.onCanvasCancel();
     this.onFormCancel();
     this.saveSignature();

@@ -1,11 +1,12 @@
-<ion-content>
+<ion-content [forceOverscroll]="false">
 
 <canvas
   (touchmove)="onTouchMove($event)"
   (touchstart)="onTouchStart($event)"
   (touchend)="onTouchEnd()"
   #canvasElement 
-  class="signature-pad">
+  class="signature-pad"
+  >
 </canvas>
 
 <ion-footer>

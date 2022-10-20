@@ -1,13 +1,18 @@
 import { Component, OnInit } from '@angular/core';
-import { SurveyInterface, SurveyQuestionInterface, SurveyQuestionPagination, SurveyResultInterface } from '@app/interfaces/survey.interface';
+import {
+  SurveyInterface,
+  SurveyQuestionInterface,
+  SurveyQuestionPagination,
+  SurveyResultInterface
+} from '@app/interfaces/survey.interface';
 import { ActivatedRoute } from '@angular/router';
 import { SurveyDatabase } from '@app/services/database/survey.database';
 import { ModalController } from '@ionic/angular';
 import { CommentModalComponent } from './comment-modal/comment-modal.component';
-import { FileInterface } from '@app/interfaces/file.interface';
 import { TypeInterface } from '@app/interfaces/type.interface';
 import { TypeService } from '@app/services/type.service';
 import { SubquestionsModalComponent } from './subquestions-modal/subquestions-modal.component';
+import { Location } from "@angular/common";
 
 @Component({
   selector: 'app-survey-view',
@@ -29,8 +34,9 @@ export class SurveyViewPage implements OnInit {
   private surveyUuid: string;
 
   constructor(
-    private route: ActivatedRoute,
+    private location: Location,
     private modalCtrl: ModalController,
+    private route: ActivatedRoute,
     private surveyDatabase: SurveyDatabase,
     private typeService: TypeService,
   ) {
@@ -45,6 +51,7 @@ export class SurveyViewPage implements OnInit {
 
       await this.getSurveyQuestions();
     });
+
     this.groups = await this.typeService.getByType('survey_groups');
   }
 
@@ -59,70 +66,88 @@ export class SurveyViewPage implements OnInit {
       });
   }
 
-  async initResults(){
-    for(const question of this.questions){
+  async initResults() {
+    for (const question of this.questions) {
       let answer = await this.surveyDatabase.getResultBySurveyAndQuestion(this.survey.id, question.id);
-      if(!answer){
+
+      if (!answer) {
         await this.surveyDatabase.createResult(this.survey.uuid, this.survey.id, question.id);
+
         answer = await this.surveyDatabase.getResultBySurveyAndQuestion(this.survey.id, question.id);
       }
+
       this.answers.push(answer);
+
       question.answer_uuid = answer.uuid;
       question.answer = answer.answer;
     }
     console.log(this.answers)
   }
 
-  async onOptionClick(question: SurveyQuestionInterface, type: 'comment' | 'questions', option: 'yes' | 'no'){
+  async onOptionClick(question: SurveyQuestionInterface, type: 'comment' | 'questions', option: 'yes' | 'no') {
     const answer = this.getAnswer(question);
+
     answer.answer = option;
     question.answer = option;
-    if(question.type === `option_with_${type}_for_${option}`){
-      answer.comment = type === 'comment'?
-        await this.openCommentModal(answer.comment):
-        await this.openSubquestionsModal(JSON.parse(answer.comment) || question.options);
+
+    if (question.type === `option_with_${type}_for_${option}`) {
+      answer.comment = type === 'comment'
+        ? await this.openCommentModal(answer.comment)
+        : await this.openSubquestionsModal(JSON.parse(answer.comment) || question.options);
+
       question.comment = answer.comment;
-      if(!answer.comment){
+
+      if (!answer.comment) {
         answer.answer = null;
         question.answer = answer.answer;
       }
-    }else{
+    } else {
       answer.comment = null;
       question.comment = answer.comment;
     }
+
     this.updateAnswer(answer);
   }
 
-  onInputChange(event, question: SurveyQuestionInterface){
+  onInputChange(event, question: SurveyQuestionInterface) {
     const answer = this.getAnswer(question);
+
     answer.answer = event.target.value;
+
     this.updateAnswer(answer);
   }
 
-  onFileSave(question: SurveyQuestionInterface){
+  onFileSave(question: SurveyQuestionInterface) {
     const answer = this.getAnswer(question);
+
     answer.answer = '-';
+
     this.updateAnswer(answer);
   }
 
-  onGroupChange(select, page = 1){
+  onGroupChange(select, page = 1) {
     const value: TypeInterface | null = select.value;
-    if(value){
+
+    if (value) {
       this.getSurveyQuestions(page, value.id);
-    }else{
+    } else {
       this.getSurveyQuestions(page);
     }
   }
 
-  updateAnswer(answer: SurveyResultInterface){
+  onSave() {
+    this.location.back();
+  }
+
+  updateAnswer(answer: SurveyResultInterface) {
     this.surveyDatabase.updateResult(answer);
   }
 
-  getAnswer(question){
+  getAnswer(question) {
     return this.answers.find(e => e.uuid === question.answer_uuid);
   }
 
-  async openCommentModal(comment: string){
+  async openCommentModal(comment: string) {
     const modal = await this.modalCtrl.create({
       component: CommentModalComponent,
       cssClass: 'popup',
@@ -130,22 +155,30 @@ export class SurveyViewPage implements OnInit {
         comment,
       }
     });
+
     modal.present();
-    return modal.onDidDismiss().then(e => e.role === 'submit'? e.data: comment);
+
+    return modal.onDidDismiss().then(e => e.role === 'submit' ? e.data : comment);
   }
 
-  async openSubquestionsModal(options){
+  async openSubquestionsModal(options) {
     const modal = await this.modalCtrl.create({
       component: SubquestionsModalComponent,
       componentProps: {
         subquestions: options.subquestions,
       }
     });
+
     modal.present();
-    return modal.onDidDismiss().then(e => e.role === 'submit'? JSON.stringify({subquestions: e.data}): null);
+
+    return modal.onDidDismiss().then(e => e.role === 'submit' ? JSON.stringify({subquestions: e.data}) : null);
   }
 
-  jsonParse(str: string){
-    return JSON.parse(str);
+  jsonParse(str: string) {
+    try {
+      return JSON.parse(str);
+    } catch (err) {
+      return null;
+    }
   }
 }

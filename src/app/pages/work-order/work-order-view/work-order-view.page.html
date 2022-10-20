@@ -9,7 +9,7 @@
     </ion-item>
 
     <ion-item class="mt-3" lines="none" *ngIf="woAddress">
-      <ion-row>
+      <ion-row class="w-100">
         <ion-col class="col-7 ion-no-padding">
           <ion-label>
             <strong>Address:</strong>
@@ -19,8 +19,24 @@
           </ion-label>
         </ion-col>
         <ion-col class="col-5 ion-text-right">
-          <ion-button color="primary" size="small" href="geo:0,0?q={{getLocationQueryString()}}">Show on map</ion-button>
-          <ion-button color="secondary" size="small" (click)="navigateToMap()">Get directions</ion-button>
+          <ion-button
+              class="m-1"
+              color="primary"
+              expand="full"
+              size="small"
+              [href]="getMapLink()"
+          >
+            Show on map
+          </ion-button>
+          <ion-button
+              class="m-1"
+              color="secondary"
+              expand="full"
+              size="small"
+              (click)="navigateToMap()"
+          >
+            Get directions
+          </ion-button>
         </ion-col>
       </ion-row>
     </ion-item>
@@ -169,7 +185,7 @@
               photoType: 'wo_pictures',
               onlyFilesWithExt: 'jpg'
             }">
-            <ion-button color="primary">Browse photos</ion-button>
+            <ion-button color="primary" expand="full">Browse photos</ion-button>
           </a>
         </ion-col>
         <ion-col class="ion-text-center">
@@ -198,17 +214,17 @@
               onlyFilesWithExt: 'pdf',
               readOnly: 'true'
             }">
-            <ion-button>Documents</ion-button>
+            <ion-button color="medium" expand="full">Documents</ion-button>
           </a>
         </ion-col>
         <ion-col class="ion-text-center">
-          <ion-button>Notes</ion-button>
+          <ion-button color="medium" expand="full">Notes</ion-button>
         </ion-col>
       </ion-row>
 
       <ion-row class="ion-align-items-center">
         <ion-col class="ion-text-center">
-          <ion-button color="primary" [routerLink]="['/survey', 'list', workOrder.uuid]">
+          <ion-button color="primary" expand="full" [routerLink]="['/survey', 'list', workOrder.uuid]">
             Certificate of Completion
           </ion-button>
         </ion-col>
@@ -216,17 +232,17 @@
 
       <ion-row class="ion-align-items-center">
         <ion-col class="ion-text-center">
-          <ion-button>Job Evaluation Form</ion-button>
+          <ion-button color="medium" expand="full">Job Evaluation Form</ion-button>
         </ion-col>
       </ion-row>
       <ion-row class="ion-align-items-center">
         <ion-col class="ion-text-center">
-          <ion-button>Parts Request Form</ion-button>
+          <ion-button color="medium" expand="full">Parts Request Form</ion-button>
         </ion-col>
       </ion-row>
       <ion-row class="ion-align-items-center">
         <ion-col class="ion-text-center">
-          <ion-button>Assets</ion-button>
+          <ion-button color="medium" expand="full">Assets</ion-button>
         </ion-col>
       </ion-row>
     </ion-grid>
