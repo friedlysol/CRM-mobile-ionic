@@ -500,6 +500,7 @@ export class SurveyDatabase {
         updated_at: null,
         comment: null,
         answer: null,
+        sync: 0,
       })
     );
 

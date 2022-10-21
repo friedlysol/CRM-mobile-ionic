@@ -174,6 +174,7 @@ export class FileDatabase {
     Object.keys(file).forEach(field => {
       query.set(field, file[field]);
     });
+    query.set('sync', 0);
     query.where('uuid', file.uuid);
 
     return this.databaseService.query(query.toString(), query.toParams());
