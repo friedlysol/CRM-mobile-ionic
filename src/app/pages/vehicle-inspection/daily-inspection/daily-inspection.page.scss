@@ -1,0 +1,34 @@
+.full-width{
+    width: 100%;
+}
+
+.disclaimer, .questions{
+    font-size: x-small;
+}
+
+.questions {
+    margin-top: 10px;
+
+    table, th, td{
+        border: 1px solid var(--ion-color-grey-shade);
+        border-collapse: collapse;
+    }
+
+    th, td{
+        padding: 1vh 1vw;
+        height: 3em;
+    }
+
+    td.satisfactory, td.unsatisfactory{
+        text-align: center;
+        font-size: medium;
+    }
+
+    .unsatisfactory{
+        background-color: hsla(0, 70%, 60%, 0.3);
+    }
+
+    .satisfactory{
+        background-color: hsla(90, 70%, 60%, 0.3);
+    }
+}

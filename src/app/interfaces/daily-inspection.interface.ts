@@ -2,7 +2,7 @@ export interface DailyInspectionInterface {
   uuid?: string;
   id?: number;
   status_type_id?: number;
-  route?: string;
+  route: string;
   vehicle_number: string;
   odometer_reading: string;
   note: string;
