@@ -86,11 +86,13 @@ export class WorkOrderDatabase {
         'addresses.city',
         'addresses.state',
         'addresses.zip_code',
-        'tech_statuses.name as tech_status'
+        'tech_statuses.name as tech_status',
+        'types.type_value as wo_type'
       )
       .from('work_orders')
       .leftJoin('addresses', {'work_orders.address_uuid': 'addresses.uuid'})
-      .leftJoin('tech_statuses', {'work_orders.tech_status_type_id': 'tech_statuses.id'});
+      .leftJoin('tech_statuses', {'work_orders.tech_status_type_id': 'tech_statuses.id'})
+      .leftJoin('types', {'work_orders.wo_type_id': 'types.id'});
 
     query = this.filterByTab(query, tab);
     query = this.filterBySearch(query, search);
@@ -155,7 +157,12 @@ export class WorkOrderDatabase {
    * @param uuid
    */
   getByUuid(uuid) {
-    return this.databaseService.findOrNull(`select * from work_orders where uuid = ?`, [uuid]);
+    return this.databaseService.findOrNull(`
+      select *, type_value as wo_type
+      from work_orders w
+      left join types t on w.wo_type_id = t.id
+      where uuid = ?`,
+      [uuid]);
   }
 
   /**

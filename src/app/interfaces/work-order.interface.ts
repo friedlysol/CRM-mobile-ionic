@@ -64,6 +64,7 @@ export interface WorkOrderInterface {
   tech_status_type_id: number;
   trade_type_id: number;
   wo_type_id: number;
+  wo_type?: string;
   work_order_id: number;
   work_order_number: string;
 

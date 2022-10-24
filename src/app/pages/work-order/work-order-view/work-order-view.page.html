@@ -45,8 +45,12 @@
       </ion-row>
     </ion-item>
 
+    <ion-item class="ion-item-small" lines="none" *ngIf="workOrder.wo_type">
+      <ion-label><strong>Type:</strong></ion-label>{{ workOrder.wo_type }}
+    </ion-item>
+
     <ion-item class="ion-item-small" lines="none">
-      <ion-label><strong>Client</strong> {{ workOrder.client }}</ion-label>
+      <ion-label><strong>Client</strong></ion-label> {{ workOrder.client }}
     </ion-item>
 
     <ion-item lines="none" *ngIf="workOrder.phone">
