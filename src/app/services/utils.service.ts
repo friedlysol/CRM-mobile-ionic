@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { environment } from '@env/environment';
 import * as moment from 'moment';
 
 @Injectable({
@@ -28,7 +29,11 @@ export class UtilsService {
     return '';
   }
 
-  getLocalDate(date: string){
-    return moment.utc(date).local().format('YYYY-MM-DD HH:mm:ss');
+  getLocalDatetime(dateUtc: string){
+    return moment.utc(dateUtc).local().format(environment.datetimeFormat);
+  }
+
+  getLocalDate(dateUtc: string){
+    return moment.utc(dateUtc).local().format(environment.dateFormat);
   }
 }

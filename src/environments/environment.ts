@@ -12,6 +12,8 @@ export const environment = {
   settings: {},
   galleryPageSize: 15,
   surveyPageSize: 10,
+  dateFormat: 'MM/DD/YYYY',
+  datetimeFormat: 'MM/DD/YYYY hh:mm A',
   countryCodes: [
     {
       label: 'USA (+1)',
