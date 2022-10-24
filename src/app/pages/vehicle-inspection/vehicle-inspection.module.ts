@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { VehicleInspectionsRoutingModule } from './vehicle-inspection-routing.module';
 import { SharedModule } from '@app/shared.module';
@@ -11,6 +11,7 @@ import { WeeklyInspectionPage } from '@app/pages/vehicle-inspection/weekly-inspe
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     IonicModule,
     SharedModule,
     VehicleInspectionsRoutingModule
