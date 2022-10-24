@@ -4,6 +4,7 @@ import { AddressDatabase } from '@app/services/database/address.database';
 import { DatabaseService } from '@app/services/database.service';
 import { EventService } from '@app/services/event.service';
 import * as moment from 'moment';
+import { AddressInterface } from '@app/interfaces/address.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -65,5 +66,24 @@ export class AddressService {
     }
 
     return Promise.resolve({});
+  }
+
+  formatAddress(address: AddressInterface){
+    const addressPieces = [];
+    if(address.address){
+      addressPieces.push(address.address);
+    }
+    if(address.city){
+      addressPieces.push(address.city);
+    }
+    if(address.state){
+      let piece = address.state;
+      if(address.zip_code){
+        piece += ` ${address.zip_code}`;
+      }
+      addressPieces.push(piece);
+    }
+
+    return addressPieces.join(', ');
   }
 }
