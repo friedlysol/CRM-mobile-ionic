@@ -2,10 +2,253 @@
   <app-header [title]="'Weekly inspections'"></app-header>
 </ion-header>
 
-<ion-content>
+<ion-content *ngIf="inspection">
+  <ion-row>
+    <ion-col 
+      *ngFor="let type of photosTypes"
+      size="6">
+      <app-capture-media
+        objectType="weekly_inspections"
+        [type]="'photo'"
+        [typeId]="type.id"
+        [objectUuid]="inspection.uuid"
+        [objectId]="inspection.id"
+        [mediaOptions]="{
+          buttonLabel: type.type_value,
+          required: true
+        }">
+      </app-capture-media>
+    </ion-col>
+  </ion-row>
+  
+  <ion-row>
+    <ion-col>
+      <ion-item lines="none">
+        <ion-label position="stacked">
+          Last 5 of vehicle vin
+          <span class="required">*</span>
+        </ion-label>
+        <ion-input [formControl]="vehicleNumberCtrl"></ion-input>
+        <ion-note 
+          color="danger"
+          *ngIf="vehicleNumberCtrl.invalid && (vehicleNumberCtrl.dirty || vehicleNumberCtrl.touched)">
+          This field is required
+        </ion-note>
+      </ion-item>
+    </ion-col>
+    <ion-col>
+      <ion-item lines="none">
+        <ion-label position="stacked">
+          Odometer reading
+          <span class="required">*</span>
+        </ion-label>
+        <ion-input [formControl]="odometerReadingCtrl"></ion-input>
+        <ion-note 
+          color="danger"
+          *ngIf="odometerReadingCtrl.invalid && (odometerReadingCtrl.dirty || odometerReadingCtrl.touched)">
+          This field is required
+        </ion-note>
+      </ion-item>
+    </ion-col>
+  </ion-row>
 
+  <ion-grid class="ion-padding">
+    <ion-row>
+      <ion-col>
+        <b>Fluids</b>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <div class="checkbox-wrapper">
+          <ion-checkbox [(ngModel)]="inspection.oil"></ion-checkbox>
+          <ion-label>Oil</ion-label>
+        </div>
+      </ion-col>
+      <ion-col>
+        <div class="checkbox-wrapper">
+          <ion-checkbox [(ngModel)]="inspection.brake"></ion-checkbox>
+          <ion-label>Brake</ion-label>
+        </div>
+      </ion-col>
+      <ion-col>
+        <div class="checkbox-wrapper">
+          <ion-checkbox [(ngModel)]="inspection.washer"></ion-checkbox>
+          <ion-label>Washer</ion-label>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid class="ion-padding">
+    <ion-row>
+      <ion-col>
+        <b>Tires</b>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <div class="checkbox-wrapper">
+          <ion-checkbox [(ngModel)]="inspection.jack"></ion-checkbox>
+          <ion-label>Jack</ion-label>
+        </div>
+      </ion-col>
+      <ion-col>
+        <div class="checkbox-wrapper">
+          <ion-checkbox [(ngModel)]="inspection.tread"></ion-checkbox>
+          <ion-label>Tread</ion-label>
+        </div>
+      </ion-col>
+      <ion-col>
+        <div class="checkbox-wrapper">
+          <ion-checkbox [(ngModel)]="inspection.spare_tire"></ion-checkbox>
+          <ion-label>Spare Tire</ion-label>
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid class="ion-padding">
+    <ion-row>
+      <ion-col>
+        <b>Tires Pressure</b>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item lines="none">
+          <ion-label position="stacked">
+            Front Driver
+            <span class="required">*</span>
+          </ion-label>
+          <ion-input [formControl]="frontDriverCtrl"></ion-input>
+          <ion-note 
+            color="danger"
+            *ngIf="frontDriverCtrl.invalid && (frontDriverCtrl.dirty || frontDriverCtrl.touched)">
+            This field is required
+          </ion-note>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item lines="none">
+          <ion-label position="stacked">
+            Rear Driver
+            <span class="required">*</span>
+          </ion-label>
+          <ion-input [formControl]="rearDriverCtrl"></ion-input>
+          <ion-note 
+            color="danger"
+            *ngIf="rearDriverCtrl.invalid && (rearDriverCtrl.dirty || rearDriverCtrl.touched)">
+            This field is required
+          </ion-note>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item lines="none">
+          <ion-label position="stacked">
+            Front Passenger
+            <span class="required">*</span>
+          </ion-label>
+          <ion-input [formControl]="frontPassengerCtrl"></ion-input>
+          <ion-note 
+            color="danger"
+            *ngIf="frontPassengerCtrl.invalid && (frontPassengerCtrl.dirty || frontPassengerCtrl.touched)">
+            This field is required
+          </ion-note>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-item lines="none">
+          <ion-label position="stacked">
+            Rear Passenger
+            <span class="required">*</span>
+          </ion-label>
+          <ion-input [formControl]="rearPassengerCtrl"></ion-input>
+          <ion-note 
+            color="danger"
+            *ngIf="rearPassengerCtrl.invalid && (rearPassengerCtrl.dirty || rearPassengerCtrl.touched)">
+            This field is required
+          </ion-note>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid class="ion-padding">
+    <ion-row>
+      <ion-col>
+        <b>Week Ending Mileage</b>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <small>
+          - Is a current, valid insurance card in the vehicle?
+        </small>
+      </ion-col>
+    </ion-row>
+    <ion-row
+      class="options-row-wrapper">
+      <ion-col>
+        <ion-button
+            class="option-btn {{inspection.card_in_vehicle === true? 'selected-option': ''}}"
+            (click)="inspection.card_in_vehicle = true">
+          Yes
+        </ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button
+            class="option-btn {{inspection.card_in_vehicle === false? 'selected-option': ''}}"
+            (click)="inspection.card_in_vehicle = false">
+          No
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <small>
+          - Is the current vehicle registration in the vahicle?
+        </small>
+      </ion-col>
+    </ion-row>
+    <ion-row
+      class="options-row-wrapper">
+      <ion-col>
+        <ion-button
+            class="option-btn {{inspection.registration_in_vehicle === true? 'selected-option': ''}}"
+            (click)="inspection.registration_in_vehicle = true">
+          Yes
+        </ion-button>
+      </ion-col>
+      <ion-col>
+        <ion-button
+            class="option-btn {{inspection.registration_in_vehicle === false? 'selected-option': ''}}"
+            (click)="inspection.registration_in_vehicle = false">
+          No
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>
 
 <ion-footer>
   <app-sync></app-sync>
+  <ion-row>
+    <ion-col>
+      <ion-button color="warning" class="ion-float-left" (click)="onClearClick()">
+        CLEAR
+      </ion-button>
+    </ion-col>
+    <ion-col>
+      <ion-button class="ion-float-right" (click)="onSaveClick()">
+        SAVE
+      </ion-button>
+    </ion-col>
+  </ion-row>
 </ion-footer>

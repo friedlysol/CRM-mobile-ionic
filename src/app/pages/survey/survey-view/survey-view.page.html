@@ -40,7 +40,7 @@
         <ion-row
             *ngIf="question.type === 'option_with_questions_for_no' ||
             question.type === 'option_with_questions_for_yes'"
-            class="options">
+            class="options-row-wrapper">
           <ion-col>
             <ion-button
                 class="option-btn {{question.answer === 'yes'? 'selected-option': ''}}"
@@ -64,10 +64,10 @@
             [objectUuid]="question.answer_uuid"
             [typeId]="1"
             [mediaOptions]="{
-            buttonLabel: 'Add photo',
-            requiredOnce: question.photo === 'required',
-            allowRemove: true
-          }"
+              buttonLabel: 'Add photo',
+              requiredOnce: question.photo === 'required',
+              allowRemove: true
+            }"
             (saveFile)="onFileSave(question)">
         </app-capture-media>
 

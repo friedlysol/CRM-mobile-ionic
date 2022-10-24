@@ -18,28 +18,6 @@ ion-item {
   width: 100%;
 }
 
-.options {
-  gap: 5px;
-
-  ion-col {
-    padding: 0;
-
-    .option-btn {
-      --background: var(--ion-color-grey-contrast);
-      --color: var(--ion-color-grey-shade);
-      border: 1px solid var(--ion-color-grey-shade);
-      width: 100%;
-      margin-inline: 0;
-    }
-
-    .selected-option {
-      --background: var(--ion-color-grey-shade);
-      --color: white;
-      border: 0;
-    }
-  }
-}
-
 .pagination ion-col {
   display: flex;
   justify-content: center;

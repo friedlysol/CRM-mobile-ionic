@@ -360,6 +360,29 @@ export class FileService {
     });
   }
 
+  async hasPhotos(objectType: string, objectUuid: string, fileTypeIds?: Array<number>): Promise<Record<number, boolean>>{
+    const records: Record<number, boolean> = {};
+    if(fileTypeIds){
+      for(const typeId of fileTypeIds){
+        const files = await this.fileDatabase.getByObjectAndType(objectType, objectUuid, typeId);
+        if(files.length > 0){
+          records[typeId] = true;
+        }else{
+          records[typeId] = false;
+        }
+      }
+    }else{
+      const files = await this.fileDatabase.getByObjectAndType(objectType, objectUuid);
+      if(files[0]){
+        records[files[0].type_id] = true;
+      }else{
+        records[0] = false;
+      }
+    }
+
+    return records;
+  }
+
   private createCanvas(width: number, height: number) {
     const canvas = document.createElement('canvas') as HTMLCanvasElement;
 

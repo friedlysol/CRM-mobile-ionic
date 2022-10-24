@@ -4,16 +4,15 @@ import { DatabaseService } from '../database.service';
 import * as sqlBuilder from 'sql-bricks';
 import * as _ from 'underscore';
 import { TypeService } from '../type.service';
-import { WeeklyInspectionInterface } from '@app/interfaces/weekly-inspection.interface';
 
 @Injectable({
     providedIn: 'root'
 })
-export class VehicleInspectionsDatabase {
+export class DailyInspectionsDatabase {
 
     constructor(private databaseService: DatabaseService, private typeService: TypeService) {}
 
-    async getDailyByUuid(uuid: string): Promise<DailyInspectionInterface> {
+    async getByUuid(uuid: string): Promise<DailyInspectionInterface> {
         return this.databaseService.findOrNull(
             `select *
             from daily_inspections
@@ -22,23 +21,14 @@ export class VehicleInspectionsDatabase {
         ]);
     };
 
-    async getWeeklyByUuid(uuid: string): Promise<WeeklyInspectionInterface> {
-        return this.databaseService.findOrNull(
-            `select *
-            from weekly_inspections
-            where uuid = ?`, [
-            uuid
-        ]);
-    };
-
-    async getAllDaily(): Promise<DailyInspectionInterface[]> {
+    async getAll(): Promise<DailyInspectionInterface[]> {
         return this.databaseService.findAsArray(
             `select *
             from daily_inspections`
         );
     };
 
-    async getLastDaily(): Promise<DailyInspectionInterface>{
+    async getLast(): Promise<DailyInspectionInterface>{
         return this.databaseService.findOrNull(
             `select *
             from daily_inspections
@@ -51,7 +41,7 @@ export class VehicleInspectionsDatabase {
      *
      * @param inspection
      */
-     async createDaily(inspection: DailyInspectionInterface): Promise<DailyInspectionInterface> {
+     async create(inspection: DailyInspectionInterface): Promise<DailyInspectionInterface> {
         const uuid = this.databaseService.getUuid();
         const questions = (await this.typeService.getByType('daily_inspection_questions'))
             .map(question => question.type_key.split('.')[1]);
@@ -68,25 +58,6 @@ export class VehicleInspectionsDatabase {
         ));
 
         return this.databaseService.query(query.toString(), query.toParams())
-            .then(() => this.getDailyByUuid(uuid));
-    }
-
-    /**
-     * Create inspection in db
-     *
-     *
-     */
-     async createWeekly(): Promise<WeeklyInspectionInterface> {
-        const uuid = this.databaseService.getUuid();
-
-        const query = sqlBuilder.insert('weekly_inspections', Object.assign({
-                uuid,
-                created_at: this.databaseService.getTimeStamp(),
-                sync: 0,
-            }
-        ));
-
-        return this.databaseService.query(query.toString(), query.toParams())
-            .then(() => this.getWeeklyByUuid(uuid));
+            .then(() => this.getByUuid(uuid));
     }
 }
