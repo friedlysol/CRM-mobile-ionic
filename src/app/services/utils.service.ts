@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import * as moment from 'moment';
 
 @Injectable({
   providedIn: 'root'
@@ -25,5 +26,9 @@ export class UtilsService {
     //ToDo: get coords from gps
 
     return '';
+  }
+
+  getLocalDate(date: string){
+    return moment.utc(date).local().format('YYYY-MM-DD HH:mm:ss');
   }
 }

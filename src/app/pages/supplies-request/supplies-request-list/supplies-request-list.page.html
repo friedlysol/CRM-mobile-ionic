@@ -6,7 +6,7 @@
 
   <ion-card *ngFor="let request of requests">
     <ion-card-header>
-      <ion-card-subtitle class="ion-text-right">{{request.created_at}}</ion-card-subtitle>
+      <ion-card-subtitle class="ion-text-right">{{utilsService.getLocalDate(request.created_at)}}</ion-card-subtitle>
       <ion-card-title>
         <div><b>{{request.type}}</b></div>
         <div>x{{request.quantity}}</div>
@@ -29,7 +29,7 @@
             Shipping Date:
           </ion-col>
           <ion-col class="ion-text-left">
-            {{request.shipping_date || '-'}}
+            {{utilsService.getLocalDate(request.shipping_date) || '-'}}
           </ion-col>
         </ion-row>
 

@@ -1,5 +1,4 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { WorkOrderService } from '@app/services/workorder.service';
 import { ActivatedRoute } from '@angular/router';
 import { WorkOrderInterface } from '@app/interfaces/work-order.interface';
 import { AddressService } from '@app/services/address.service';
@@ -10,6 +9,7 @@ import { AddressInterface } from '@app/interfaces/address.interface';
 import { AddressDatabase } from '@app/services/database/address.database';
 import { LaunchNavigator } from '@awesome-cordova-plugins/launch-navigator/ngx';
 import { StaticService } from '@app/services/static.service';
+import { UtilsService } from '@app/services/utils.service';
 
 @Component({
   selector: 'app-work-order-view',
@@ -36,7 +36,8 @@ export class WorkOrderViewPage implements OnInit, OnDestroy {
     private staticService: StaticService,
     private typeService: TypeService,
     private workOrderDatabase: WorkOrderDatabase,
-    public addressService: AddressService
+    public addressService: AddressService,
+    public utilsService: UtilsService,
   ) {
   }
 

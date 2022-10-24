@@ -56,7 +56,7 @@
       <ion-label>
         <strong>Contract Date:</strong>
       </ion-label>
-      {{ workOrder.received_date }}
+      {{ utilsService.getLocalDate(workOrder.received_date) }}
     </ion-item>
 
     <ion-item class="margin-top-5vh" lines="none" *ngIf="woTypes.length > 0">

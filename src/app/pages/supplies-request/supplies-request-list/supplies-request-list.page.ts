@@ -4,6 +4,7 @@ import { TypeInterface } from '@app/interfaces/type.interface';
 import { SupplyDatabase } from '@app/services/database/supply.database';
 import { SupplyService } from '@app/services/supply.service';
 import { TypeService } from '@app/services/type.service';
+import { UtilsService } from '@app/services/utils.service';
 import { ModalController } from '@ionic/angular';
 import { OverlayEventDetail } from '@ionic/core';
 import { SuppliesRequestEditStatusFormComponent } from '../supplies-request-edit-status-form/supplies-request-edit-status-form.component';
@@ -23,6 +24,7 @@ export class SuppliesRequestListPage implements OnInit {
     private typeService: TypeService,
     private supplyDatabase: SupplyDatabase,
     private supplyService: SupplyService,
+    public utilsService: UtilsService,
   ) { }
 
   async ngOnInit() {
