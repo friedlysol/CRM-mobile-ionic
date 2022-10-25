@@ -28,7 +28,7 @@
       </ion-card-header>
       <ion-card-content>
         <ion-row *ngIf="!params.short">
-          <b>Status</b>: {{ workOrder.status }}
+          <b>Status</b>: {{ workOrder.status }} ({{ workOrder.tech_status }})
         </ion-row>
         <ion-row>
           <b>Scheduled date</b>: {{ workOrder.scheduled_date || '-' }}

@@ -3,9 +3,9 @@ export interface TimeSheetInterface {
   id?: number;
   type_id: number;
   vehicle_id?: number;
-  start_at: string;
+  start_at?: string;
   stop_at?: string;
-  start_gps: string;
+  start_gps?: string;
   stop_gps?: string;
   description?: string;
   object_type: string;
@@ -18,4 +18,7 @@ export interface TimeSheetInterface {
   auto_close_at?: string;
   created_at?: string;
   updated_at?: string;
+
+  //extra fields
+  type?: string;
 }

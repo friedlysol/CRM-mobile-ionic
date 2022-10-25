@@ -5,8 +5,6 @@ import {catchError, map} from 'rxjs/operators';
 import {AuthService} from '@app/services/auth.service';
 import {ActivatedRoute} from '@angular/router';
 
-import {environment} from '@env/environment';
-
 @Injectable()
 export class ApiInterceptor implements HttpInterceptor {
   private ignoreRoutes: string[] = [
@@ -20,10 +18,6 @@ export class ApiInterceptor implements HttpInterceptor {
     request = request.clone({
       headers: request.headers.set('Authorization', `Bearer ${this.authService.getToken()}`),
     });
-
-    /*if (!environment.production) {
-      request = request.clone({headers: request.headers.set('X-Cors', '1')});
-    }*/
 
     if (!request.headers.has('Content-Type')) {
       request = request.clone({headers: request.headers.set('Content-Type', 'application/json')});
@@ -54,12 +48,11 @@ export class ApiInterceptor implements HttpInterceptor {
   }
 
   private handleAuthError(err: HttpErrorResponse): Observable<any> {
-    // eslint-disable-next-line @typescript-eslint/dot-notation
     const currentRoute = this.activatedRoute.snapshot['_routerState'].url;
 
     if ((err.status === 401 || err.status === 403 || err.status === 498) && !this.ignoreRoutes.includes(currentRoute)) {
       this.authService.logout();
-console.log('asd');
+
       return of(err.message);
     }
 

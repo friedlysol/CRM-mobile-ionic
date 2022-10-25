@@ -25,6 +25,5 @@ CREATE TABLE `messages`
     `completed_at`         TEXT,
     `created_at`           TEXT,
     `updated_at`           TEXT             DEFAULT NULL,
-
     PRIMARY KEY (uuid)
 )

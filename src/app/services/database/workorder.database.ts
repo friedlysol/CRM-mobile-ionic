@@ -5,6 +5,7 @@ import { HashMapInterface } from '@app/interfaces/hash-map.interface';
 import { WorkOrderApiInterface } from '@app/providers/api/interfaces/response-work-order-api.interface';
 import { WorkOrderInterface } from '@app/interfaces/work-order.interface';
 
+import { environment } from '@env/environment';
 import * as sqlBuilder from 'sql-bricks';
 import * as _ from 'underscore';
 
@@ -137,7 +138,7 @@ export class WorkOrderDatabase {
   /**
    * Get all work order ids
    */
-  async getAllWorkOrderIds() {
+  getAllWorkOrderIds() {
     return this.databaseService
       .findAsArray(`select work_order_id from work_orders`)
       .then(result => {
@@ -152,11 +153,94 @@ export class WorkOrderDatabase {
   /**
    * Get work order record by uuid
    *
-   * @param uuid
+   * @param workOrderUuid
    */
-  getByUuid(uuid) {
-    return this.databaseService.findOrNull(`select * from work_orders where uuid = ?`, [uuid]);
+  getByUuid(workOrderUuid: string) {
+    return this.databaseService.findOrNull(`select * from work_orders where uuid = ?`, [workOrderUuid]);
   }
+
+  /**
+   * Get a list of other active work orders
+   *
+   * @param workOrderUuid
+   */
+  getAnotherActiveWorkOrders(workOrderUuid): Promise<WorkOrderInterface[]> {
+    const statuses = [
+      environment.techStatuses.inRoute,
+      environment.techStatuses.wip
+    ];
+
+    let query = sqlBuilder
+      .select('*')
+      .from('work_orders')
+      .where(sqlBuilder.in('tech_status_type_id', statuses))
+      .where(sqlBuilder.notEq('uuid', workOrderUuid))
+
+    return this.databaseService.findAsArray(query.toString(), query.toParams());
+  };
+
+  /**
+   * Update tech status
+   *
+   * @param workOrderUuid
+   * @param techStatusTypeId
+   */
+  setNewTechStatus(workOrderUuid: string, techStatusTypeId: number) {
+    return this.databaseService.query(`
+      update work_orders set tech_status_type_id = ?, sync = 0 where uuid = ?
+    `, [
+      techStatusTypeId, workOrderUuid
+    ]);
+  }
+
+  createStatusHistory(workOrderUuid: string, currentTechStatusId: number, newTechStatusId: number) {
+    return this.databaseService.query(`
+      insert into work_order_status_history (
+        work_order_uuid, current_tech_status_type_id, previous_tech_status_type_id, sync, created_at, updated_at
+      ) values(
+        ?, ?, ?, ?, ?, ?
+      )
+    `, [
+      workOrderUuid,
+      currentTechStatusId,
+      newTechStatusId,
+      0,
+      this.databaseService.getTimeStamp(),
+      this.databaseService.getTimeStamp()
+    ]);
+  };
+
+  /**
+   * Change of order status to confirmed
+   *
+   * @param workOrderUuid
+   */
+  confirm(workOrderUuid) {
+    return this.databaseService.query(`
+      update work_orders set status = ?, sync = 0, confirmed_at = ?, updated_at = ? where uuid = ?
+    `, [
+      environment.workOrderStatuses.confirmed,
+      this.databaseService.getTimeStamp(),
+      this.databaseService.getTimeStamp(),
+      workOrderUuid
+    ]).then(() => environment.workOrderStatuses.confirmed);
+  };
+
+  /**
+   * Change of order status to completed
+   *
+   * @param workOrderUuid
+   */
+  complete(workOrderUuid) {
+    return this.databaseService.query(`
+      update work_orders set status = ?, sync = 0, completed_at = ?, updated_at = ? where uuid = ?
+    `, [
+      environment.workOrderStatuses.completed,
+      this.databaseService.getTimeStamp(),
+      this.databaseService.getTimeStamp(),
+      workOrderUuid
+    ]);
+  };
 
   /**
    * Update work order data based on allowed columns in allowFileds array

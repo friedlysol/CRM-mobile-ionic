@@ -34,6 +34,17 @@ export class TypeService implements SyncInterface {
     return this.typeDatabase.getByType(type);
   }
 
+  async getByTypeAsList(type: string): Promise<Record<string, number>> {
+    const mappedStatuses = {};
+    const statuses = await this.getByType('tech_status');
+
+    if(statuses) {
+      statuses.map(type => mappedStatuses[type.type_key] = type.id);
+    }
+
+    return mappedStatuses;
+  }
+
   getByTypes(types: Array<string>): Promise<TypeInterface[]> {
     return this.typeDatabase.getByTypes(types);
   }

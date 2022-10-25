@@ -10,6 +10,12 @@ import { AddressInterface } from '@app/interfaces/address.interface';
 import { AddressDatabase } from '@app/services/database/address.database';
 import { LaunchNavigator } from '@awesome-cordova-plugins/launch-navigator/ngx';
 import { StaticService } from '@app/services/static.service';
+import { TechStatusDatabase } from '@app/services/database/tech-status.database';
+import { TechStatusInterface } from '@app/interfaces/tech-status.interface';
+import { environment } from '@env/environment';
+import { TimeSheetsDatabase } from '@app/services/database/time-sheets.database';
+import { TimeSheetService } from '@app/services/time-sheet.service';
+import { TimeSheetInterface } from '@app/interfaces/time-sheet.interface';
 
 @Component({
   selector: 'app-work-order-view',
@@ -27,6 +33,7 @@ export class WorkOrderViewPage implements OnInit, OnDestroy {
   public coveredAreaTypes: TypeInterface[] = [];
   public photoType: TypeInterface;
 
+  private currentTechStatus: TechStatusInterface = null;
   private workOrderUuid: string;
 
   constructor(
@@ -34,8 +41,12 @@ export class WorkOrderViewPage implements OnInit, OnDestroy {
     private launchNavigator: LaunchNavigator,
     private route: ActivatedRoute,
     private staticService: StaticService,
+    private techStatusDatabase: TechStatusDatabase,
+    private timeSheetDatabase: TimeSheetsDatabase,
+    private timeSheetService: TimeSheetService,
     private typeService: TypeService,
     private workOrderDatabase: WorkOrderDatabase,
+    private workOrderService: WorkOrderService,
     public addressService: AddressService
   ) {
   }
@@ -45,6 +56,8 @@ export class WorkOrderViewPage implements OnInit, OnDestroy {
       this.workOrderUuid = params.get('workOrderUuid');
       this.workOrder = await this.workOrderDatabase.getByUuid(this.workOrderUuid);
       this.woAddress = await this.addressDatabase.getByUuid(this.workOrder.address_uuid);
+
+      this.currentTechStatus = await this.techStatusDatabase.getTechStatusById(this.workOrder.tech_status_type_id);
     });
 
     this.woTypes = await this.typeService.getByType('tech_status');
@@ -63,11 +76,11 @@ export class WorkOrderViewPage implements OnInit, OnDestroy {
     if (!this.workOrder || !this.woTypes) {
       return false;
     }
-    return this.workOrder.tech_status_type_id === this.woTypes.find(e => e.type_key=== 'tech_status.work_in_progress')?.id;
+    return this.workOrder.tech_status_type_id === this.woTypes.find(e => e.type_key === 'tech_status.work_in_progress')?.id;
   }
 
-  isCompleted(){
-    if(!this.workOrder || !this.woTypes){
+  isCompleted() {
+    if (!this.workOrder || !this.woTypes) {
       return false;
     }
     return this.workOrder.tech_status_type_id === this.woTypes.find(e => e.type_key === 'tech_status.completed')?.id;
@@ -87,7 +100,7 @@ export class WorkOrderViewPage implements OnInit, OnDestroy {
   }
 
   getMapLink() {
-    if(this.staticService.isIos) {
+    if (this.staticService.isIos) {
       return 'maps://?q=' + this.getLocationQueryString();
     } else {
       return 'geo:0,0?q=' + this.getLocationQueryString();
@@ -98,13 +111,90 @@ export class WorkOrderViewPage implements OnInit, OnDestroy {
     this.launchNavigator.navigate(this.getLocationQueryString());
   }
 
-  isDisabledSelectStatusOption(index: number){
-    if(this.woTypes[index].type_key === 'tech_status.incomplete'){
+  isDisabledSelectStatusOption(index: number) {
+    if (this.woTypes[index].type_key === 'tech_status.incomplete') {
       return !(this.woTypes[index].id === this.workOrder.tech_status_type_id);
     }
 
     return !(this.woTypes[index].id === this.workOrder.tech_status_type_id ||
-      index > 0 && this.woTypes[index-1].id === this.workOrder.tech_status_type_id ||
-      index < this.woTypes.length-1 && this.woTypes[index+1].id === this.workOrder.tech_status_type_id);
+      index > 0 && this.woTypes[index - 1].id === this.workOrder.tech_status_type_id ||
+      index < this.woTypes.length - 1 && this.woTypes[index + 1].id === this.workOrder.tech_status_type_id);
+  }
+
+  showConfirmButton() {
+    return this.workOrder.status === environment.workOrderStatuses.issued;
+  };
+
+  async changeStatus() {
+    // abort checking if the newly selected status is the same as the current one
+    if (this.currentTechStatus.id === this.workOrder.tech_status_type_id) {
+      return;
+    }
+
+    // validation of all work order data before changing status to completed
+    // if something is missing an exception is thrown
+    if (this.workOrder.tech_status_type_id === environment.techStatuses.completed) {
+      const isValid = await this.workOrderService.workOrderDataValidation(this.workOrder);
+      if(!isValid) {
+        return this.revertStatus();
+      }
+    }
+
+    // before changing the status we check if there is any other work order active
+    // if so we do not allow to change the status and throw an exception
+    const activeAnotherWorkOrder = await this.workOrderService.checkIfAnotherWorkOrderIsActive(this.workOrder);
+    if(activeAnotherWorkOrder) {
+      return this.revertStatus();
+    }
+
+    // confirmation of change of status
+    const changeStatus = await this.workOrderService.confirmToChangeStatus();
+    if(!changeStatus) {
+      return this.revertStatus();
+    }
+
+    if(this.workOrder.tech_status_type_id === environment.techStatuses.completed) {
+      await this.workOrderService.changeStatusToComplete(this.workOrder);
+    } else {
+      const lastTimeSheet = await this.timeSheetDatabase.getLastTimeSheetForWorkOrderUuid(this.workOrder.uuid);
+
+      if(lastTimeSheet && !lastTimeSheet.stop_at) {
+        const description = await this.timeSheetService.getDescription(this.currentTechStatus);
+
+        await this.timeSheetService.stop(lastTimeSheet, {description});
+      }
+
+      if(this.currentTechStatus.start_after_stop) {
+        const canStartTimeSheet = await this.workOrderService.checkIfCanStartAnotherTimesheet(this.workOrder);
+        if(canStartTimeSheet) {
+          const techStatus = await this.techStatusDatabase.getTechStatusById(this.workOrder.tech_status_type_id);
+
+          let timeSheet: TimeSheetInterface = {
+            type_id: techStatus.time_sheet_reason_type_id,
+            object_type: 'work_order',
+            object_uuid: this.workOrder.uuid,
+            work_order_number: this.workOrder.work_order_number
+          }
+
+          await this.timeSheetService.start(timeSheet);
+        } else {
+          this.revertStatus();
+        }
+      }
+    }
+
+    this.currentTechStatus = await this.workOrderService.setNewTechStatus(this.workOrder, this.currentTechStatus);
+  }
+
+  private revertStatus() {
+    console.log('this.currentTechStatus', this.currentTechStatus);
+
+    this.workOrder.tech_status_type_id = this.currentTechStatus.id;
+
+    return;
+  }
+
+  async confirmWorkOrder(workOrder: WorkOrderInterface) {
+    workOrder.status = await this.workOrderService.changeStatusToConfirmed(workOrder);
   }
 }

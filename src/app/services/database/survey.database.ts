@@ -365,7 +365,7 @@ export class SurveyDatabase {
    */
   getSqlForUpdateSyncStatus(sync: SyncApiInterface) {
     return sqlBuilder
-      .update('survey_answers', {id: sync.object_id, sync: 1})
+      .update('survey_results', {id: sync.object_id, sync: 1})
       .where({uuid: sync.object_uuid});
   }
 
@@ -440,7 +440,7 @@ export class SurveyDatabase {
     if (surveyAnswerIds && Array.isArray(surveyAnswerIds) && surveyAnswerIds.length) {
       const query = sqlBuilder
         .select('uuid', 'id', 'hash')
-        .from('survey_answers')
+        .from('survey_results')
         .where(sqlBuilder.in('id', ...surveyAnswerIds));
 
       return this.databaseService
@@ -622,7 +622,7 @@ export class SurveyDatabase {
     answer: SurveyAnswerApiInterface,
     surveyInstanceHashMap?: Record<string, HashMapInterface>
   ): SurveyResultInterface {
-    const surveyInstanceUuid = surveyInstanceHashMap.hasOwnProperty(answer.survey_instance_id)
+    const surveyInstanceUuid = surveyInstanceHashMap && surveyInstanceHashMap.hasOwnProperty(answer.survey_instance_id)
       ? surveyInstanceHashMap[answer.survey_instance_id].uuid
       : null;
 

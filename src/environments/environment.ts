@@ -66,6 +66,21 @@ export const environment = {
       isActive: true
     },
   ],
+  techStatuses: {
+    assigned: 1512,
+    inRoute: 1513,
+    wip: 1511,
+    completed: 1514,
+    incomplete: 1515
+  },
+  workOrderStatuses: {
+    issued: "issued",
+    confirmed: "confirmed",
+    inProgress: "in_progress",
+    inProgressAndHold: "in_progress_and_hold",
+    canceled: "canceled",
+    completed: "completed"
+  },
   workOrderTabs: [
     {
       key: 'open',

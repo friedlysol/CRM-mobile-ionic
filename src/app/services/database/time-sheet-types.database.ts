@@ -12,8 +12,17 @@ export class TimeSheetTypesDatabase {
   constructor(private databaseService: DatabaseService) {
   }
 
+  getTimeSheetTypes() {
+    return this.databaseService.findAsArray(`
+        select *
+        from time_sheet_types
+    `);
+  }
+
   deleteAll(): Promise<any> {
-    return this.databaseService.query(`delete from time_sheet_types`);
+    return this.databaseService.query(`
+        delete from time_sheet_types
+    `);
   }
 
   async create(timeSheetType: TimeSheetTypeInterface) {
@@ -23,11 +32,12 @@ export class TimeSheetTypesDatabase {
   }
 
   async bulkCreate(timeSheetTypes: TimeSheetTypeInterface[]) {
+    const allowColumns = ['id', 'reason_type_id', 'is_description_required', 'is_work_order_related', 'name'];
     const query = [];
 
     if (!_.isEmpty(timeSheetTypes)) {
       for (const timeSheetType of timeSheetTypes) {
-        query.push(sqlBuilder.insert('time_sheet_types', timeSheetTypes));
+        query.push(sqlBuilder.insert('time_sheet_types', _.pick(timeSheetType, allowColumns)));
       }
 
       return this.databaseService.bulkQueries(query);

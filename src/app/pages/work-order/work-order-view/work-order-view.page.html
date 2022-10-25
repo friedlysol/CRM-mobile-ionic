@@ -59,7 +59,11 @@
       {{ workOrder.received_date }}
     </ion-item>
 
-    <ion-item class="margin-top-5vh" lines="none" *ngIf="woTypes.length > 0">
+    <ion-item class="margin-top-5vh" lines="none" *ngIf="woTypes.length > 0 && showConfirmButton()">
+      <ion-button (click)="confirmWorkOrder(workOrder)" expand="full">Confirm Work Order</ion-button>
+    </ion-item>
+
+    <ion-item class="margin-top-5vh" lines="none" *ngIf="woTypes.length > 0 && !showConfirmButton()">
       <ng-container *ngIf="isCompleted(); else notCompletedStatus">
         <ion-label class="completed-label">COMPLETED</ion-label>
       </ng-container>
@@ -70,7 +74,7 @@
             class="status-select"
             placeholder="Select status"
             [(ngModel)]="workOrder.tech_status_type_id"
-            (ionChange)="updateWorkOrder()">
+            (ionChange)="changeStatus()">
           <ion-select-option
               *ngFor="let type of woTypes; index as i"
               [disabled]="isDisabledSelectStatusOption(i)"
@@ -173,7 +177,7 @@
       </ion-item>
     </ng-container>
 
-    <ion-grid class="mx-1">
+    <ion-grid class="mx-1" *ngIf="!showConfirmButton()">
       <ion-row *ngIf="photoType" class="ion-align-items-center ion-no-padding">
         <ion-col class="ion-text-center">
           <a

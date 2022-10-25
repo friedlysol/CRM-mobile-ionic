@@ -67,7 +67,7 @@ export interface WorkOrderInterface {
   work_order_id: number;
   work_order_number: string;
 
-  //optional fields
+  //extra fields
   address?: string;
   city?: string;
   state?: string;
