@@ -132,7 +132,6 @@ export class WeeklyInspectionPage implements OnInit {
 
     for (const value of Object.values(typeHasPhoto)) {
       if (!value) {
-
         this.showErrorToast('Please add all required photos.');
         this.showErrors = true;
 
@@ -156,6 +155,7 @@ export class WeeklyInspectionPage implements OnInit {
       const alert = await this.alertController.create({
         header: 'Message Alert',
         message: 'Vehicle state is not good!\nPlease contact your manager!',
+        backdropDismiss: false,
         buttons: [
           {
             text: 'Ok',

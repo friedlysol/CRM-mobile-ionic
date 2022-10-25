@@ -10,4 +10,4 @@ CREATE TABLE `asset_retake_file`
     `created_at`   TEXT,
     `updated_at`   TEXT,
     PRIMARY KEY (uuid)
-)
+);

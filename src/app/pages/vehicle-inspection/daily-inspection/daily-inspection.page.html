@@ -3,80 +3,81 @@
 </ion-header>
 
 <ion-content>
-  <ion-item 
-    *ngIf="isReadOnly" 
+  <ion-item
+    *ngIf="isPreview"
     lines="none"
     class="preview-title">
+
     <b class="full-width ion-text-center ion-padding">
       Preview mode for the last inspection<br/>
       from {{utilsService.getLocalDatetime(inspection.created_at)}}
     </b>
+
   </ion-item>
   <form [formGroup]="inspectionForm">
     <ion-row>
+
       <ion-col size="6">
         <ion-item lines="none">
+
           <ion-label position="stacked">
             Last 5 of vehicle vin
             <span class="required">*</span>
           </ion-label>
-          <ion-input [readonly]="isReadOnly" formControlName="vehicleNumber"></ion-input>
-          <ion-note 
+
+          <ion-input [readonly]="isPreview" type="number" formControlName="vehicleNumber"></ion-input>
+
+          <ion-note
             color="danger"
-            *ngIf="!isReadOnly && vehicleNumberCtrl.invalid && (vehicleNumberCtrl.dirty || vehicleNumberCtrl.touched)">
-            This field is required
+            *ngIf="!isPreview && vehicleNumberCtrl.invalid">
+            <ion-text *ngIf="vehicleNumberCtrl.errors?.required && (vehicleNumberCtrl.dirty || vehicleNumberCtrl.touched)">This field is required<br/></ion-text>
+            <ion-text *ngIf="vehicleNumberCtrl.errors?.pattern && showErrors">This field should have 5 digits</ion-text>
           </ion-note>
+
         </ion-item>
       </ion-col>
-    </ion-row>
-    <ion-row>
+
       <ion-col size="6">
         <ion-item lines="none">
+
           <ion-label position="stacked">
             Odometer Reading
             <span class="required">*</span>
           </ion-label>
-          <ion-input [readonly]="isReadOnly" formControlName="odometerReading"></ion-input>
-          <ion-note 
+
+          <ion-input [readonly]="isPreview" formControlName="odometerReading"></ion-input>
+
+          <ion-note
             color="danger"
-            *ngIf="!isReadOnly && odometerReadingCtrl.invalid && (odometerReadingCtrl.dirty || odometerReadingCtrl.touched)">
+            *ngIf="!isPreview && odometerReadingCtrl.invalid && (odometerReadingCtrl.dirty || odometerReadingCtrl.touched)">
             This field is required
           </ion-note>
+
         </ion-item>
       </ion-col>
+
     </ion-row>
     <ion-row>
-      <ion-col size="6">
-        <ion-item lines="none">
-          <ion-label position="stacked">
-            Route
-          <span class="required">*</span>
-          </ion-label>
-          <ion-input [readonly]="isReadOnly" formControlName="route"></ion-input>
-          <ion-note 
-            color="danger"
-            *ngIf="!isReadOnly && routeCtrl.invalid && (routeCtrl.dirty || routeCtrl.touched)">
-            This field is required
-          </ion-note>
-        </ion-item>
-      </ion-col>
-    </ion-row>
-    <ion-row>
+
       <ion-col>
         <ion-item lines="none">
+
           <ion-label position="stacked">Note</ion-label>
-          <ion-input [readonly]="isReadOnly" formControlName="note"></ion-input>
+
+          <ion-input [readonly]="isPreview" formControlName="note"></ion-input>
+
         </ion-item>
       </ion-col>
+
     </ion-row>
   </form>
 
   <ion-item lines="none ion-margin-top" class="disclaimer">
-    No commercial motor vehicle shall be driven unless the 
-    driver is satisfied that the following parts and 
-    accessories are in good working order, nor shall any 
-    driver fail to use or make use of such parts and 
-    accessories when and as needed: 
+    No commercial motor vehicle shall be driven unless the
+    driver is satisfied that the following parts and
+    accessories are in good working order, nor shall any
+    driver fail to use or make use of such parts and
+    accessories when and as needed:
     <br/><br/>
     Each questions should be "satisfactory" or "unsatisfactory"
   </ion-item>
@@ -90,13 +91,13 @@
       </tr>
       <tr *ngFor="let question of questions">
         <td class="{{showErrors && inspection[question.type_key] === undefined? 'required': ''}}">{{question.type_value}}</td>
-        <td 
-          class="unsatisfactory" 
+        <td
+          class="unsatisfactory"
           (click)="onAnswerClick(question, false)">
           <ion-icon *ngIf="inspection[question.type_key] === 0" name="checkmark-outline"></ion-icon>
         </td>
-        <td 
-          class="satisfactory" 
+        <td
+          class="satisfactory"
           (click)="onAnswerClick(question, true)">
           <ion-icon *ngIf="inspection[question.type_key] === 1" name="checkmark-outline"></ion-icon>
         </td>
@@ -107,25 +108,41 @@
 
 <ion-footer>
   <app-sync></app-sync>
-  <ion-row *ngIf="isReadOnly; else formButtons">
+  <ion-row *ngIf="isPreview; else formButtons">
+
     <ion-col>
-      <ion-button class="ion-float-right" (click)="onNextClick()">
-        NEXT
+    </ion-col>
+    <ion-col>
+      <ion-button
+          color="medium"
+          expand="full"
+          (click)="onNextClick()">
+        Next
       </ion-button>
     </ion-col>
+
   </ion-row>
   <ng-template #formButtons>
     <ion-row>
+
       <ion-col>
-        <ion-button color="warning" class="ion-float-left" (click)="onClearClick()">
-          CLEAR
+        <ion-button
+          color="light"
+          expand="full"
+          (click)="onClearClick()">
+          Clear
         </ion-button>
       </ion-col>
+
       <ion-col>
-        <ion-button class="ion-float-right" (click)="onSaveClick()">
-          SAVE
+        <ion-button
+          color="medium"
+          expand="full"
+          (click)="onSaveClick()">
+          Save
         </ion-button>
       </ion-col>
+
     </ion-row>
   </ng-template>
 </ion-footer>

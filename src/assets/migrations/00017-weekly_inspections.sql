@@ -21,6 +21,6 @@ CREATE TABLE `weekly_inspections`
     `created_at`                     TEXT,
     `updated_at`                     TEXT,
     PRIMARY KEY (uuid)
-)
+);
 
-CREATE INDEX weekly_inspections_idx ON weekly_inspections (created_at, id, sync)
+CREATE INDEX weekly_inspections_idx ON weekly_inspections (created_at, id, sync);

@@ -9,4 +9,4 @@ CREATE TABLE `asset_changes`
     `created_at` TEXT,
     `updated_at` TEXT,
     PRIMARY KEY (uuid)
-)
+);

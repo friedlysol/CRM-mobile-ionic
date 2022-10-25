@@ -57,7 +57,7 @@ CREATE TABLE `assets`
     `created_at`                 TEXT,
     `updated_at`                 TEXT,
     PRIMARY KEY (uuid)
-)
+);
 
-CREATE INDEX assets_idx ON assets (uuid, address_uuid, id, source)
+CREATE INDEX assets_idx ON assets (uuid, address_uuid, id, source);
 

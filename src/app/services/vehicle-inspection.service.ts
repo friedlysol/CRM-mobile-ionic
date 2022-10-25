@@ -14,7 +14,7 @@ export class VehicleInspectionService {
   }
 
   async checkIfDailyInspectionIsRequired(): Promise<boolean> {
-    if (this.isDailyInspectionRequired === null) {
+
       const lastInspectionDate = (await this.vehicleInspectionsDatabase.getLastDaily())?.created_at;
 
       if (!lastInspectionDate) {
@@ -22,7 +22,9 @@ export class VehicleInspectionService {
       } else {
         this.isDailyInspectionRequired = !moment.utc(lastInspectionDate).local().isSame(new Date(), 'day');
       }
-    }
+
+      console.log('checkIfDailyInspectionIsRequired', lastInspectionDate,this.isDailyInspectionRequired );
+
 
     return this.isDailyInspectionRequired;
   }
@@ -34,14 +36,14 @@ export class VehicleInspectionService {
       }
     });
 
-    if (this.isWeeklyInspectionRequired === null) {
+
       const lastInspectionDate = (await this.vehicleInspectionsDatabase.getLastWeekly())?.created_at;
       if (!lastInspectionDate) {
         this.isWeeklyInspectionRequired = true;
       } else {
         this.isWeeklyInspectionRequired = !moment.utc(lastInspectionDate).local().isSame(new Date(), 'week');
       }
-    }
+
 
     return this.isWeeklyInspectionRequired;
   }

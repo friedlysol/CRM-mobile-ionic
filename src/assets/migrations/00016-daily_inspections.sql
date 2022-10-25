@@ -32,6 +32,6 @@ CREATE TABLE `daily_inspections`
     `created_at`          TEXT,
     `updated_at`          TEXT,
     PRIMARY KEY (uuid)
-)
+);
 
-CREATE INDEX daily_inspections_idx ON daily_inspections (created_at, id, sync)
+CREATE INDEX daily_inspections_idx ON daily_inspections (created_at, id, sync);

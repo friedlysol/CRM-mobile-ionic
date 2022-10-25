@@ -14,6 +14,6 @@ CREATE TABLE `work_order_assets`
     `sync`                    INTEGER DEFAULT 0,
     `created_at`              TEXT,
     `updated_at`              TEXT
-)
+);
 
-CREATE INDEX work_order_assets_idx ON work_order_assets (work_order_uuid, asset_uuid, work_performed, sync)
+CREATE INDEX work_order_assets_idx ON work_order_assets (work_order_uuid, asset_uuid, work_performed, sync);

@@ -59,17 +59,7 @@ export class WorkOrderViewPage implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.route.paramMap.subscribe(async params => {
-      const redirectTo = encodeURI('/work-order/view/' + this.workOrderUuid);
-
       this.workOrderUuid = params.get('workOrderUuid');
-
-      if(await this.vehicleInspectionService.checkIfDailyInspectionIsRequired()) {
-        return this.router.navigateByUrl('/vehicle-inspection/daily?redirectTo=' + redirectTo);
-      }
-
-      if(await this.vehicleInspectionService.checkIfWeeklyInspectionIsRequired()) {
-        return this.router.navigateByUrl('/vehicle-inspection/weekly?redirectTo=' + redirectTo);
-      }
 
       this.workOrder = await this.workOrderDatabase.getByUuid(this.workOrderUuid);
       this.woAddress = await this.addressDatabase.getByUuid(this.workOrder.address_uuid);
@@ -84,6 +74,18 @@ export class WorkOrderViewPage implements OnInit, OnDestroy {
     this.conditionsTypes = await this.typeService.getByType('wo_conditions_type');
     this.coveredAreaTypes = await this.typeService.getByType('wo_covered_area_type');
     this.photoType = await this.typeService.getByKey('wo_pictures.photo');
+  }
+
+  async ionViewDidEnter() {
+    const redirectTo = encodeURI('/work-order/view/' + this.workOrderUuid);
+
+    if (await this.vehicleInspectionService.checkIfDailyInspectionIsRequired()) {
+      return this.router.navigateByUrl('/vehicle-inspection/daily?redirectTo=' + redirectTo);
+    }
+
+    if (await this.vehicleInspectionService.checkIfWeeklyInspectionIsRequired()) {
+      return this.router.navigateByUrl('/vehicle-inspection/weekly?redirectTo=' + redirectTo);
+    }
   }
 
   ngOnDestroy() {
@@ -186,12 +188,12 @@ export class WorkOrderViewPage implements OnInit, OnDestroy {
         if(canStartTimeSheet) {
           const techStatus = await this.techStatusDatabase.getTechStatusById(this.workOrder.tech_status_type_id);
 
-          let timeSheet: TimeSheetInterface = {
+          const timeSheet: TimeSheetInterface = {
             type_id: techStatus.time_sheet_reason_type_id,
             object_type: 'work_order',
             object_uuid: this.workOrder.uuid,
             work_order_number: this.workOrder.work_order_number
-          }
+          };
 
           await this.timeSheetService.start(timeSheet);
         } else {
@@ -203,6 +205,10 @@ export class WorkOrderViewPage implements OnInit, OnDestroy {
     this.currentTechStatus = await this.workOrderService.setNewTechStatus(this.workOrder, this.currentTechStatus);
   }
 
+  async confirmWorkOrder(workOrder: WorkOrderInterface) {
+    workOrder.status = await this.workOrderService.changeStatusToConfirmed(workOrder);
+  }
+
   private revertStatus() {
     console.log('this.currentTechStatus', this.currentTechStatus);
 
@@ -211,7 +217,4 @@ export class WorkOrderViewPage implements OnInit, OnDestroy {
     return;
   }
 
-  async confirmWorkOrder(workOrder: WorkOrderInterface) {
-    workOrder.status = await this.workOrderService.changeStatusToConfirmed(workOrder);
-  }
 }
