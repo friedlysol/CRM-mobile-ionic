@@ -28,7 +28,7 @@
             Shipping Date:
           </ion-col>
           <ion-col class="ion-text-left">
-            {{utilsService.getLocalDatetime(request.shipping_date) || '-'}}
+            {{request.shipping_date ? utilsService.getLocalDatetime(request.shipping_date) : '-'}}
           </ion-col>
         </ion-row>
 
@@ -37,15 +37,7 @@
             Status:
           </ion-col>
           <ion-col
-            class="ion-text-left {{
-              request.delivery_status === 'delivered'?
-              'status-delivered':
-              request.delivery_status === 'partially_delivered'?
-              'status-partially-delivered':
-              request.delivery_status === 'not_delivered'?
-              'status-not-delivered':
-              ''
-            }}">
+            class="ion-text-left {{ getStatusClass(request.delivery_status) }}">
             {{request.delivery_status? getStatusName(request.delivery_status): '-'}}
           </ion-col>
         </ion-row>

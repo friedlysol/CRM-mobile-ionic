@@ -28,7 +28,7 @@
           Last 5 of vehicle vin
           <span class="required">*</span>
         </ion-label>
-        <ion-input type="number" [formControl]="vehicleNumberCtrl"></ion-input>
+        <ion-input type="tel" [formControl]="vehicleNumberCtrl"></ion-input>
         <ion-text class="small" color="danger">
           <span *ngIf="vehicleNumberCtrl.errors?.required && (vehicleNumberCtrl.dirty || vehicleNumberCtrl.touched)">
               This field is required
@@ -43,7 +43,7 @@
           Odometer reading
           <span class="required">*</span>
         </ion-label>
-        <ion-input type="number" [formControl]="odometerReadingCtrl"></ion-input>
+        <ion-input type="tel" [formControl]="odometerReadingCtrl"></ion-input>
         <ion-text
             class="small"
             color="danger"

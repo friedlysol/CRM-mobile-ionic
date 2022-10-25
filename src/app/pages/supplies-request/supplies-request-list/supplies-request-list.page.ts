@@ -52,6 +52,7 @@ export class SuppliesRequestListPage implements OnInit {
     const modal = await this.modalCtrl.create({
       component: SuppliesRequestEditStatusFormComponent,
       cssClass: 'popup',
+      backdropDismiss: false,
       componentProps: {
         request,
       }
@@ -68,6 +69,10 @@ export class SuppliesRequestListPage implements OnInit {
 
   getStatusName(key: string): string {
     return this.statuses.find(status => status.type_key === key)?.type_value || '';
+  }
+
+  getStatusClass(status: string){
+    return 'status-'+ (status?.replace(/_/g, '-') || '');
   }
 
   async onStatusChange(e) {

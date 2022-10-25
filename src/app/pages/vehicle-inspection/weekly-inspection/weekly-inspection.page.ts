@@ -88,8 +88,6 @@ export class WeeklyInspectionPage implements OnInit {
     });
 
     this.photosTypes = await this.typeService.getByType('weekly_inspections');
-    console.log(await this.vehicleInspectionService.checkIfWeeklyInspectionIsRequired());
-
   }
 
   async onClearClick() {
@@ -147,6 +145,7 @@ export class WeeklyInspectionPage implements OnInit {
     this.inspection.tires_pressure_rear_passenger = Number.parseInt(this.rearPassengerCtrl.value, 10);
 
     await this.vehicleInspectionsDatabase.createWeekly(this.inspection);
+    this.vehicleInspectionService.setIsWeeklyInspectionRequired(false);
 
     if (!this.inspection.oil || !this.inspection.brake || !this.inspection.washer ||
       this.inspection.tires_pressure_front_driver <= 32 || this.inspection.tires_pressure_front_passenger <= 32 ||

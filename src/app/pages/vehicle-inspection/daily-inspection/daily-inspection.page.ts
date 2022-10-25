@@ -7,6 +7,7 @@ import { VehicleInspectionsDatabase } from '@app/services/database/vehicle-inspe
 import { TypeService } from '@app/services/type.service';
 import { UtilsService } from '@app/services/utils.service';
 import { IonContent, ToastController } from '@ionic/angular';
+import { VehicleInspectionService } from '@app/services/vehicle-inspection.service';
 
 @Component({
   selector: 'app-daily-inspection',
@@ -28,7 +29,7 @@ export class DailyInspectionPage implements OnInit {
   };
 
   inspectionForm = new FormGroup({
-    vehicleNumber: new FormControl('', [Validators.required, Validators.pattern('^[0-9]{5}$')]),
+    vehicleNumber: new FormControl('', [Validators.required, Validators.pattern('[0-9]{5}')]),
     odometerReading: new FormControl('', [Validators.required]),
     note: new FormControl(),
   });
@@ -42,6 +43,7 @@ export class DailyInspectionPage implements OnInit {
     private toastController: ToastController,
     private typeService: TypeService,
     private vehicleInspectionDatabase: VehicleInspectionsDatabase,
+    private vehicleInspectionService: VehicleInspectionService,
     public utilsService: UtilsService,
   ) {
   }
@@ -107,6 +109,8 @@ export class DailyInspectionPage implements OnInit {
     this.inspection.note = this.noteCtrl.value;
 
     await this.vehicleInspectionDatabase.createDaily(this.inspection);
+
+    this.vehicleInspectionService.setIsDailyInspectionRequired(false);
 
     if (this.redirectTo) {
       return this.router.navigateByUrl(this.redirectTo, {replaceUrl: true});

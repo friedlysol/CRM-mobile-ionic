@@ -12,7 +12,7 @@ import { CommentModalComponent } from './comment-modal/comment-modal.component';
 import { TypeInterface } from '@app/interfaces/type.interface';
 import { TypeService } from '@app/services/type.service';
 import { SubquestionsModalComponent } from './subquestions-modal/subquestions-modal.component';
-import { Location } from "@angular/common";
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-survey-view',
@@ -150,6 +150,7 @@ export class SurveyViewPage implements OnInit {
     const modal = await this.modalCtrl.create({
       component: CommentModalComponent,
       cssClass: 'popup',
+      backdropDismiss: false,
       componentProps: {
         comment,
       }
@@ -163,6 +164,7 @@ export class SurveyViewPage implements OnInit {
   async openSubquestionsModal(options) {
     const modal = await this.modalCtrl.create({
       component: SubquestionsModalComponent,
+      backdropDismiss: false,
       componentProps: {
         subquestions: options.subquestions,
       }
