@@ -77,12 +77,12 @@ export const environment = {
     incomplete: 1515
   },
   workOrderStatuses: {
-    issued: "issued",
-    confirmed: "confirmed",
-    inProgress: "in_progress",
-    inProgressAndHold: "in_progress_and_hold",
-    canceled: "canceled",
-    completed: "completed"
+    issued: 'issued',
+    confirmed: 'confirmed',
+    inProgress: 'in_progress',
+    inProgressAndHold: 'in_progress_and_hold',
+    canceled: 'canceled',
+    completed: 'completed'
   },
   workOrderTabs: [
     {

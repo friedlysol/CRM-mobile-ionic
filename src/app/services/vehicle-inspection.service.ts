@@ -12,6 +12,14 @@ export class VehicleInspectionService{
 
     constructor(private vehicleInspectionsDatabase: VehicleInspectionsDatabase){}
 
+    setIsDailyInspectionRequired(value: boolean){
+        this.isDailyInspectionRequired = value;
+    }
+
+    setIsWeeklyInspectionRequired(value: boolean){
+        this.isWeeklyInspectionRequired = value;
+    }
+
     async checkIfDailyInspectionIsRequired(): Promise<boolean>{
         if(this.isDailyInspectionRequired === null){
             const lastInspectionDate = (await this.vehicleInspectionsDatabase.getLastDaily())?.created_at;
@@ -43,4 +51,5 @@ export class VehicleInspectionService{
 
         return this.isWeeklyInspectionRequired;
     }
+
 }

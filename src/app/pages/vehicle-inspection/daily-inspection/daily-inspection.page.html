@@ -25,7 +25,7 @@
             <span class="required">*</span>
           </ion-label>
 
-          <ion-input [readonly]="isPreview" type="number" formControlName="vehicleNumber"></ion-input>
+          <ion-input [readonly]="isPreview" type="tel" formControlName="vehicleNumber"></ion-input>
           
           <ion-note 
             color="danger"
@@ -45,7 +45,7 @@
             <span class="required">*</span>
           </ion-label>
           
-          <ion-input [readonly]="isPreview" formControlName="odometerReading"></ion-input>
+          <ion-input type="number" [readonly]="isPreview" formControlName="odometerReading"></ion-input>
           
           <ion-note 
             color="danger"

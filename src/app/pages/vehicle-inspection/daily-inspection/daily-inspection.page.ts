@@ -27,7 +27,7 @@ export class DailyInspectionPage implements OnInit {
   };
 
   inspectionForm = new FormGroup({
-    vehicleNumber: new FormControl('', [Validators.required, Validators.pattern('^[0-9]{5}$')]),
+    vehicleNumber: new FormControl('', [Validators.required, Validators.pattern('[0-9]{5}')]),
     odometerReading: new FormControl('', [Validators.required]),
     note: new FormControl(),
   });
@@ -40,6 +40,7 @@ export class DailyInspectionPage implements OnInit {
     private toastController: ToastController,
     private typeService: TypeService,
     private vehicleInspectionDatabase: VehicleInspectionsDatabase,
+    private vehicleInspectionService: VehicleInspectionService,
     public utilsService: UtilsService,
   ) { }
 
@@ -83,19 +84,18 @@ export class DailyInspectionPage implements OnInit {
 
   async onSaveClick(){
     if(this.inspectionForm.invalid){
-
       this.showErrors = true;
       this.inspectionForm.markAllAsTouched();
+
       return;
 
     }
     for(const question of this.questions){
       if(this.inspection[question.type_key] == null){
-
         this.showErrors = true;
         this.showErrorToast('Each questions should be "satisfactory" or "unsatisfactory"');
-        return;
 
+        return;
       }
     }
 
@@ -103,8 +103,9 @@ export class DailyInspectionPage implements OnInit {
     this.inspection.odometer_reading = this.odometerReadingCtrl.value;
     this.inspection.note = this.noteCtrl.value;
     await this.vehicleInspectionDatabase.createDaily(this.inspection);
-    if(this.redirectTo){
+    this.vehicleInspectionService.setIsDailyInspectionRequired(false);
 
+    if(this.redirectTo){
       this.router.navigateByUrl(this.redirectTo, {replaceUrl: true});
 
     }else{
@@ -138,5 +139,4 @@ export class DailyInspectionPage implements OnInit {
     });
     toast.present();
   }
-
 }
