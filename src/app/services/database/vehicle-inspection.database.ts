@@ -46,6 +46,14 @@ export class VehicleInspectionsDatabase {
         );
     }
 
+    async getLastWeekly(): Promise<WeeklyInspectionInterface>{
+        return this.databaseService.findOrNull(
+            `select *
+            from weekly_inspections
+            order by created_at desc`
+        );
+    }
+
     /**
      * Create inspection in db
      *
@@ -74,17 +82,29 @@ export class VehicleInspectionsDatabase {
     /**
      * Create inspection in db
      *
-     *
+     * @param inspection
      */
-     async createWeekly(): Promise<WeeklyInspectionInterface> {
-        const uuid = this.databaseService.getUuid();
+     async createWeekly(inspection: WeeklyInspectionInterface): Promise<WeeklyInspectionInterface> {
+        const uuid = inspection.uuid || this.databaseService.getUuid();
 
         const query = sqlBuilder.insert('weekly_inspections', Object.assign({
                 uuid,
                 created_at: this.databaseService.getTimeStamp(),
                 sync: 0,
             }
-        ));
+        ), _.pick(inspection, [
+            'oil',
+            'brake',
+            'washer',
+            'jack',
+            'tread',
+            'spare_tire',
+            'tires_pressure_front_driver',
+            'tires_pressure_front_passenger',
+            'tires_pressure_rear_driver',
+            'card_in_vehicle',
+            'registration_in_vehicle',
+        ]));
 
         return this.databaseService.query(query.toString(), query.toParams())
             .then(() => this.getWeeklyByUuid(uuid));

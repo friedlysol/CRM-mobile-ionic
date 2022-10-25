@@ -1,0 +1,21 @@
+<ion-row>
+
+  <ion-col>
+    <ion-button
+        class="full-width"
+        color="{{selected === true? 'medium': 'light'}}"
+        (click)="onYesClick()">
+      Yes
+    </ion-button>
+  </ion-col>
+
+  <ion-col>
+    <ion-button
+        class="full-width"
+        color="{{selected === false? 'medium': 'light'}}"
+        (click)="onNoClick()">
+      No
+    </ion-button>
+  </ion-col>
+
+</ion-row>

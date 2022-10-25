@@ -10,6 +10,7 @@ import { SignatureCanvasComponent } from '@app/components/signature/signature-ca
 import { CaptureMediaComponent } from './components/capture-media/capture-media.component';
 import { SideSwipeDirective } from './directives/side-swipe.directive';
 import { RouterModule } from '@angular/router';
+import { YesOrNoOptionsComponent } from './components/yes-or-no-options/yes-or-no-options.component';
 
 @NgModule({
   declarations: [
@@ -20,6 +21,7 @@ import { RouterModule } from '@angular/router';
     SignatureCanvasComponent,
     CaptureMediaComponent,
     SideSwipeDirective,
+    YesOrNoOptionsComponent,
   ],
   imports: [
     CommonModule,
@@ -32,6 +34,7 @@ import { RouterModule } from '@angular/router';
     SyncComponent,
     SignatureComponent,
     CaptureMediaComponent,
+    YesOrNoOptionsComponent,
   ],
   providers: [
   ]
