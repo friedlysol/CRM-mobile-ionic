@@ -3,65 +3,60 @@
 </ion-header>
 
 <ion-content *ngIf="inspection">
-
   <ion-row class="ion-padding">
-    <ion-col 
-      *ngFor="let type of photosTypes"
-      size="6">
+    <ion-col
+        *ngFor="let type of photosTypes"
+        size="6">
       <app-capture-media
-        objectType="weekly_inspections"
-        [type]="'photo'"
-        [typeId]="type.id"
-        [objectUuid]="inspection.uuid"
-        [objectId]="inspection.id"
-        [mediaOptions]="{
+          objectType="weekly_inspections"
+          [type]="'photo'"
+          [typeId]="type.id"
+          [objectUuid]="inspection.uuid"
+          [objectId]="inspection.id"
+          [mediaOptions]="{
           buttonLabel: type.type_value,
-          required: true,
-          onlyNewPhoto: false
+          required: true
         }">
       </app-capture-media>
     </ion-col>
   </ion-row>
-  
+
   <ion-row>
     <ion-col>
       <ion-item lines="none">
-        <ion-label position="stacked">
+        <ion-label class="bold" position="stacked">
           Last 5 of vehicle vin
           <span class="required">*</span>
         </ion-label>
         <ion-input type="number" [formControl]="vehicleNumberCtrl"></ion-input>
-        <ion-note 
-          color="danger"
-          *ngIf="vehicleNumberCtrl.invalid">
-          <ion-text *ngIf="vehicleNumberCtrl.errors?.required && (vehicleNumberCtrl.dirty || vehicleNumberCtrl.touched)">This field is required<br/></ion-text>
-          <ion-text *ngIf="vehicleNumberCtrl.errors?.pattern && showErrors">This field should have 5 digits</ion-text>
-        </ion-note>
+        <ion-text class="small" color="danger">
+          <span *ngIf="vehicleNumberCtrl.errors?.required && (vehicleNumberCtrl.dirty || vehicleNumberCtrl.touched)">
+              This field is required
+          </span>
+          <span *ngIf="vehicleNumberCtrl.errors?.pattern && showErrors">This field should have 5 digits</span>
+        </ion-text>
       </ion-item>
     </ion-col>
     <ion-col>
       <ion-item lines="none">
-        <ion-label position="stacked">
+        <ion-label class="bold" position="stacked">
           Odometer reading
           <span class="required">*</span>
         </ion-label>
         <ion-input type="number" [formControl]="odometerReadingCtrl"></ion-input>
-        <ion-note 
-          color="danger"
-          *ngIf="odometerReadingCtrl.invalid && (odometerReadingCtrl.dirty || odometerReadingCtrl.touched)">
+        <ion-text
+            class="small"
+            color="danger"
+            *ngIf="odometerReadingCtrl.invalid && (odometerReadingCtrl.dirty || odometerReadingCtrl.touched)">
           <ion-text *ngIf="vehicleNumberCtrl.errors?.required">This field is required<br/></ion-text>
-        </ion-note>
+        </ion-text>
       </ion-item>
     </ion-col>
   </ion-row>
 
   <ion-grid class="ion-padding">
     <ion-row>
-
-      <ion-col>
-        <b>Fluids</b>
-      </ion-col>
-
+      <ion-col class="label">Fluids</ion-col>
     </ion-row>
     <ion-row>
 
@@ -91,11 +86,7 @@
 
   <ion-grid class="ion-padding">
     <ion-row>
-
-      <ion-col>
-        <b>Tires</b>
-      </ion-col>
-
+      <ion-col class="label">Tires</ion-col>
     </ion-row>
     <ion-row>
 
@@ -125,26 +116,23 @@
 
   <ion-grid class="ion-padding">
     <ion-row>
-
-      <ion-col>
-        <b>Tires Pressure</b>
-      </ion-col>
-
+      <ion-col class="label">Tires Pressure</ion-col>
     </ion-row>
     <ion-row>
 
       <ion-col>
         <ion-item lines="none" class="ion-no-padding">
-          <ion-label position="stacked">
+          <ion-label class="bold" position="stacked">
             Front Driver
             <span class="required">*</span>
           </ion-label>
           <ion-input type="number" [formControl]="frontDriverCtrl"></ion-input>
-          <ion-note 
-            color="danger"
-            *ngIf="frontDriverCtrl.invalid && (frontDriverCtrl.dirty || frontDriverCtrl.touched)">
+          <ion-text
+              class="small"
+              color="danger"
+              *ngIf="frontDriverCtrl.invalid && (frontDriverCtrl.dirty || frontDriverCtrl.touched)">
             This field is required
-          </ion-note>
+          </ion-text>
         </ion-item>
       </ion-col>
 
@@ -153,16 +141,17 @@
 
       <ion-col>
         <ion-item lines="none" class="ion-no-padding">
-          <ion-label position="stacked">
+          <ion-label class="bold" position="stacked">
             Rear Driver
             <span class="required">*</span>
           </ion-label>
           <ion-input type="number" [formControl]="rearDriverCtrl"></ion-input>
-          <ion-note 
-            color="danger"
-            *ngIf="rearDriverCtrl.invalid && (rearDriverCtrl.dirty || rearDriverCtrl.touched)">
+          <ion-text
+              class="small"
+              color="danger"
+              *ngIf="rearDriverCtrl.invalid && (rearDriverCtrl.dirty || rearDriverCtrl.touched)">
             This field is required
-          </ion-note>
+          </ion-text>
         </ion-item>
       </ion-col>
 
@@ -171,16 +160,17 @@
 
       <ion-col>
         <ion-item lines="none" class="ion-no-padding">
-          <ion-label position="stacked">
+          <ion-label class="bold" position="stacked">
             Front Passenger
             <span class="required">*</span>
           </ion-label>
           <ion-input type="number" [formControl]="frontPassengerCtrl"></ion-input>
-          <ion-note 
-            color="danger"
-            *ngIf="frontPassengerCtrl.invalid && (frontPassengerCtrl.dirty || frontPassengerCtrl.touched)">
+          <ion-text
+              class="small"
+              color="danger"
+              *ngIf="frontPassengerCtrl.invalid && (frontPassengerCtrl.dirty || frontPassengerCtrl.touched)">
             This field is required
-          </ion-note>
+          </ion-text>
         </ion-item>
       </ion-col>
 
@@ -189,29 +179,25 @@
 
       <ion-col>
         <ion-item lines="none" class="ion-no-padding">
-          <ion-label position="stacked">
+          <ion-label class="bold" position="stacked">
             Rear Passenger
             <span class="required">*</span>
           </ion-label>
           <ion-input type="number" [formControl]="rearPassengerCtrl"></ion-input>
-          <ion-note 
-            color="danger"
-            *ngIf="rearPassengerCtrl.invalid && (rearPassengerCtrl.dirty || rearPassengerCtrl.touched)">
+          <ion-text
+              class="small"
+              color="danger"
+              *ngIf="rearPassengerCtrl.invalid && (rearPassengerCtrl.dirty || rearPassengerCtrl.touched)">
             This field is required
-          </ion-note>
+          </ion-text>
         </ion-item>
       </ion-col>
-
     </ion-row>
   </ion-grid>
 
   <ion-grid class="ion-padding">
     <ion-row>
-
-      <ion-col>
-        <b>Week Ending Mileage</b>
-      </ion-col>
-
+      <ion-col class="label">Week Ending Mileage</ion-col>
     </ion-row>
 
     <ion-row>
@@ -220,11 +206,12 @@
           - Is a current, valid insurance card in the vehicle?
           <span class="required">*</span>
         </small>
-        <ion-note 
-          *ngIf="showErrors && inspection.card_in_vehicle === null"
-          color="danger">
-          <small><br/>You must select one option</small>
-        </ion-note>
+        <ion-text
+            *ngIf="showErrors && inspection.card_in_vehicle === null"
+            class="small"
+            color="danger">
+          <br/>You must select one option
+        </ion-text>
       </ion-col>
     </ion-row>
     <app-yes-or-no-options [(selected)]="inspection.card_in_vehicle"></app-yes-or-no-options>
@@ -235,15 +222,16 @@
           - Is the current vehicle registration in the vahicle?
           <span class="required">*</span>
         </small>
-        <ion-note 
-          *ngIf="showErrors && inspection.registration_in_vehicle === null"
-          color="danger">
-          <small><br/>You must select one option</small>
-        </ion-note>
+        <ion-text
+            *ngIf="showErrors && inspection.registration_in_vehicle === null"
+            class="small"
+            color="danger">
+          <br/>You must select one option
+        </ion-text>
       </ion-col>
     </ion-row>
-    <app-yes-or-no-options [(selected)]="inspection.registration_in_vehicle"></app-yes-or-no-options>
 
+    <app-yes-or-no-options [(selected)]="inspection.registration_in_vehicle"></app-yes-or-no-options>
   </ion-grid>
 </ion-content>
 
@@ -251,25 +239,22 @@
   <app-sync></app-sync>
 
   <ion-row>
-
     <ion-col>
-      <ion-button 
-        color="light" 
-        class="ion-float-left full-width" 
-        (click)="onClearClick()">
-        CLEAR
+      <ion-button
+          color="light"
+          expand="full"
+          (click)="onClearClick()">
+        Clear
       </ion-button>
     </ion-col>
 
     <ion-col>
-      <ion-button 
-        color="medium"
-        class="ion-float-right full-width" 
-        (click)="onSaveClick()">
-        SAVE
+      <ion-button
+          color="medium"
+          expand="full"
+          (click)="onSaveClick()">
+        Save
       </ion-button>
     </ion-col>
-
   </ion-row>
-
 </ion-footer>

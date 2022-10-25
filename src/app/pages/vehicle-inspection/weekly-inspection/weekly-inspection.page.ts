@@ -55,23 +55,29 @@ export class WeeklyInspectionPage implements OnInit {
     private typeService: TypeService,
     private vehicleInspectionsDatabase: VehicleInspectionsDatabase,
     private vehicleInspectionService: VehicleInspectionService,
-  ) { }
+  ) {
+  }
 
   get vehicleNumberCtrl() {
     return this.formGroup.controls.vehicleNumber;
   }
+
   get odometerReadingCtrl() {
     return this.formGroup.controls.odometerReading;
   }
+
   get frontDriverCtrl() {
     return this.formGroup.controls.frontDriver;
   }
+
   get rearDriverCtrl() {
     return this.formGroup.controls.rearDriver;
   }
+
   get frontPassengerCtrl() {
     return this.formGroup.controls.frontPassenger;
   }
+
   get rearPassengerCtrl() {
     return this.formGroup.controls.rearPassenger;
   }
@@ -113,7 +119,8 @@ export class WeeklyInspectionPage implements OnInit {
       this.inspection.uuid,
       this.photosTypes.map(type => type.id)
     );
-    if(this.formGroup.invalid ||
+
+    if (this.formGroup.invalid ||
       this.inspection.registration_in_vehicle == null ||
       this.inspection.card_in_vehicle == null) {
 
@@ -122,8 +129,9 @@ export class WeeklyInspectionPage implements OnInit {
 
       return;
     }
-    for(const value of Object.values(typeHasPhoto)) {
-      if(!value){
+
+    for (const value of Object.values(typeHasPhoto)) {
+      if (!value) {
 
         this.showErrorToast('Please add all required photos.');
         this.showErrors = true;
@@ -141,27 +149,31 @@ export class WeeklyInspectionPage implements OnInit {
 
     await this.vehicleInspectionsDatabase.createWeekly(this.inspection);
 
-    if(!this.inspection.oil || !this.inspection.brake || !this.inspection.washer ||
+    if (!this.inspection.oil || !this.inspection.brake || !this.inspection.washer ||
       this.inspection.tires_pressure_front_driver <= 32 || this.inspection.tires_pressure_front_passenger <= 32 ||
-      this.inspection.tires_pressure_rear_driver <= 38 || this.inspection.tires_pressure_rear_passenger <= 38) {
-        const alert = await this.alertController.create({
-          header: 'Message Alert',
-          message: 'Vehicle state is not good!\nPlease contact your manager!',
-          buttons: [
-            {
-              text: 'Ok',
-              role: 'ok',
-            },
-          ]
-        });
-        alert.present();
-        await alert.onDidDismiss();
+      this.inspection.tires_pressure_rear_driver <= 38 || this.inspection.tires_pressure_rear_passenger <= 38
+    ) {
+      const alert = await this.alertController.create({
+        header: 'Message Alert',
+        message: 'Vehicle state is not good!\nPlease contact your manager!',
+        buttons: [
+          {
+            text: 'Ok',
+            role: 'ok',
+          },
+        ]
+      });
+
+      alert.present();
+
+      await alert.onDidDismiss();
     }
 
     this.showErrors = false;
-    if(this.redirectTo) {
+
+    if (this.redirectTo) {
       this.router.navigateByUrl(this.redirectTo, {replaceUrl: true});
-    }else{
+    } else {
       this.router.navigateByUrl('/work-order/list', {replaceUrl: true});
     }
   }
@@ -172,6 +184,7 @@ export class WeeklyInspectionPage implements OnInit {
       duration: 3000,
       position: 'top',
     });
+
     toast.present();
   }
 }

@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { WorkOrderService } from '@app/services/workorder.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { WorkOrderInterface } from '@app/interfaces/work-order.interface';
 import { AddressService } from '@app/services/address.service';
 import { WorkOrderDatabase } from '@app/services/database/workorder.database';
@@ -18,6 +18,7 @@ import { TimeSheetInterface } from '@app/interfaces/time-sheet.interface';
 import { UtilsService } from '@app/services/utils.service';
 
 import { environment } from '@env/environment';
+import { VehicleInspectionService } from '@app/services/vehicle-inspection.service';
 
 @Component({
   selector: 'app-work-order-view',
@@ -42,11 +43,13 @@ export class WorkOrderViewPage implements OnInit, OnDestroy {
     private addressDatabase: AddressDatabase,
     private launchNavigator: LaunchNavigator,
     private route: ActivatedRoute,
+    private router: Router,
     private staticService: StaticService,
     private techStatusDatabase: TechStatusDatabase,
     private timeSheetDatabase: TimeSheetsDatabase,
     private timeSheetService: TimeSheetService,
     private typeService: TypeService,
+    private vehicleInspectionService: VehicleInspectionService,
     private workOrderDatabase: WorkOrderDatabase,
     private workOrderService: WorkOrderService,
     public addressService: AddressService,
@@ -56,7 +59,18 @@ export class WorkOrderViewPage implements OnInit, OnDestroy {
 
   async ngOnInit() {
     this.route.paramMap.subscribe(async params => {
+      const redirectTo = encodeURI('/work-order/view/' + this.workOrderUuid);
+
       this.workOrderUuid = params.get('workOrderUuid');
+
+      if(await this.vehicleInspectionService.checkIfDailyInspectionIsRequired()) {
+        return this.router.navigateByUrl('/vehicle-inspection/daily?redirectTo=' + redirectTo);
+      }
+
+      if(await this.vehicleInspectionService.checkIfWeeklyInspectionIsRequired()) {
+        return this.router.navigateByUrl('/vehicle-inspection/weekly?redirectTo=' + redirectTo);
+      }
+
       this.workOrder = await this.workOrderDatabase.getByUuid(this.workOrderUuid);
       this.woAddress = await this.addressDatabase.getByUuid(this.workOrder.address_uuid);
 
