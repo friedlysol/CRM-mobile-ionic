@@ -61,8 +61,8 @@ export class VehicleInspectionsDatabase {
      */
      async createDaily(inspection: DailyInspectionInterface): Promise<DailyInspectionInterface> {
         const uuid = this.databaseService.getUuid();
-        const questions = (await this.typeService.getByType('daily_inspection_questions'))
-            .map(question => question.type_key.split('.')[1]);
+        const questions = (await this.typeService.getByTypeWithMappedKeys('daily_inspection_questions'))
+            .map(type => type.type_key);
 
         const query = sqlBuilder.insert('daily_inspections', Object.assign({
                 uuid,

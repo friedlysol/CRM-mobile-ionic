@@ -31,8 +31,7 @@ export class SuppliesRequestListPage implements OnInit {
   }
 
   async ngOnInit() {
-    this.statuses = (await this.typeService.getByType('supplies_request_status'))
-      .map(status => ({...status, type_key: status.type_key.split('.')[1]}));
+    this.statuses = await this.typeService.getByTypeWithMappedKeys('supplies_request_status');
 
     this.requests = await this.supplyDatabase.getAll();
   }

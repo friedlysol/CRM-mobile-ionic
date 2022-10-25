@@ -27,12 +27,11 @@ export class DailyInspectionPage implements OnInit {
   };
 
   inspectionForm = new FormGroup({
-    vehicleNumber: new FormControl('', [Validators.required]),
+    vehicleNumber: new FormControl('', [Validators.required, Validators.pattern('^[0-9]{5}$')]),
     odometerReading: new FormControl('', [Validators.required]),
-    route: new FormControl('', [Validators.required]),
     note: new FormControl(),
   });
-  isReadOnly: boolean;
+  isPreview: boolean;
   showErrors = false;
 
   constructor(
@@ -41,14 +40,18 @@ export class DailyInspectionPage implements OnInit {
     private toastController: ToastController,
     private typeService: TypeService,
     private vehicleInspectionDatabase: VehicleInspectionsDatabase,
-    private vehicleInspectionService: VehicleInspectionService,
     public utilsService: UtilsService,
   ) { }
 
-  get vehicleNumberCtrl() { return this.inspectionForm.get('vehicleNumber'); }
-  get odometerReadingCtrl() { return this.inspectionForm.get('odometerReading'); }
-  get routeCtrl() { return this.inspectionForm.get('route'); }
-  get noteCtrl() { return this.inspectionForm.get('note'); }
+  get vehicleNumberCtrl() {
+    return this.inspectionForm.get('vehicleNumber');
+  }
+  get odometerReadingCtrl() {
+    return this.inspectionForm.get('odometerReading');
+  }
+  get noteCtrl() {
+    return this.inspectionForm.get('note');
+  }
 
 
   async ngOnInit() {
@@ -57,52 +60,57 @@ export class DailyInspectionPage implements OnInit {
       this.redirectTo = params.get('redirectTo');
     });
 
-    this.inspection = await this.vehicleInspectionDatabase.getLastDaily();
-    if(this.inspection){
+    const prevInspection = await this.vehicleInspectionDatabase.getLastDaily();
+    if(prevInspection){
+      this.inspection = prevInspection;
       this.vehicleNumberCtrl.setValue(this.inspection.vehicle_number);
       this.odometerReadingCtrl.setValue(this.inspection.odometer_reading);
-      this.routeCtrl.setValue(this.inspection.route);
       this.noteCtrl.setValue(this.inspection.note);
-      this.isReadOnly = !this.withoutPreview;
+      this.isPreview = !this.withoutPreview;
     }else{
-      this.isReadOnly = false;
+      this.isPreview = false;
     }
 
-    this.questions = (await this.typeService.getByType('daily_inspection_questions'))
-      .map(question => ({...question, type_key: question.type_key.split('.')[1]}));
+    this.questions = await this.typeService.getByTypeWithMappedKeys('daily_inspection_questions');
 
   }
 
   onAnswerClick(question: TypeInterface, satisfactory: boolean){
-    if(this.isReadOnly){
-      return;
+    if(!this.isPreview){
+      this.inspection[question.type_key] = satisfactory? 1: 0;
     }
-    this.inspection[question.type_key] = satisfactory? 1: 0;
   }
 
   async onSaveClick(){
     if(this.inspectionForm.invalid){
+
       this.showErrors = true;
       this.inspectionForm.markAllAsTouched();
       return;
+
     }
     for(const question of this.questions){
       if(this.inspection[question.type_key] == null){
+
         this.showErrors = true;
         this.showErrorToast('Each questions should be "satisfactory" or "unsatisfactory"');
         return;
+
       }
     }
 
     this.inspection.vehicle_number = this.vehicleNumberCtrl.value;
     this.inspection.odometer_reading = this.odometerReadingCtrl.value;
-    this.inspection.route = this.routeCtrl.value;
     this.inspection.note = this.noteCtrl.value;
     await this.vehicleInspectionDatabase.createDaily(this.inspection);
     if(this.redirectTo){
+
       this.router.navigateByUrl(this.redirectTo, {replaceUrl: true});
+
     }else{
+
       this.router.navigateByUrl('/work-order/list', {replaceUrl: true});
+
     }
   }
 
@@ -119,7 +127,7 @@ export class DailyInspectionPage implements OnInit {
 
   onNextClick(){
     this.onClearClick();
-    this.isReadOnly = false;
+    this.isPreview = false;
   }
 
   async showErrorToast(message: string) {

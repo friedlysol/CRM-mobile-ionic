@@ -34,9 +34,9 @@ export class TypeService implements SyncInterface {
     return this.typeDatabase.getByType(type);
   }
 
-  async getByTypeAsList(type: string): Promise<Record<string, number>> {
+  async getByTypeAsList(typeName: string): Promise<Record<string, number>> {
     const mappedStatuses = {};
-    const statuses = await this.getByType('tech_status');
+    const statuses = await this.getByType(typeName);
 
     if(statuses) {
       statuses.map(type => mappedStatuses[type.type_key] = type.id);
@@ -47,6 +47,21 @@ export class TypeService implements SyncInterface {
 
   getByTypes(types: Array<string>): Promise<TypeInterface[]> {
     return this.typeDatabase.getByTypes(types);
+  }
+
+  async getByTypeWithMappedKeys(typeName: string){
+    const types = await this.getByType(typeName);
+    const mappedTypes = [];
+    for(const type of types) {
+
+      const key = type.type_key.split('.')[1];
+      if(key) {
+
+        mappedTypes.push({...type, type_key: key});
+      }
+    }
+
+    return mappedTypes;
   }
 
   /**
