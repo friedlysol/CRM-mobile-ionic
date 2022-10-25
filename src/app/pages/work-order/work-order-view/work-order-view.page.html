@@ -94,7 +94,7 @@
     </ion-item>
 
     <ng-container *ngIf="isWorking()">
-      <ion-item lines="none" *ngIf="exteriorTypes.length > 0">
+      <div class="ion-padding" *ngIf="exteriorTypes.length > 0">
         <ion-label position="stacked"><strong>Exterior Type:</strong></ion-label>
         <ion-select
             placeholder="Select type"
@@ -107,9 +107,9 @@
             {{ type.type_value }}
           </ion-select-option>
         </ion-select>
-      </ion-item>
+      </div>
 
-      <ion-item lines="none" *ngIf="structureTypes.length > 0">
+      <div class="ion-padding-horizontal" *ngIf="structureTypes.length > 0">
         <ion-label position="floating"><strong>Structure Type:</strong></ion-label>
         <ion-select
             placeholder="Select type"
@@ -122,9 +122,9 @@
             {{ type.type_value }}
           </ion-select-option>
         </ion-select>
-      </ion-item>
+      </div>
 
-      <ion-item lines="none" *ngIf="foundationTypes.length > 0">
+      <div class="ion-padding" *ngIf="foundationTypes.length > 0">
         <ion-label position="floating"><strong>Foundation Type:</strong></ion-label>
         <ion-select
             placeholder="Select type"
@@ -137,9 +137,9 @@
             {{ type.type_value }}
           </ion-select-option>
         </ion-select>
-      </ion-item>
+      </div>
 
-      <ion-item lines="none" *ngIf="conditionsTypes.length > 0">
+      <div class="ion-padding-horizontal" *ngIf="conditionsTypes.length > 0">
         <ion-label position="floating"><strong>Conditions:</strong></ion-label>
         <ion-select
             placeholder="Select type"
@@ -152,9 +152,9 @@
             {{ type.type_value }}
           </ion-select-option>
         </ion-select>
-      </ion-item>
+      </div>
 
-      <ion-item lines="none" *ngIf="coveredAreaTypes.length > 0">
+      <div class="ion-padding" *ngIf="coveredAreaTypes.length > 0">
         <ion-label position="floating"><strong>Covered Area:</strong></ion-label>
         <ion-select
             placeholder="Select type"
@@ -167,9 +167,9 @@
             {{ type.type_value }}
           </ion-select-option>
         </ion-select>
-      </ion-item>
+      </div>
 
-      <ion-item lines="none">
+      <div class="ion-padding-horizontal">
         <ion-label position="floating"><strong>Estimated Install Time:</strong></ion-label>
         <ion-select
             placeholder="Select time"
@@ -182,7 +182,7 @@
             {{ hours }} hours
           </ion-select-option>
         </ion-select>
-      </ion-item>
+      </div>
     </ng-container>
 
     <ion-grid class="mx-1" *ngIf="!showConfirmButton()">
