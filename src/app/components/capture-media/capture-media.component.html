@@ -2,7 +2,7 @@
 
 <ion-row class="ion-no-padding">
   <ion-col class="ion-no-padding" [class]="{padding: photo && _mediaOptions.allowRemove}">
-    <ion-button (click)="onClick()" [color]="getButtonColor()" [class]="mediaOptions.class">
+    <ion-button class="ion-text-wrap" (click)="onClick()" [color]="getButtonColor()" [class]="mediaOptions.class">
       {{getButtonLabel()}}
     </ion-button>
   </ion-col>

@@ -16,46 +16,21 @@
           <small>{{ question.help_text }}</small>
         </div>
 
-        <ion-row
-            *ngIf="question.type === 'option' ||
+        <app-yes-or-no-options 
+          *ngIf="question.type === 'option' ||
             question.type === 'option_with_comment_for_no' ||
             question.type === 'option_with_comment_for_yes'"
-            class="options">
-          <ion-col>
-            <ion-button
-                class="option-btn {{question.answer === 'yes'? 'selected-option': ''}}"
-                (click)="onOptionClick(question, 'comment', 'yes')">
-              Yes
-            </ion-button>
-          </ion-col>
-          <ion-col>
-            <ion-button
-                class="option-btn {{question.answer === 'no'? 'selected-option': ''}}"
-                (click)="onOptionClick(question, 'comment', 'no')">
-              No
-            </ion-button>
-          </ion-col>
-        </ion-row>
+          [selected]="question.answer === 'yes'"
+          (selectedChange)="$event? onOptionClick(question, 'comment', 'yes'): onOptionClick(question, 'comment', 'no')">
+        </app-yes-or-no-options>
 
-        <ion-row
-            *ngIf="question.type === 'option_with_questions_for_no' ||
+        <app-yes-or-no-options 
+          *ngIf="question.type === 'option' ||
+            question.type === 'option_with_questions_for_no' ||
             question.type === 'option_with_questions_for_yes'"
-            class="options">
-          <ion-col>
-            <ion-button
-                class="option-btn {{question.answer === 'yes'? 'selected-option': ''}}"
-                (click)="onOptionClick(question, 'questions','yes')">
-              Yes
-            </ion-button>
-          </ion-col>
-          <ion-col>
-            <ion-button
-                class="option-btn {{question.answer === 'no'? 'selected-option': ''}}"
-                (click)="onOptionClick(question, 'questions','no')">
-              No
-            </ion-button>
-          </ion-col>
-        </ion-row>
+          [selected]="question.answer === 'yes'"
+          (selectedChange)="$event? onOptionClick(question, 'questions', 'yes'): onOptionClick(question, 'questions', 'no')">
+        </app-yes-or-no-options>
 
         <app-capture-media
             *ngIf="question.type === 'photo_only' || question.photo !== 'skip'"
@@ -64,10 +39,10 @@
             [objectUuid]="question.answer_uuid"
             [typeId]="1"
             [mediaOptions]="{
-            buttonLabel: 'Add photo',
-            requiredOnce: question.photo === 'required',
-            allowRemove: true
-          }"
+              buttonLabel: 'Add photo',
+              requiredOnce: question.photo === 'required',
+              allowRemove: true
+            }"
             (saveFile)="onFileSave(question)">
         </app-capture-media>
 

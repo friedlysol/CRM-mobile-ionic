@@ -396,3 +396,12 @@ ion-modal {
 .alert-wrapper {
   --min-width: 80vw;
 }
+
+.checkbox-wrapper{
+  display: flex;
+  gap: 5px;
+}
+
+.full-width{
+  width: 100%;
+}

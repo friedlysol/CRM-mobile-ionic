@@ -14,6 +14,7 @@ export const environment = {
   surveyPageSize: 10,
   dateFormat: 'MM/DD/YYYY',
   datetimeFormat: 'MM/DD/YYYY hh:mm A',
+  firstDayOfWeek: 1,
   countryCodes: [
     {
       label: 'USA (+1)',
@@ -43,7 +44,7 @@ export const environment = {
       key: 'vehicle-inspection',
       label: 'Vehicle Inspection',
       icon: 'car-sport-outline',
-      url: ['/vehicle-inspection', 'daily'],
+      url: ['/vehicle-inspection', 'weekly'],
       isActive: true
     },
     {

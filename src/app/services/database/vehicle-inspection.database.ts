@@ -4,6 +4,7 @@ import { DatabaseService } from '../database.service';
 import * as sqlBuilder from 'sql-bricks';
 import * as _ from 'underscore';
 import { TypeService } from '../type.service';
+import { WeeklyInspectionInterface } from '@app/interfaces/weekly-inspection.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -21,6 +22,15 @@ export class VehicleInspectionsDatabase {
         ]);
     };
 
+    async getWeeklyByUuid(uuid: string): Promise<WeeklyInspectionInterface> {
+        return this.databaseService.findOrNull(
+            `select *
+            from weekly_inspections
+            where uuid = ?`, [
+            uuid
+        ]);
+    };
+
     async getAllDaily(): Promise<DailyInspectionInterface[]> {
         return this.databaseService.findAsArray(
             `select *
@@ -32,6 +42,14 @@ export class VehicleInspectionsDatabase {
         return this.databaseService.findOrNull(
             `select *
             from daily_inspections
+            order by created_at desc`
+        );
+    }
+
+    async getLastWeekly(): Promise<WeeklyInspectionInterface>{
+        return this.databaseService.findOrNull(
+            `select *
+            from weekly_inspections
             order by created_at desc`
         );
     }
@@ -59,5 +77,36 @@ export class VehicleInspectionsDatabase {
 
         return this.databaseService.query(query.toString(), query.toParams())
             .then(() => this.getDailyByUuid(uuid));
+    }
+
+    /**
+     * Create inspection in db
+     *
+     * @param inspection
+     */
+     async createWeekly(inspection: WeeklyInspectionInterface): Promise<WeeklyInspectionInterface> {
+        const uuid = inspection.uuid || this.databaseService.getUuid();
+
+        const query = sqlBuilder.insert('weekly_inspections', Object.assign({
+                uuid,
+                created_at: this.databaseService.getTimeStamp(),
+                sync: 0,
+            }
+        ), _.pick(inspection, [
+            'oil',
+            'brake',
+            'washer',
+            'jack',
+            'tread',
+            'spare_tire',
+            'tires_pressure_front_driver',
+            'tires_pressure_front_passenger',
+            'tires_pressure_rear_driver',
+            'card_in_vehicle',
+            'registration_in_vehicle',
+        ]));
+
+        return this.databaseService.query(query.toString(), query.toParams())
+            .then(() => this.getWeeklyByUuid(uuid));
     }
 }
