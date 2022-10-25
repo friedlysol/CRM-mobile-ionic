@@ -12,10 +12,12 @@ import { LaunchNavigator } from '@awesome-cordova-plugins/launch-navigator/ngx';
 import { StaticService } from '@app/services/static.service';
 import { TechStatusDatabase } from '@app/services/database/tech-status.database';
 import { TechStatusInterface } from '@app/interfaces/tech-status.interface';
-import { environment } from '@env/environment';
 import { TimeSheetsDatabase } from '@app/services/database/time-sheets.database';
 import { TimeSheetService } from '@app/services/time-sheet.service';
 import { TimeSheetInterface } from '@app/interfaces/time-sheet.interface';
+import { UtilsService } from '@app/services/utils.service';
+
+import { environment } from '@env/environment';
 
 @Component({
   selector: 'app-work-order-view',
@@ -47,7 +49,8 @@ export class WorkOrderViewPage implements OnInit, OnDestroy {
     private typeService: TypeService,
     private workOrderDatabase: WorkOrderDatabase,
     private workOrderService: WorkOrderService,
-    public addressService: AddressService
+    public addressService: AddressService,
+    public utilsService: UtilsService,
   ) {
   }
 

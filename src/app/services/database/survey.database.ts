@@ -622,7 +622,7 @@ export class SurveyDatabase {
     answer: SurveyAnswerApiInterface,
     surveyInstanceHashMap?: Record<string, HashMapInterface>
   ): SurveyResultInterface {
-    const surveyInstanceUuid = surveyInstanceHashMap && surveyInstanceHashMap.hasOwnProperty(answer.survey_instance_id)
+    const surveyInstanceUuid = surveyInstanceHashMap?.hasOwnProperty(answer.survey_instance_id)
       ? surveyInstanceHashMap[answer.survey_instance_id].uuid
       : null;
 

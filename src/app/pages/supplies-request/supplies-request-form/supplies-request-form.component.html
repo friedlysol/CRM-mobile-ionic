@@ -1,54 +1,57 @@
-<h1 class="ion-text-center"><b>Create new request</b></h1>
+<h2 class="modal-title ion-text-center">Create new request</h2>
 
-<form [formGroup]="requestForm" (ngSubmit)="onSubmit()" class="ion-padding">
-  <div class="field">
-    <strong class="ion-margin-top">Job type</strong>
+<form [formGroup]="requestForm" (ngSubmit)="onSubmit()" class="modal-message ion-padding">
+  <div class="mb-2">
+    <ion-label class="bold">Job type</ion-label>
     <ion-select
       #jobTypeSelect
       formControlName="jobType"
       interface="popover"
       class="job-type-select">
       <ion-select-option
-        *ngFor="let type of jobTypes"
-        [value]="type">
+          *ngFor="let type of jobTypes"
+          [value]="type">
         {{ type.type_value }}
       </ion-select-option>
     </ion-select>
-    <ion-note 
-      color="danger"
-      *ngIf="jobType.invalid && (jobType.dirty)">
+    <ion-text class="small"
+              color="danger"
+              *ngIf="jobType.invalid && (jobType.dirty)">
       This field is required
-    </ion-note>
+    </ion-text>
   </div>
 
-  <div class="field">
-    <strong>Type</strong>
-    <ion-input 
-      formControlName="type"
-      class="ion-no-margin">
+  <div class="mb-2">
+    <ion-label class="bold">Type</ion-label>
+    <ion-input
+        formControlName="type"
+        class="ion-no-margin">
     </ion-input>
-    <ion-note 
-      color="danger"
-      *ngIf="type.invalid && (type.dirty || type.touched)">
+    <ion-text class="small"
+              color="danger"
+              *ngIf="type.invalid && (type.dirty || type.touched)">
       This field is required
-    </ion-note>
+    </ion-text>
   </div>
-  
-  <div class="field">
-    <strong>Quantity</strong>
-    <ion-input 
-      type="number" 
-      formControlName="quantity"
-      class="ion-no-margin">
+
+  <div class="mb-2">
+    <ion-label class="bold">Quantity</ion-label>
+    <ion-input
+        type="number"
+        formControlName="quantity"
+        class="ion-no-margin">
     </ion-input>
-    <ion-note 
-      color="danger"
-      *ngIf="quantity.invalid && (quantity.dirty || quantity.touched)">
-      {{quantity.errors?.required? 'This field is required': 'Quantity should be larger than 0'}}
-    </ion-note>
+    <ion-text class="small"
+              color="danger"
+              *ngIf="quantity.invalid && (quantity.dirty || quantity.touched)">
+      {{quantity.errors?.required ? 'This field is required' : 'Quantity should be larger than 0'}}
+    </ion-text>
   </div>
 
   <ion-row class="gap-2 ion-padding-top">
+    <ion-col class="ion-no-padding">
+      <ion-button type="button" (click)="onCancel()" color="light" expand="full">Cancel</ion-button>
+    </ion-col>
     <ion-col class="ion-no-padding">
       <ion-button type="submit" color="medium" expand="full">
         Submit

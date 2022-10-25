@@ -1,47 +1,35 @@
-.alert-input-wrapper{
-    border: 1px solid var(--ion-color-grey-shade);
-}
+ion-col {
+  display: flex;
+  align-items: center;
 
-.new-request-btn{
-    --background: var(--ion-color-grey-shade);
-    --color: white;
+  ion-select {
     width: 100%;
-    margin-inline: 0;
+  }
 }
 
-ion-col{
-    display: flex;
-    align-items: center;
-
-    ion-select{
-        width: 100%;
-    }
+ion-card-subtitle {
+  font-size: 0.8rem;
 }
 
-ion-card-title{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+ion-card-title {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
-.description-label{
-    display: flex;
-    justify-content: flex-end;
+.description-label {
+  display: flex;
+  justify-content: flex-end;
 }
 
-.acknowledgment-pending, .status-partially-delivered{
-    color: var(--ion-color-status-in-progress);
+.acknowledgment-pending, .status-partially-delivered {
+  color: var(--ion-color-status-in-progress);
 }
 
-.acknowledgment-yes, .status-delivered{
-    color: var(--ion-color-status-done);
+.acknowledgment-yes, .status-delivered {
+  color: var(--ion-color-status-done);
 }
 
-.status-not-delivered{
-    color: var(--ion-color-status-stoped);
-}
-
-.confirm-btn{
-    --background: var(--ion-color-green-tint);
-    width: 100%;
+.status-not-delivered {
+  color: var(--ion-color-status-stoped);
 }

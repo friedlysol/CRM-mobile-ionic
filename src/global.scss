@@ -109,11 +109,21 @@ ion-button {
 }
 
 ion-card-title {
-  font-size: 1.1rem;
+  font-size: 1.0rem;
 }
 
 .ion-item-small {
   height: 32px;
+}
+
+ion-card-content {
+  &.card-content-md {
+    font-size: 0.8rem;
+  }
+
+  ion-row {
+    padding-top: 3px;
+  }
 }
 
 ion-button {
@@ -134,10 +144,13 @@ ion-item {
 
 ion-input {
   border: 1px solid var(--ion-color-grey-shade);
+  font-size: 0.8rem;
   margin-top: 8px;
   padding: 0 5px !important;
-  --padding-start: 8px !important;
-  --padding-end: 8px !important;
+  --padding-start: 6px !important;
+  --padding-end: 6px !important;
+  --padding-bottom: 6px !important;
+  --padding-top: 6px !important;
 
   &.clear {
     border: 0;
@@ -145,9 +158,15 @@ ion-input {
   }
 }
 
+ion-label {
+  font-size: 0.8rem;
+}
+
 ion-select {
   border: 1px solid var(--ion-color-grey-shade);
-  padding: 6px;
+  font-size: 0.8rem;
+  padding: 7px;
+  width: 100%;
   --padding-bottom: 6px;
   --padding-top: 6px;
 }
@@ -165,10 +184,14 @@ ion-textarea {
   margin-top: 5rem !important;
 }
 
+.modal-title,
 .alert-title {
+  font-family: 'Poppins', sans-serif;
   font-size: 18px !important;
+  font-weight: 500;
 }
 
+.modal-message,
 .alert-message {
   font-size: 14px !important;
 }
@@ -327,16 +350,18 @@ ion-textarea {
   --box-shadow: none;
 }
 
-ion-modal.popup {
-  --width: fit-content;
-  --min-width: 80vw;
-  --height: fit-content;
-  --border-radius: 6px;
-  --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
-}
+ion-modal {
+  &.popup {
+    --width: fit-content;
+    --min-width: 80vw;
+    --height: fit-content;
+    --border-radius: 6px;
+    --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
+  }
 
-ion-modal.popup .wrapper {
-  margin-bottom: 10px;
+  .wrapper {
+    margin-bottom: 10px;
+  }
 }
 
 .form-alert {
@@ -366,4 +391,8 @@ ion-modal.popup .wrapper {
       justify-content: center;
     }
   }
+}
+
+.alert-wrapper {
+  --min-width: 80vw;
 }

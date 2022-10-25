@@ -24,19 +24,27 @@ export class SuppliesRequestFormComponent implements OnInit {
     private modalCtrl: ModalController,
     private supplyDatabase: SupplyDatabase,
     private typeService: TypeService,
-    ) { }
+  ) {
+  }
 
-  get jobType() { return this.requestForm.get('jobType'); }
-  get type() { return this.requestForm.get('type'); }
-  get quantity() { return this.requestForm.get('quantity'); }
+  get jobType() {
+    return this.requestForm.get('jobType');
+  }
+
+  get type() {
+    return this.requestForm.get('type');
+  }
+
+  get quantity() {
+    return this.requestForm.get('quantity');
+  }
 
   async ngOnInit() {
     this.jobTypes = await this.typeService.getByType('supplies_request_job_type');
-    console.log(this.jobTypes);
   }
 
-  async onSubmit(){
-    if(this.requestForm.invalid){
+  async onSubmit() {
+    if (this.requestForm.invalid) {
       this.requestForm.markAllAsTouched();
       this.requestForm.controls.jobType.markAsDirty();
       return;
@@ -51,6 +59,10 @@ export class SuppliesRequestFormComponent implements OnInit {
 
     request = await this.supplyDatabase.createRequest(request);
 
-    this.modalCtrl.dismiss(request, 'submit');
+    await this.modalCtrl.dismiss(request, 'submit');
+  }
+
+  onCancel() {
+    this.modalCtrl.dismiss();
   }
 }

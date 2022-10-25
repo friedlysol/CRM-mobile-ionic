@@ -27,6 +27,9 @@
         <ion-card-title>#{{ workOrder.work_order_number }}</ion-card-title>
       </ion-card-header>
       <ion-card-content>
+        <ion-row *ngIf="workOrder.wo_type">
+          <b>Type</b>: {{ workOrder.wo_type }}
+        </ion-row>
         <ion-row *ngIf="!params.short">
           <b>Status</b>: {{ workOrder.status }} ({{ workOrder.tech_status }})
         </ion-row>

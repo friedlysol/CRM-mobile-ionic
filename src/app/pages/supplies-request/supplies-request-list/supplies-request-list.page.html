@@ -3,10 +3,9 @@
 </ion-header>
 
 <ion-content>
-
   <ion-card *ngFor="let request of requests">
     <ion-card-header>
-      <ion-card-subtitle class="ion-text-right">{{request.created_at}}</ion-card-subtitle>
+      <ion-card-subtitle class="ion-text-right">{{utilsService.getLocalDatetime(request.created_at)}}</ion-card-subtitle>
       <ion-card-title>
         <div><b>{{request.type}}</b></div>
         <div>x{{request.quantity}}</div>
@@ -18,7 +17,7 @@
           <ion-col size="4" class="description-label">
             Approved:
           </ion-col>
-          <ion-col 
+          <ion-col
             class="ion-text-left {{request.acknowledgment === 0? 'acknowledgment-pending': 'acknowledgment-yes'}}">
             {{request.acknowledgment === 0? 'Pending...': 'Yes'}}
           </ion-col>
@@ -29,7 +28,7 @@
             Shipping Date:
           </ion-col>
           <ion-col class="ion-text-left">
-            {{request.shipping_date || '-'}}
+            {{utilsService.getLocalDatetime(request.shipping_date) || '-'}}
           </ion-col>
         </ion-row>
 
@@ -37,13 +36,13 @@
           <ion-col size="4" class="description-label">
             Status:
           </ion-col>
-          <ion-col 
+          <ion-col
             class="ion-text-left {{
-              request.delivery_status === 'delivered'? 
-              'status-delivered': 
-              request.delivery_status === 'partially_delivered'? 
+              request.delivery_status === 'delivered'?
+              'status-delivered':
+              request.delivery_status === 'partially_delivered'?
               'status-partially-delivered':
-              request.delivery_status === 'not_delivered'? 
+              request.delivery_status === 'not_delivered'?
               'status-not-delivered':
               ''
             }}">
@@ -62,8 +61,9 @@
 
         <ion-row *ngIf="request.shipping_date && request.acknowledgment === 1 && !request.delivery_status">
           <ion-col>
-            <ion-button 
-              class="confirm-btn"
+            <ion-button
+              color="green"
+              expand="full"
               (click)="openStatusModal(request)">
               CONFIRM
             </ion-button>
@@ -99,9 +99,12 @@
       </ion-select>
     </ion-col>
     <ion-col>
-      <ion-button 
+      <ion-button
         class="new-request-btn"
-        (click)="openFormModal()">
+        color="medium"
+        expand="full"
+        (click)="openFormModal()"
+      >
         New request
       </ion-button>
     </ion-col>
