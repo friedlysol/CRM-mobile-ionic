@@ -1,0 +1,27 @@
+CREATE TABLE `incidents`
+(
+    `uuid`                                      TEXT,
+    `id`                                        INTEGER,
+    `status_type_id`                            INTEGER,
+    `incident_type_id`                          INTEGER,
+    `incident_date`                             TEXT,
+    `incident_time`                             TEXT,
+    `incident_location`                         TEXT,
+    `description`                               TEXT,
+    `injury_persons`                            TEXT             DEFAULT NULL,
+    `injury_description`                        TEXT             DEFAULT NULL,
+    `analysis_root_cause_type_id`               INTEGER          DEFAULT NULL,
+    `analysis_risk_type_id`                     INTEGER          DEFAULT NULL,
+    `analysis_activity_being_performed_type_id` INTEGER          DEFAULT NULL,
+    `analysis_corrective_action_description`    TEXT             DEFAULT NULL,
+    `damage_property_owner`                     TEXT             DEFAULT NULL,
+    `damage_description`                        TEXT             DEFAULT NULL,
+    `damage_cause`                              TEXT             DEFAULT NULL,
+    `person_involved`                           TEXT             DEFAULT NULL,
+    `witnesses`                                 TEXT             DEFAULT NULL,
+    `note`                                      TEXT             DEFAULT NULL,
+    `sync`                                      INTEGER NOT NULL DEFAULT 0,
+    `created_at`                                TEXT,
+    `updated_at`                                TEXT             DEFAULT NULL,
+    PRIMARY KEY (uuid)
+);
