@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS `accounts`
 (
+    `uuid`                   TEXT,
     `person_id`              INTEGER,
     `username`               TEXT,
     `phone`                  TEXT,

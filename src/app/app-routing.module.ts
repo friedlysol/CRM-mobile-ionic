@@ -38,6 +38,10 @@ const routes: Routes = [
     path: 'sign-in',
     loadChildren: () => import('./pages/auth/auth.module').then(m => m.AuthPageModule),
   },
+  {
+    path: 'time-sheets',
+    loadChildren: () => import('./pages/time-sheets/time-sheets.module').then( m => m.TimeSheetsPageModule)
+  },
   {path: '', redirectTo: '/work-order/list', pathMatch: 'full'},
   {path: '**', redirectTo: '/work-order'},
 ];

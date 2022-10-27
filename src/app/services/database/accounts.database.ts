@@ -15,12 +15,16 @@ export class AccountsDatabase {
     return this.databaseService.findOrNull(`select * from accounts where person_id = ?`, [personId]);
   }
 
+  getActive(): Promise<AccountInterface> {
+    return this.databaseService.findOrNull(`select * from accounts where is_active = 1`);  }
+
   /**
    * Save account (create or update if account exists)
    *
    * @param accountData
    */
   saveAccount(accountData: AccountInterface) {
+    accountData.uuid = this.databaseService.getUuid();
     return this.databaseService.findOrNull(`select * from accounts where person_id = ?`, [accountData.person_id])
       .then(async (account: AccountInterface) => {
         if (account) {

@@ -133,7 +133,7 @@ export class TimeSheetsDatabase {
     `);
   };
 
-  getLastRunningTimeSheet(): Promise<TimeSheetInterface> {
+  getLastRunningTimeSheet() {
     return this.databaseService.findOrNull(
       ' select * from time_sheets' +
       ' where stop_at is null ' +
@@ -206,7 +206,7 @@ export class TimeSheetsDatabase {
     `);
   };
 
-  async stop(timeSheet: TimeSheetInterface): Promise<any> {
+  async stop(timeSheet: TimeSheetInterface): Promise<TimeSheetInterface> {
     const query = sqlBuilder
       .update('time_sheets', {
         description: timeSheet.description,
@@ -217,7 +217,8 @@ export class TimeSheetsDatabase {
       })
       .where('uuid', timeSheet.uuid);
 
-    return this.databaseService.query(query.toString(), query.toParams());
+    return this.databaseService.query(query.toString(), query.toParams())
+      .then(() => this.getByUuid(timeSheet.uuid));;
   };
 
   async stopForWorkOrder(workOrder: WorkOrderInterface): Promise<any> {

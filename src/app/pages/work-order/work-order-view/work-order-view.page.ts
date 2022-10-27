@@ -176,7 +176,7 @@ export class WorkOrderViewPage implements OnInit, OnDestroy {
       await this.workOrderService.changeStatusToComplete(this.workOrder);
     } else {
       const lastTimeSheet = await this.timeSheetDatabase.getLastTimeSheetForWorkOrderUuid(this.workOrder.uuid);
-
+      console.log(lastTimeSheet)
       if(lastTimeSheet && !lastTimeSheet.stop_at) {
         const description = await this.timeSheetService.getDescription(this.currentTechStatus);
 

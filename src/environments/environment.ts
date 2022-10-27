@@ -55,6 +55,13 @@ export const environment = {
       isActive: true
     },
     {
+      key: 'time-sheets',
+      label: 'Time Sheets',
+      icon: 'calendar-outline',
+      url: ['/time-sheets', 'list'],
+      isActive: true
+    },
+    {
       key: 'job-search',
       label: 'Job Search',
       icon: 'search-outline',

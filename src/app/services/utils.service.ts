@@ -36,4 +36,8 @@ export class UtilsService {
   getLocalDate(dateUtc: string){
     return moment.utc(dateUtc).local().format(environment.dateFormat);
   }
+
+  getDatesDifferenceInSeconds(startDate: string, endDate: string){
+    return moment.duration(moment(endDate).diff(startDate)).asSeconds();
+  }
 }

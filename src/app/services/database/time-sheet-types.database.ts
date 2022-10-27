@@ -19,6 +19,14 @@ export class TimeSheetTypesDatabase {
     `);
   }
 
+  getAllByIsWorkOrderRelated(isWorkOrderRelated: boolean): Promise<TimeSheetTypeInterface[]>{
+    return this.databaseService.findAsArray(`
+        select *
+        from time_sheet_types
+        where is_work_order_related = ?
+    `, [isWorkOrderRelated ? 1 : 0]);
+  }
+
   deleteAll(): Promise<any> {
     return this.databaseService.query(`
         delete from time_sheet_types

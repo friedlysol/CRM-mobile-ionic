@@ -40,7 +40,6 @@ export class SuppliesRequestEditStatusFormComponent implements OnInit {
     this.statuses = (await this.typeService.getByType('supplies_request_status'))
       .filter(status => status.type_key !== 'supplies_request_status.not_confirmed')
       .map(status => ({...status, type_key: status.type_key.split('.')[1]}));
-    console.log(this.statuses);
   }
 
   async onSubmit(){
