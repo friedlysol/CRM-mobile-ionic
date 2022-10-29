@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS `accounts`
     `default_country_prefix` TEXT,
     `created_at`             TEXT,
     `update_at`              TEXT,
-    PRIMARY KEY (person_id)
+    PRIMARY KEY (uuid)
 );
 
 CREATE TABLE IF NOT EXISTS `logs`
