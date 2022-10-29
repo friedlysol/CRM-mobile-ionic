@@ -5,11 +5,11 @@
 <ion-content>
   <ion-row class="tab-content">
 
-    <ion-col [class]="{active: tab === 'daily'}" (click)="tab = 'daily'">
+    <ion-col [class]="{active: tab === 'daily'}" (click)="onTabClick('daily')">
       <ion-label> Daily </ion-label>
     </ion-col>
 
-    <ion-col [class]="{active: tab === 'weekly'}" (click)="tab = 'weekly'">
+    <ion-col [class]="{active: tab === 'weekly'}" (click)="onTabClick('weekly')">
       <ion-label> Weekly </ion-label>
     </ion-col>
 
@@ -18,14 +18,14 @@
   <ion-grid class="ion-padding">
     <ion-row>
   
-      <ion-col>
+      <ion-col class="ion-padding-bottom">
         <ion-label>
           <div><b>Time Sheets</b></div>
-          <div><small>For {{currentDate}}</small></div>
+          <div><small>For {{dateToDisplay}}</small></div>
         </ion-label>
       </ion-col>
   
-      <ion-col>
+      <ion-col *ngIf="currentDate === dateToDisplay">
 
         <ion-button 
           *ngIf="!activeTimeSheet" 
@@ -39,7 +39,7 @@
           *ngIf="activeTimeSheet && activeTimeSheet.object_type === 'work_order'" 
           class="float-end" 
           color="light"
-          [routerLink]="['/wok-orders', 'view', activeTimeSheet.object_uuid]">
+          [routerLink]="['/work-order', 'view', activeTimeSheet.object_uuid]">
           Finnish WO
         </ion-button>
 
@@ -55,23 +55,26 @@
   
     </ion-row>
 
-    <ion-grid class="time-sheets">
+    <ion-grid *ngIf="timeSheets.length > 0" class="time-sheets">
       <ion-row *ngFor="let timeSheet of timeSheets">
 
         <ion-col size="4">
-          <ion-label>
-            {{getType(timeSheet.type_id)?.name || ''}}
-          </ion-label>
+
+          <div *ngIf="timeSheet.work_order_number">
+            <ion-label>
+              WO# {{timeSheet.work_order_number}}
+            </ion-label>
+          </div>
+
+          <div *ngIf="getType(timeSheet.type_id) as type">
+            <ion-label>
+              {{type.name}}
+            </ion-label>
+          </div>
+          
         </ion-col>
   
         <ion-col>
-
-          <div *ngIf="timeSheet.object_type === 'work_order' && timeSheet.work_order_number">
-            <ion-label>
-              <b>WO#:</b>
-              {{timeSheet.work_order_number}}
-            </ion-label>
-          </div>
   
           <div>
             <ion-label>
@@ -90,7 +93,7 @@
           <div *ngIf="timeSheet.stop_at">
             <ion-label>
               <b>Time:</b>
-              {{getDateDifferenceString(timeSheet.start_at, timeSheet.stop_at)}}
+              {{secondsToTime(timeSheet.time)}}
             </ion-label>
           </div>
   
@@ -106,14 +109,73 @@
       </ion-col>
   
     </ion-row>
+
+    <ion-row>
+  
+      <ion-col size="4">
+        <ion-label><b>By Type</b></ion-label>
+      </ion-col>
+  
+    </ion-row>
+
     <ion-row>
   
       <ion-col size="4">
         <ion-label><b>Total: </b></ion-label>
       </ion-col>
       
-      <ion-col>0</ion-col>
+      <ion-col>
+        <ion-label>{{getTotalTime()}}</ion-label>
+      </ion-col>
     </ion-row>
+
+    <ng-container *ngFor="let type of types">
+      <ion-row *ngIf="getTotalTimeOfType(type.id) as total">
+  
+        <ion-col size="4">
+          <ion-label><b>{{type.name}}: </b></ion-label>
+        </ion-col>
+        
+        <ion-col>
+          <ion-label>{{this.secondsToTime(total)}}</ion-label>
+        </ion-col>
+        
+      </ion-row>
+    </ng-container>
+
+    <ion-row class="ion-margin-top">
+  
+      <ion-col size="4">
+        <ion-label><b>By WO#</b></ion-label>
+      </ion-col>
+
+    </ion-row>
+
+    <ion-row>
+  
+      <ion-col size="4">
+        <ion-label><b>Total: </b></ion-label>
+      </ion-col>
+      
+      <ion-col>
+        <ion-label>{{getTotalTimeOfWo()}}</ion-label>
+      </ion-col>
+    </ion-row>
+
+    <ng-container *ngFor="let woTotal of getTotalTimeByWoNumber() | keyvalue">
+      <ion-row *ngIf="woTotal.value">
+  
+        <ion-col size="4">
+          <ion-label><b>#{{woTotal.key}}: </b></ion-label>
+        </ion-col>
+        
+        <ion-col>
+          <ion-label>{{secondsToTime(woTotal.value)}}</ion-label>
+        </ion-col>
+        
+      </ion-row>
+    </ng-container>
+
   </ion-grid>
 </ion-content>
 
@@ -123,15 +185,21 @@
   <ion-row>
 
     <ion-col>
-      <ion-button expand="full" color="medium">Prev</ion-button>
+      <ion-button expand="full" color="medium" (click)="onPrevClick()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+        Prev
+      </ion-button>
     </ion-col>
 
     <ion-col>
-      <ion-button expand="full" color="medium">Current</ion-button>
+      <ion-button expand="full" color="medium" (click)="onCurrentClick()">Current</ion-button>
     </ion-col>
 
     <ion-col>
-      <ion-button expand="full" color="medium">Next</ion-button>
+      <ion-button expand="full" color="medium" (click)="onNextClick()">
+        Next
+        <ion-icon name="arrow-forward-outline"></ion-icon>
+      </ion-button>
     </ion-col>
 
   </ion-row>

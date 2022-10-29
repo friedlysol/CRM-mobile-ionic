@@ -16,10 +16,10 @@ import * as moment from 'moment';
 })
 export class TimeSheetsListPage implements OnInit {
   tab = 'daily';
-  currentDate: string;
   activeTimeSheet: TimeSheetInterface;
   timeSheets: TimeSheetInterface[] = [];
   types: TimeSheetTypeInterface[] = [];
+  differenceFromCurrent = 0;
 
   constructor(
     private accountsDatabase: AccountsDatabase,
@@ -29,15 +29,84 @@ export class TimeSheetsListPage implements OnInit {
     public utilsService: UtilsService,
   ) { }
 
+  get currentDate() {
+    const weekOrDay = this.tab === 'daily' ? 'day' : 'week';
+
+    if(this.tab === 'daily'){
+
+      return this.utilsService.getLocalDate(new Date().toDateString());
+    }else if(this.tab === 'weekly'){
+
+      const startDate = moment().startOf(weekOrDay).format(environment.dateFormat);
+      const endDate = moment().endOf(weekOrDay).format(environment.dateFormat);
+      const weekNumber = moment(startDate).week();
+
+      return `week #${weekNumber} ${startDate} - ${endDate}`;
+    }
+  }
+
+  get dateToDisplay() {
+    const weekOrDay = this.tab === 'daily' ? 'day' : 'week';
+    if(this.tab === 'daily'){
+
+      return moment().add(this.differenceFromCurrent, `${weekOrDay}s`).format(environment.dateFormat);
+    }else if(this.tab === 'weekly'){
+
+      const startDate = moment().add(this.differenceFromCurrent, `${weekOrDay}s`)
+        .startOf(weekOrDay).format(environment.dateFormat);
+      const endDate = moment().add(this.differenceFromCurrent, `${weekOrDay}s`)
+        .endOf(weekOrDay).format(environment.dateFormat);
+      const weekNumber = moment(startDate).week();
+
+      return `week #${weekNumber} ${startDate} - ${endDate}`;
+    }
+  }
+
   async ngOnInit() {
-    this.currentDate = this.utilsService.getLocalDate(new Date().toDateString());
+    moment.updateLocale('en', {
+      week: {
+        dow: environment.firstDayOfWeek,
+      }
+    });
     this.activeTimeSheet = await this.timeSheetsDatabase.getLastRunningTimeSheet();
-    const utcToday = moment().format('YYYY-MM-DD hh:mm:ss');
-    this.timeSheets = await this.timeSheetsDatabase.getAllForDateRange(utcToday.toString(), utcToday.toString());
+    await this.loadTimeSheets();
+    this.types = await this.timeSheetsTypesDatabase.getTimeSheetTypes();
+  }
+
+  onTabClick(tabName: string){
+    this.differenceFromCurrent = 0;
+    this.tab = tabName;
+    this.loadTimeSheets();
+  }
+
+  onPrevClick(){
+    this.differenceFromCurrent--;
+    this.loadTimeSheets();
+  }
+
+  onCurrentClick(){
+    this.differenceFromCurrent = 0;
+    this.loadTimeSheets();
+  }
+
+  onNextClick(){
+    this.differenceFromCurrent++;
+    this.loadTimeSheets();
+  }
+
+  async loadTimeSheets(){
+    const weekOrDay = this.tab === 'daily' ? 'day' : 'week';
+    const startDate = moment().add(this.differenceFromCurrent, `${weekOrDay}s`)
+      .startOf(weekOrDay).format('YYYY-MM-DD HH:mm:ss');
+    const endDate = moment().add(this.differenceFromCurrent, `${weekOrDay}s`)
+      .endOf(weekOrDay).format('YYYY-MM-DD HH:mm:ss');
+
+    this.timeSheets = (await this.timeSheetsDatabase.getAllForDateRange(startDate.toString(), endDate.toString()))
+      .map(timeSheet => ({
+        ...timeSheet,
+        time: this.utilsService.getDatesDifferenceInSeconds(timeSheet.start_at, timeSheet.stop_at)
+      }));
     console.log(this.timeSheets)
-    this.types = await this.timeSheetsTypesDatabase.getAllByIsWorkOrderRelated(false);
-    console.log(this.types)
-    console.log(this.activeTimeSheet)
   }
 
   onStartActivityClick(){
@@ -50,16 +119,19 @@ export class TimeSheetsListPage implements OnInit {
     }
 
     this.activeTimeSheet = await this.timeSheetsDatabase.stop(this.activeTimeSheet);
+    this.activeTimeSheet.time = this.utilsService.getDatesDifferenceInSeconds(this.activeTimeSheet.start_at, this.activeTimeSheet.stop_at);
     const index = this.timeSheets.findIndex(ts => ts.uuid === this.activeTimeSheet.uuid);
     this.timeSheets[index] = this.activeTimeSheet;
     this.activeTimeSheet = null;
   }
 
   async showCreateTimeSheetAlert(){
+    const notWoRelatedTypes = this.types.filter(type => type.is_work_order_related === 0);
+
     const alert = await this.alertCtrl.create({
       header: 'Select type',
       backdropDismiss: false,
-      inputs: this.types.map(type => ({
+      inputs: notWoRelatedTypes.map(type => ({
         type: 'radio',
         name: type.name,
         label: type.name,
@@ -143,13 +215,71 @@ export class TimeSheetsListPage implements OnInit {
     return this.types.find((type) => type.id === typeId);
   }
 
-  getDateDifferenceString(startDate: string, endDate: string){
-    const difference = this.utilsService.getDatesDifferenceInSeconds(startDate, endDate);
-    const hours = Math.floor(difference/3600);
-    const minutes = Math.floor(difference/60)%60;
-    const seconds = difference%60;
-    return `${hours}h ${minutes}m ${seconds}s`;
+  getStartAt(timeSheet: TimeSheetInterface){
+    return this.utilsService.getLocalDatetime(timeSheet.time < 0 ? timeSheet.stop_at : timeSheet.start_at);
   }
 
+  getStopAt(timeSheet: TimeSheetInterface){
+    return this.utilsService.getLocalDatetime(timeSheet.time < 0 ? timeSheet.start_at : timeSheet.stop_at);
+  }
 
+  secondsToTime(totalSeconds: number){
+    const hours = Math.floor(Math.abs(totalSeconds)/3600);
+    const minutes = Math.floor(Math.abs(totalSeconds)/60)%60;
+    const seconds = Math.abs(totalSeconds)%60;
+    const sign = totalSeconds > 0 ? '' : '-';
+    return `${sign}${hours}h ${minutes}m ${seconds}s`;
+  }
+
+  getTotalTime(){
+    let total = 0;
+
+    for(const timeSheet of this.timeSheets){
+      total += timeSheet.time || 0;
+    }
+
+    return this.secondsToTime(total);
+  }
+
+  getTotalTimeOfWo(){
+    let total = 0;
+
+    for(const timeSheet of this.timeSheets){
+      if(timeSheet.object_type === 'work_order'){
+        total += timeSheet.time || 0;
+      }
+    }
+
+    return this.secondsToTime(total);
+  }
+
+  getTotalTimeOfType(typeId: number){
+    let total = 0;
+
+    for(const timeSheet of this.timeSheets){
+      if(timeSheet.type_id === typeId){
+        total += timeSheet.time || 0;
+      }
+    }
+
+    return total;
+  }
+
+  getTotalTimeByWoNumber(){
+    const total = new Map<string, number>();
+
+    for(const timeSheet of this.timeSheets){
+      if(timeSheet.object_type !== 'work_order'){
+        continue;
+      }
+      if(total.has(timeSheet.work_order_number)){
+        total.set(timeSheet.work_order_number, total.get(timeSheet.work_order_number)+timeSheet.time || 0);
+      }else{
+        total.set(timeSheet.work_order_number, timeSheet.time || 0);
+      }
+    }
+
+    return total;
+  }
 }
+
