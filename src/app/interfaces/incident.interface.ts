@@ -6,7 +6,7 @@ export interface IncidentInterface {
   incident_time: string;
   location: string;
   description: string;
-  injury_persons?: InjuryPersonInterface[],
+  injury_persons?: InjuryPersonInterface[];
   injury_description?: string;
   analysis_root_cause_type_id?: number;
   analysis_risk_type_id?: number;
@@ -15,8 +15,8 @@ export interface IncidentInterface {
   damage_property_owner?: string;
   damage_description?: string;
   damage_cause?: string;
-  person_involved?: IncidentPerson[],
-  witnesses?: WitnessInterface[],
+  person_involved?: IncidentPerson[];
+  witnesses?: WitnessInterface[];
   note?: string;
   hash?: string;
   sync?: number;
@@ -31,7 +31,7 @@ export interface InjuryPersonInterface extends IncidentPerson {
 }
 
 export interface WitnessInterface extends IncidentPerson {
-  statement?: string
+  statement?: string;
 }
 
 export interface IncidentPerson {

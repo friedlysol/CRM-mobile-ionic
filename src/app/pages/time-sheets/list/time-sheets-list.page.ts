@@ -227,7 +227,7 @@ export class TimeSheetsListPage implements OnInit {
     const hours = Math.floor(Math.abs(totalSeconds)/3600);
     const minutes = Math.floor(Math.abs(totalSeconds)/60)%60;
     const seconds = Math.abs(totalSeconds)%60;
-    const sign = totalSeconds > 0 ? '' : '-';
+    const sign = totalSeconds >= 0 ? '' : '-';
     return `${sign}${hours}h ${minutes}m ${seconds}s`;
   }
 

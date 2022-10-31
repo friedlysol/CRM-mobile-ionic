@@ -1,0 +1,44 @@
+<ion-header>
+  <app-header [title]="'Incidents'"></app-header>
+</ion-header>
+
+<ion-content>
+  
+</ion-content>
+
+<ion-footer>
+  <app-sync></app-sync>
+
+  <ion-row>
+
+    <ion-col>
+      <ion-select
+        #statusSelect
+        interface="popover"
+        class="status-select"
+        placeholder="Select status"
+        (ionChange)="onStatusChange($event)"
+        [value]="null">
+        <ion-select-option
+          [value]="null">
+          All
+        </ion-select-option>
+        <ion-select-option
+          *ngFor="let status of statuses"
+          [value]="status">
+          {{ status.type_value }}
+        </ion-select-option>
+      </ion-select>
+    </ion-col>
+
+    <ion-col>
+      <ion-button 
+        color="medium" 
+        expand="full"
+        [routerLink]="['/incidents', 'form']">
+        Log Incident
+      </ion-button>
+    </ion-col>
+
+  </ion-row>
+</ion-footer>

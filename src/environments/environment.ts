@@ -62,6 +62,13 @@ export const environment = {
       isActive: true
     },
     {
+      key: 'incidents',
+      label: 'Incidents',
+      icon: 'warning-outline',
+      url: ['/incidents', 'list'],
+      isActive: true
+    },
+    {
       key: 'job-search',
       label: 'Job Search',
       icon: 'search-outline',
