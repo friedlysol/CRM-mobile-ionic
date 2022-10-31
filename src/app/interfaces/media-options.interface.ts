@@ -1,5 +1,6 @@
 export interface MediaOptionsInterface {
   buttonLabel: string;
+  buttonColor?: string;
   required?: boolean;
   requiredOnce?: boolean;
   minQuantity?: number;

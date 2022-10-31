@@ -180,18 +180,16 @@ export class WorkOrderService implements SyncInterface {
 
     if (onlyOneActiveTimer) {
       if (runningTimeSheets.length) {
-        const activeWorkOrder = await this.workOrderDatabase.getByUuid(runningTimeSheets[0].object_uuid);
-
         const alert = await this.alertController.create({
           header: `You can't start this work order`,
-          message: `Another work order (#" + ${activeWorkOrder.work_order_number}) is active. Check in Menu/Time sheet`,
+          message: `Another work order is active. Check in Menu/Time sheet`,
           cssClass: 'form-alert',
           buttons: [
             {
               text: 'Time sheet',
               cssClass: 'alert-button-cancel',
               handler: (value: any) => {
-                this.router.navigateByUrl('/time-sheets');
+                this.router.navigateByUrl('/time-sheets/list');
               }
             },
             {

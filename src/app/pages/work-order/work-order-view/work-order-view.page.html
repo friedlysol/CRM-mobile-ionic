@@ -15,9 +15,9 @@
             <strong>Address:</strong><br/>
             <ng-container *ngIf="woAddress.address">{{ woAddress.address }}<br/></ng-container>
             <ng-container *ngIf="woAddress.city">{{ woAddress.city }}</ng-container>
-            <ng-container *ngIf="woAddress.city && woAddress.state">, </ng-container>
+            <ng-container *ngIf="woAddress.city && woAddress.state">,</ng-container>
             <ng-container *ngIf="woAddress.state">
-              {{ woAddress.state }} 
+              {{ woAddress.state }}
               <ng-container *ngIf="woAddress.zip_code">{{ woAddress.zip_code }}</ng-container>
             </ng-container>
           </ion-label>
@@ -46,11 +46,13 @@
     </ion-item>
 
     <ion-item class="ion-item-small" lines="none" *ngIf="workOrder.wo_type">
-      <ion-label><strong>Type:</strong></ion-label>{{ workOrder.wo_type }}
+      <ion-label><strong>Type:</strong></ion-label>
+      {{ workOrder.wo_type }}
     </ion-item>
 
     <ion-item class="ion-item-small" lines="none">
-      <ion-label><strong>Client</strong></ion-label> {{ workOrder.client }}
+      <ion-label><strong>Client</strong></ion-label>
+      {{ workOrder.client }}
     </ion-item>
 
     <ion-item lines="none" *ngIf="workOrder.phone">
@@ -197,7 +199,7 @@
               photoType: 'wo_pictures',
               onlyFilesWithExt: 'jpg'
             }">
-            <ion-button color="primary" expand="full">Browse photos</ion-button>
+            <ion-button color="medium" expand="full">Browse photos</ion-button>
           </a>
         </ion-col>
         <ion-col class="ion-text-center">
@@ -226,17 +228,23 @@
               onlyFilesWithExt: 'pdf',
               readOnly: 'true'
             }">
-            <ion-button color="medium" expand="full">Documents</ion-button>
+            <ion-button color="light" expand="full">Documents</ion-button>
           </a>
         </ion-col>
         <ion-col class="ion-text-center">
-          <ion-button color="medium" expand="full">Notes</ion-button>
+          <ion-button
+              expand="full"
+              color="medium"
+              [routerLink]="['/message-center', 'list']"
+              [queryParams]="{objectType: 'work_order', objectUuid: workOrder.uuid, objectId: workOrder.id}"
+          >Notes
+          </ion-button>
         </ion-col>
       </ion-row>
 
       <ion-row class="ion-align-items-center">
         <ion-col class="ion-text-center">
-          <ion-button color="primary" expand="full" [routerLink]="['/survey', 'list', workOrder.uuid]">
+          <ion-button color="medium" expand="full" [routerLink]="['/survey', 'list', workOrder.uuid]">
             Certificate of Completion
           </ion-button>
         </ion-col>
@@ -244,17 +252,17 @@
 
       <ion-row class="ion-align-items-center">
         <ion-col class="ion-text-center">
-          <ion-button color="medium" expand="full">Job Evaluation Form</ion-button>
+          <ion-button color="light" expand="full">Job Evaluation Form</ion-button>
         </ion-col>
       </ion-row>
       <ion-row class="ion-align-items-center">
         <ion-col class="ion-text-center">
-          <ion-button color="medium" expand="full">Parts Request Form</ion-button>
+          <ion-button color="light" expand="full">Parts Request Form</ion-button>
         </ion-col>
       </ion-row>
       <ion-row class="ion-align-items-center">
         <ion-col class="ion-text-center">
-          <ion-button color="medium" expand="full">Assets</ion-button>
+          <ion-button color="light" expand="full">Assets</ion-button>
         </ion-col>
       </ion-row>
     </ion-grid>

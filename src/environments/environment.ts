@@ -10,6 +10,7 @@ export const environment = {
   companyName: 'American Home Design',
   authBy: 'email', //'device-id' | 'email' | 'phone-number'
   settings: {},
+  defaultPageSize: 20,
   galleryPageSize: 15,
   surveyPageSize: 10,
   dateFormat: 'MM/DD/YYYY',
@@ -35,17 +36,17 @@ export const environment = {
       isActive: true
     },
     {
+      key: 'time-sheets',
+      label: 'Time Sheets',
+      icon: 'calendar-outline',
+      url: ['/time-sheets', 'list'],
+      isActive: true
+    },
+    {
       key: 'supplies-request',
       label: 'Supplies Request',
       icon: 'construct-outline',
       url: ['/supplies-request', 'list'],
-      isActive: true
-    },
-    {
-      key: 'vehicle-inspection',
-      label: 'Vehicle Inspection',
-      icon: 'car-sport-outline',
-      url: ['/vehicle-inspection', 'daily'],
       isActive: true
     },
     {
@@ -54,13 +55,6 @@ export const environment = {
       icon: 'chatbubble-outline',
       url: ['/message-center', 'list'],
       isActive: true
-    },
-    {
-      key: 'job-search',
-      label: 'Job Search',
-      icon: 'search-outline',
-      url: ['/job-search', 'list'],
-      isActive: false
     },
     {
       key: 'settings',

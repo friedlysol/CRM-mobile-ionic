@@ -130,10 +130,10 @@ export class TimeSheetService implements SyncInterface {
       timeSheet.description = data.description;
     }
 
-    await this.timeSheetsDatabase.stop(timeSheet);
+    timeSheet = await this.timeSheetsDatabase.stop(timeSheet);
     await this.geolocationService.stopWatch();
 
-    return this.timeSheetsDatabase.getByUuid(timeSheet.uuid);
+    return timeSheet;
   }
 
   async getDescription(techStatus: TechStatusInterface) {
@@ -146,11 +146,11 @@ export class TimeSheetService implements SyncInterface {
           role: 'skip',
           cssClass: 'alert-button-cancel',
         },
-        {
-          text: 'Save',
-          role: 'save',
-          cssClass: 'alert-button-confirm',
-        }],
+          {
+            text: 'Save',
+            role: 'save',
+            cssClass: 'alert-button-confirm',
+          }],
         inputs: [{
           type: 'textarea',
           name: 'description',

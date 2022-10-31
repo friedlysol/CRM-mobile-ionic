@@ -51,6 +51,7 @@ export class AccountsDatabase {
    * @private
    */
   private async createAccount(accountData: AccountInterface): Promise<AccountInterface> {
+    accountData.uuid = this.databaseService.getUuid();
     accountData.created_at = this.databaseService.getTimeStamp();
 
     const query = sqlBuilder.insert('accounts', accountData);

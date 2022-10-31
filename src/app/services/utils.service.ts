@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '@env/environment';
 import * as moment from 'moment';
+import { PaginationInterface } from '@app/interfaces/pagination.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -35,5 +36,20 @@ export class UtilsService {
 
   getLocalDate(dateUtc: string){
     return moment.utc(dateUtc).local().format(environment.dateFormat);
+  }
+
+  getDatesDifferenceInSeconds(startDate: string, endDate: string){
+    return moment.duration(moment(endDate).diff(startDate)).asSeconds();
+  }
+
+  getPagination(total: any, page: number, limit: number): PaginationInterface {
+    return {
+      total: total,
+      totalPages: Math.round(total / page),
+      page: page,
+      limit: limit,
+      prev: page > 1,
+      next: page < Math.round(total / page)
+    }
   }
 }

@@ -98,11 +98,11 @@ export class SurveyViewPage implements OnInit {
 
       if (!answer.comment) {
         answer.answer = null;
-        question.answer = answer.answer;
+        question.answer = null;
       }
     } else {
       answer.comment = null;
-      question.comment = answer.comment;
+      question.comment = null;
     }
 
     this.updateAnswer(answer);
@@ -158,7 +158,7 @@ export class SurveyViewPage implements OnInit {
 
     modal.present();
 
-    return modal.onDidDismiss().then(e => e.role === 'submit' ? e.data : comment);
+    return modal.onDidDismiss().then(e => e.role === 'submit' ? e.data : null);
   }
 
   async openSubquestionsModal(options) {

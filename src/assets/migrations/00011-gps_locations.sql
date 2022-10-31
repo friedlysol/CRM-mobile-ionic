@@ -12,4 +12,4 @@ CREATE TABLE `gps_locations`
     `timestamp`         TEXT,
     `sync`              INTEGER NOT NULL DEFAULT 0,
     PRIMARY KEY (uuid)
-)
+);

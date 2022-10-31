@@ -10,4 +10,4 @@ CREATE TABLE `tech_statuses`
     `created_at`                TEXT,
     `updated_at`                TEXT,
     PRIMARY KEY (id)
-)
+);

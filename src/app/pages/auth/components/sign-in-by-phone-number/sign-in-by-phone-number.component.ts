@@ -71,7 +71,11 @@ export class SignInByPhoneNumberComponent implements OnInit {
         const alert = await this.alertController.create({
           header: 'Login Failed',
           message: 'Incorrect phone number',
-          buttons: ['Ok']
+          cssClass: 'form-alert',
+          buttons: [{
+            text: 'Ok',
+            cssClass: 'alert-button-confirm',
+          }]
         });
 
         await alert.present();
@@ -137,7 +141,11 @@ export class SignInByPhoneNumberComponent implements OnInit {
     const alert = await this.alertController.create({
       header: 'Login Failed',
       message: 'Verification code is incorrect',
-      buttons: ['Ok']
+      cssClass: 'form-alert',
+      buttons: [{
+        text: 'Ok',
+        cssClass: 'alert-button-confirm',
+      }]
     });
 
     await alert.present();

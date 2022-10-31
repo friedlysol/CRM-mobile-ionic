@@ -17,14 +17,14 @@ export class SurveyListPage implements OnInit {
   public workOrderUuid: string;
 
   constructor(
-    private route: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
     private surveyDatabase: SurveyDatabase,
     private workOrderDatabase: WorkOrderDatabase
   ) {
   }
 
   ngOnInit() {
-    this.route.paramMap.subscribe(async params => {
+    this.activatedRoute.paramMap.subscribe(async params => {
       this.workOrderUuid = params.get('workOrderUuid');
 
       this.workOrder = await this.workOrderDatabase.getByUuid(this.workOrderUuid);

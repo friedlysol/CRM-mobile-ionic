@@ -59,7 +59,11 @@ export class SignInByDeviceIdComponent implements OnInit {
     const alert = await this.alertController.create({
       header: 'Login Failed',
       message: `Your device was not authorized.<br />Please contact office.`,
-      buttons: ['Ok']
+      cssClass: 'form-alert',
+      buttons: [{
+        text: 'Ok',
+        cssClass: 'alert-button-confirm',
+      }]
     });
 
     await alert.present();

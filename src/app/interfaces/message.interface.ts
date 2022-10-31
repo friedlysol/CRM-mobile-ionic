@@ -44,6 +44,7 @@ export interface MessageInterface {
   work_order_state?: string;
   work_order_zip_code?: string;
   zip_code?: string;
+  total_photos?: number;
 }
 
 export interface MessageRepeat {

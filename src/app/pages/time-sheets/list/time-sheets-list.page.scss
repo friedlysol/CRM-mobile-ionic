@@ -1,0 +1,22 @@
+.time-sheets{
+  border: 1px solid var(--ion-color-grey-shade);
+  border-radius: 7px;
+}
+
+.tab-content {
+    color: #3d3b3b;
+    background-color: #e8e4dc;
+    height: 40px;
+    vertical-align: middle;
+  
+    ion-col {
+      display: flex !important;
+      justify-content: center !important;
+      align-items: center !important;
+  
+      &.active {
+        background-color: #82817e;
+        color: #e8e4dc;
+      }
+    }
+}

@@ -17,4 +17,4 @@ CREATE TABLE `addresses`
     `updated_at`          TEXT,
     `sync`                INTEGER NOT NULL DEFAULT 0,
     PRIMARY KEY (uuid)
-)
+);

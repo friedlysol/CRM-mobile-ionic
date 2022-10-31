@@ -83,4 +83,4 @@ CREATE TABLE `work_orders`
     `hash`                          TEXT,
     `sync`                          INTEGER NOT NULL DEFAULT 0,
     PRIMARY KEY (uuid)
-)
+);

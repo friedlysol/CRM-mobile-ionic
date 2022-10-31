@@ -99,14 +99,17 @@ export class GalleryListPage implements OnInit {
     const alert = await this.alertController.create({
       header: 'Confirm',
       message: 'Are you sure you want to delete this file?',
+      cssClass: 'form-alert',
       buttons: [
         {
           text: 'Cancel',
           role: 'cancel',
+          cssClass: 'alert-button-cancel',
         },
         {
           text: 'Submit',
           role: 'submit',
+          cssClass: 'alert-button-confirm',
         },
       ]
     });
@@ -127,6 +130,7 @@ export class GalleryListPage implements OnInit {
   async onAddClick() {
     const alert = await this.alertController.create({
       header: 'Select type',
+      cssClass: 'form-alert',
       inputs: this.types.map((type, i) => ({
           type: 'radio',
           label: type.type_value,
@@ -138,10 +142,12 @@ export class GalleryListPage implements OnInit {
         {
           text: 'Cancel',
           role: 'cancel',
+          cssClass: 'alert-button-cancel',
         },
         {
           text: 'Submit',
           role: 'submit',
+          cssClass: 'alert-button-confirm',
         },
       ]
     });
@@ -201,6 +207,7 @@ export class GalleryListPage implements OnInit {
       {
         text: 'Submit',
         role: 'submit',
+        cssClass: 'alert-button-confirm',
         handler: data => {
           if (data.description.length < minLengthDescription) {
             this.showErrorToast(`Description should by at least ${minLengthDescription} characters long.`);
@@ -213,11 +220,13 @@ export class GalleryListPage implements OnInit {
       buttons.unshift({
         text: 'Skip',
         role: 'skip',
+        cssClass: 'alert-button-cancel',
       });
     }
     const alert = await this.alertController.create({
       header: 'Enter description',
       backdropDismiss: false,
+      cssClass: 'form-alert',
       inputs: [
         {
           name: 'description',

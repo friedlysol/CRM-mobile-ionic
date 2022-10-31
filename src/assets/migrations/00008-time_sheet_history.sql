@@ -11,4 +11,4 @@ CREATE TABLE `time_sheet_history`
     `created_at`      TEXT,
     `updated_at`      TEXT NOT NULL,
     PRIMARY KEY (id)
-)
+);

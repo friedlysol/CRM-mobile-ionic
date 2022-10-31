@@ -6,4 +6,4 @@ CREATE TABLE `time_sheet_types`
     `is_work_order_related`   INTEGER DEFAULT 0,
     `name`                    TEXT    NOT NULL,
     PRIMARY KEY (id)
-)
+);

@@ -11,13 +11,17 @@ import * as _ from 'underscore';
 import { SyncApiInterface } from '@app/providers/api/interfaces/sync-api.interface';
 import { HashMapInterface } from '@app/interfaces/hash-map.interface';
 import { ActivityApiInterface } from '@app/providers/api/interfaces/response-activity-api.interface';
-import { WorkOrderApiInterface } from '@app/providers/api/interfaces/response-work-order-api.interface';
+import { UtilsService } from '@app/services/utils.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MessagesDatabase {
-  constructor(private accountsDatabase: AccountsDatabase, private databaseService: DatabaseService) {
+  constructor(
+    private accountsDatabase: AccountsDatabase,
+    private databaseService: DatabaseService,
+    private utilsService: UtilsService
+  ) {
   }
 
   /**
@@ -83,7 +87,26 @@ export class MessagesDatabase {
   }
 
   getByUuid(messageUuid): Promise<MessageInterface> {
-    return this.databaseService.findOrNull('select * from messages where uuid = ?', [messageUuid]);
+    return this.databaseService.findOrNull(`
+      select 
+        messages.*, 
+        persons.first_name as person_first_name, 
+        persons.last_name as person_last_name,
+        from_persons.id as from_person_id, 
+        from_persons.first_name as from_person_first_name, 
+        from_persons.last_name as from_person_last_name,
+                (
+          select count(1) as total
+          from files
+          where files.object_uuid = messages.uuid and files.object_type = 'activity' and files.is_deleted = 0
+        ) as total_photos
+      from messages
+      left join persons from_persons on from_persons.id = messages.creator_person_id
+      left join persons on persons.id = messages.person_id  
+      where messages.uuid = ?
+    `, [
+      messageUuid
+    ]);
   }
 
   /**
@@ -98,7 +121,12 @@ export class MessagesDatabase {
         persons.last_name as person_last_name,
         from_persons.id as from_person_id, 
         from_persons.first_name as from_person_first_name, 
-        from_persons.last_name as from_person_last_name
+        from_persons.last_name as from_person_last_name,
+                (
+          select count(1) as total
+          from files
+          where files.object_uuid = messages.uuid and files.object_type = 'activity' and files.is_deleted = 0
+        ) as total_photos
       from messages
       left join persons from_persons on from_persons.id = messages.creator_person_id
       left join persons on persons.id = messages.person_id
@@ -115,15 +143,17 @@ export class MessagesDatabase {
    * @param tabName
    * @param objectType
    * @param objectUuid
+   * @param page
+   * @param limit
    */
   async getAllByTab(
-    tabName: 'new' | 'completed' | 'sent',
-    objectType: string = null,
-    objectUuid: string = null
+    tabName?: 'new' | 'completed' | 'sent',
+    objectType?: string,
+    objectUuid?: string,
+    page: number = 1,
+    limit: number = 15,
+    search?: string
   ): Promise<MessageInterface[]> {
-    const account = await this.accountsDatabase.getActive();
-
-    const params: Array<any> = [account.person_id];
     let query = `
       select 
         messages.*, 
@@ -145,7 +175,7 @@ export class MessagesDatabase {
         (
           select count(1) as total
           from files
-          where files.object_uuid = m.uuid and files.object_type = 'activity' and files.is_deleted = 0
+          where files.object_uuid = messages.uuid and files.object_type = 'activity' and files.is_deleted = 0
         ) as total_photos
       from messages
       left join persons from_persons on from_persons.id = messages.creator_person_id
@@ -161,22 +191,98 @@ export class MessagesDatabase {
       )
     `;
 
-    switch (tabName) {
-      case 'new': {
-        query += 'where m.completed = 0 and m.creator_person_id != ?';
+    const filters = await this.getFiltersForMessages(tabName, objectType, objectUuid, search);
 
-        break;
-      }
-      case 'completed': {
-        query += 'where m.completed = 1 and m.creator_person_id != ?';
+    query += filters.query;
+    query += ` order by messages.created_at desc`
 
-        break;
-      }
-      case 'sent': {
-        query += 'where m.creator_person_id = ?';
+    if (limit) {
+      query += ` limit ${limit} offset ${(page - 1) * limit}`
+    }
 
-        break;
+    return this.databaseService.findAsArray(query, filters.params)
+      .then((messages: MessageInterface[]) => {
+        messages = messages.map(message => {
+          try {
+            message.client_and_address = JSON.parse(message.client_and_address);
+          } catch (e) {
+            message.client_and_address = {};
+          }
+
+          return message;
+        });
+
+        return messages;
+      });
+  }
+
+  /**
+   * Get all messages by tab name and objectType with objectUuid
+   *
+   * @param tabName
+   * @param objectType
+   * @param objectUuid
+   * @param page
+   * @param limit
+   */
+  async getCountByTab(
+    tabName?: 'new' | 'completed' | 'sent',
+    objectType?: string,
+    objectUuid?: string,
+    page: number = 1,
+    limit: number = 15,
+    search?: string
+  ): Promise<any> {
+    let query = `
+      select count(*) as total from messages
+    `;
+
+    const filters = await this.getFiltersForMessages(tabName, objectType, objectUuid, search);
+
+    query += filters.query;
+
+    return this.databaseService.findOrNull(query, filters.params)
+      .then((result: any) => {
+        const total = result?.total || 0;
+
+        return this.utilsService.getPagination(total, page, limit);
+      });
+  }
+
+  async getFiltersForMessages(
+    tabName?: 'new' | 'completed' | 'sent',
+    objectType?: string,
+    objectUuid?: string,
+    search?: string
+  ): Promise<{ query: string, params: Array<any> }> {
+    const account = await this.accountsDatabase.getActive();
+
+    const params: Array<any> = [];
+
+    let query = '';
+
+    if (tabName) {
+      params.push(account.person_id);
+
+      switch (tabName) {
+        case 'new': {
+          query += 'where messages.completed = 0 and messages.creator_person_id != ?';
+
+          break;
+        }
+        case 'completed': {
+          query += 'where messages.completed = 1 and messages.creator_person_id != ?';
+
+          break;
+        }
+        case 'sent': {
+          query += 'where messages.creator_person_id = ?';
+
+          break;
+        }
       }
+    } else {
+      query += 'where messages.uuid is not null';
     }
 
     if (objectType && objectUuid) {
@@ -193,22 +299,22 @@ export class MessagesDatabase {
       } else {
         query += `and messages.object_uuid = ?`;
       }
+
+      query += `and messages.object_type = ?`;
+      params.push(objectType);
+    } else {
+      query += `and messages.object_type is null`;
     }
 
-    return this.databaseService.findAsArray(query, params)
-      .then((messages: MessageInterface[]) => {
-        messages = messages.map(message => {
-          try {
-            message.client_and_address = JSON.parse(message.client_and_address);
-          } catch (e) {
-            message.client_and_address = {};
-          }
+    if(search) {
+      query += ` and messages.description like ?`;
+      params.push('%' + search + '%');
+    }
 
-          return message;
-        });
-
-        return messages;
-      });
+    return {
+      query,
+      params
+    }
   }
 
   /**
@@ -308,7 +414,7 @@ export class MessagesDatabase {
    *
    * @param message
    */
-  async createResult(message: MessageInterface): Promise<MessageInterface> {
+  async create(message: MessageInterface): Promise<MessageInterface> {
     const account = await this.accountsDatabase.getActive();
 
     if (!message.uuid) {

@@ -1,4 +1,5 @@
 export interface AccountInterface {
+  uuid?: string;
   person_id: number;
   username: string;
   phone?: string;

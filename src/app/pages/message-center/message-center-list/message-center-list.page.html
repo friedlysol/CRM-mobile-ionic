@@ -1,35 +1,67 @@
 <ion-header>
-  <app-header [title]="'Message center'"></app-header>
+  <app-header [title]="title"></app-header>
+  <div class="search-box">
+    <ion-row>
+      <ion-col>
+        <ion-input
+            class="clear"
+            [(ngModel)]="params.query"
+            [debounce]="300"
+            (ionChange)="loadList()" placeholder="Type to search">
+        </ion-input>
+      </ion-col>
+    </ion-row>
+  </div>
 </ion-header>
 
 <ion-content>
-  <ion-row>
-    <ion-col>
-      <app-capture-media
-          [typeId]="81"
-          type="photo"
-          [objectId]="120"
-          objectUuid="31341"
-          objectType="asset_pictures"
-          [mediaOptions]="buttonLabel">
-      </app-capture-media>
-    </ion-col>
-  </ion-row>
-  <ion-row>
-    <ion-col>
-      <a [routerLink]="['/gallery', 'list', 'asset_pictures', '32134']" [queryParams]="{
-        objectId: 0, 
-        readOnly: false, 
-        onlyFilesWithExt: null, 
-        allowSkipDescription: true,
-        photoType: 'asset_pictures'
-      }">
-        <ion-button>Browser photos</ion-button>
-      </a>
-    </ion-col>
-  </ion-row>
+  <ion-list>
+    <ion-card *ngFor="let message of messages">
+      <ion-card-content>
+        <ion-row>
+          <ion-col>{{ message.description}}</ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="10" class="small">
+            <span class="bold">Created</span>
+            {{ utilsService.getLocalDatetime(message.created_at) }}
+            <span *ngIf="message.from_person_first_name">
+          - {{ message.from_person_first_name }} {{ message.from_person_last_name }}
+        </span>
+          </ion-col>
+
+          <ion-col size="2">
+            <div class="total-photos"
+                 [routerLink]="['/gallery', 'list', message.type, message.uuid]"
+                 *ngIf="message.total_photos"
+            >
+              <ion-badge slot="">{{ message.total_photos}}</ion-badge>
+              <ion-icon name="images-outline"></ion-icon>
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+
+
+
 </ion-content>
 
 <ion-footer>
-  <app-sync></app-sync>
+  <ion-footer>
+    <app-sync></app-sync>
+
+    <ion-row>
+      <ion-col>
+      </ion-col>
+
+      <ion-col>
+        <ion-button expand="full" color="medium" (click)="openFormModal()" *ngIf="objectType">
+          New
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-footer>
 </ion-footer>

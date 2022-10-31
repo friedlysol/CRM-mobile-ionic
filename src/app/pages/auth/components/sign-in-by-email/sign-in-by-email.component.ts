@@ -76,8 +76,12 @@ export class SignInByEmailComponent implements OnInit {
   private async loginFailed() {
     const alert = await this.alertController.create({
       header: 'Login Failed',
+      cssClass: 'form-alert',
       message: 'Email address or password is wrong',
-      buttons: ['Ok']
+      buttons: [{
+        text: 'Ok',
+        cssClass: 'alert-button-confirm',
+      }]
     });
 
     await alert.present();

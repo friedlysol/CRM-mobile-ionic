@@ -8,4 +8,4 @@ CREATE TABLE `work_order_status_history`
     `created_at`                   TEXT NOT NULL,
     `updated_at`                   TEXT NOT NULL,
     PRIMARY KEY (id)
-)
+);

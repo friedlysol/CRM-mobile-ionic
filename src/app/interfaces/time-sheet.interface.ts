@@ -21,4 +21,5 @@ export interface TimeSheetInterface {
 
   //extra fields
   type?: string;
+  time?: number;
 }

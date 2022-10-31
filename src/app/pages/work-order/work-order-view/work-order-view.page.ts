@@ -183,8 +183,11 @@ export class WorkOrderViewPage implements OnInit, OnDestroy {
         await this.timeSheetService.stop(lastTimeSheet, {description});
       }
 
-      if(this.currentTechStatus.start_after_stop) {
+      const newTechStatus = await this.techStatusDatabase.getTechStatusById(this.workOrder.tech_status_type_id);
+
+      if(newTechStatus.start_after_stop) {
         const canStartTimeSheet = await this.workOrderService.checkIfCanStartAnotherTimesheet(this.workOrder);
+
         if(canStartTimeSheet) {
           const techStatus = await this.techStatusDatabase.getTechStatusById(this.workOrder.tech_status_type_id);
 

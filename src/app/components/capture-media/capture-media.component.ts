@@ -28,7 +28,8 @@ export class CaptureMediaComponent implements OnInit {
 
   set mediaOptions(options: MediaOptionsInterface) {
     this._mediaOptions = {
-      buttonLabel: options.buttonLabel != null ? options.buttonLabel : 'Media',
+      buttonLabel: options.buttonLabel != null ? options.buttonLabel : 'Add photo',
+      buttonColor: options.buttonColor != null ? options.buttonColor : 'medium',
       required: options.required != null ? options.required : false,
       requiredOnce: options.requiredOnce != null ? options.requiredOnce : false,
       minQuantity: options.minQuantity != null ? options.minQuantity : 0,
@@ -84,7 +85,7 @@ export class CaptureMediaComponent implements OnInit {
 
   getButtonColor() {
     if (!this.mediaOptions.required && !this.mediaOptions.requiredOnce) {
-      return 'tertiary';
+      return this.mediaOptions.buttonColor;
     }
 
     if ((!this.mediaOptions.minQuantity && this.quantity === 0) ||
@@ -171,9 +172,11 @@ export class CaptureMediaComponent implements OnInit {
     const alert = await this.alertController.create({
       header: 'Enter description',
       backdropDismiss: false,
+      cssClass: 'form-alert',
       inputs: [
         {
           name: 'description',
+          cssClass: 'alert-button-cancel',
           placeholder: 'Description',
         }
       ],
@@ -181,6 +184,7 @@ export class CaptureMediaComponent implements OnInit {
         {
           text: 'Submit',
           role: 'submit',
+          cssClass: 'alert-button-confirm',
           handler: data => {
             if (data.description.length < this.mediaOptions.minLengthDescription) {
               this.showErrorToast(`Description should by at least ${this.mediaOptions.minLengthDescription} characters long.`);
@@ -214,14 +218,17 @@ export class CaptureMediaComponent implements OnInit {
     const alert = await this.alertController.create({
       header: 'Confirm',
       message: 'Are you sure you want to delete this file?',
+      cssClass: 'form-alert',
       buttons: [
         {
           text: 'Cancel',
           role: 'cancel',
+          cssClass: 'alert-button-cancel',
         },
         {
           text: 'Submit',
           role: 'submit',
+          cssClass: 'alert-button-confirm',
         },
       ]
     });

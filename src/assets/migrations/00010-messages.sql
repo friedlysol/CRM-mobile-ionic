@@ -26,7 +26,7 @@ CREATE TABLE `messages`
     `created_at`           TEXT,
     `updated_at`           TEXT             DEFAULT NULL,
     PRIMARY KEY (uuid)
-)
+);
 
 CREATE TABLE `message_repeats`
 (
@@ -37,4 +37,4 @@ CREATE TABLE `message_repeats`
     `created_at`            TEXT,
     `updated_at`            TEXT,
     PRIMARY KEY (uuid)
-)
+);

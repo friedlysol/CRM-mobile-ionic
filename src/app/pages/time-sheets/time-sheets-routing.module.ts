@@ -1,17 +1,16 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-
-import { MessageCenterListPage } from '@app/pages/message-center/message-center-list/message-center-list.page';
+import { TimeSheetsListPage } from './list/time-sheets-list.page';
 
 const routes: Routes = [
   {
     path: 'list',
-    component: MessageCenterListPage
-  }
+    component: TimeSheetsListPage
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class MessageCenterRoutingModule {}
+export class TimeSheetsPageRoutingModule {}
