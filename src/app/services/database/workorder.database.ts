@@ -118,8 +118,8 @@ export class WorkOrderDatabase {
   /**
    * Get unsynchronized work orders
    */
-  getUnsynchronized(): Promise<WorkOrderInterface[]> {
-    return this.databaseService.findAsArray(`select * from work_orders where sync = 0`);
+  getUnSynchronized(): Promise<WorkOrderInterface[]> {
+    return this.databaseService.getUnSynchronized('work_orders');
   }
 
   /**
@@ -252,7 +252,7 @@ export class WorkOrderDatabase {
   };
 
   /**
-   * Update work order data based on allowed columns in allowFileds array
+   * Update work order data based on allowed columns in allowFields array
    *
    * @param uuid
    * @param workOrderData

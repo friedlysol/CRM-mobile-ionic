@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { SQLite, SQLiteObject } from '@ionic-native/sqlite/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { UUID } from 'angular2-uuid';
+import { Directory, Encoding, Filesystem } from '@capacitor/filesystem';
 
 import * as moment from 'moment';
-import { Directory, Encoding, Filesystem } from '@capacitor/filesystem';
+import * as sqlBuilder from 'sql-bricks';
 
 @Injectable({
   providedIn: 'root'
@@ -164,6 +165,32 @@ export class DatabaseService {
       )
       .catch((err) => {
         console.error('Migration query', err);
+      });
+  }
+
+  getUnSynchronized(tableName: string) {
+    const query = sqlBuilder
+      .select()
+      .from(tableName)
+      .where('sync', 0)
+
+    return this.findAsArray(query.toString(), query.toParams());
+  }
+
+  getHashes(tableName: string, columnName = 'id'): Promise<Record<number, string>> {
+    const query = sqlBuilder
+      .select(columnName, 'hash')
+      .from(tableName)
+      .where(sqlBuilder.isNotNull('hash'));
+
+    return this
+      .findAsArray(query.toString(), query.toParams())
+      .then(result => {
+        const hashMapped = {};
+
+        result.map(item => hashMapped[item[columnName]] = item.hash);
+
+        return hashMapped;
       });
   }
 }

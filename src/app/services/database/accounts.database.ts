@@ -11,6 +11,17 @@ export class AccountsDatabase {
   constructor(private databaseService: DatabaseService) {
   }
 
+  /**
+   * Get active account
+   */
+  getActive(): Promise<AccountInterface> {
+    return this.databaseService.findOrNull(`select * from accounts where is_active = 1`);
+  }
+
+  /**
+   * Get account by person id
+   * @param personId
+   */
   getById(personId: number): Promise<AccountInterface> {
     return this.databaseService.findOrNull(`select * from accounts where person_id = ?`, [personId]);
   }
@@ -20,7 +31,7 @@ export class AccountsDatabase {
    *
    * @param accountData
    */
-  saveAccount(accountData: AccountInterface) {
+  saveAccount(accountData: AccountInterface): Promise<any> {
     return this.databaseService.findOrNull(`select * from accounts where person_id = ?`, [accountData.person_id])
       .then(async (account: AccountInterface) => {
         if (account) {
@@ -71,7 +82,7 @@ export class AccountsDatabase {
    * @param account
    * @private
    */
-  private async setAsActive(account: AccountInterface) {
+  private async setAsActive(account: AccountInterface): Promise<any> {
     await this.databaseService.query(`update accounts set is_active = 0`);
     await this.databaseService.query(`update accounts set is_active = 1 where person_id = ?`, [account.person_id]);
 

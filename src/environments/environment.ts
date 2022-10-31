@@ -14,6 +14,7 @@ export const environment = {
   surveyPageSize: 10,
   dateFormat: 'MM/DD/YYYY',
   datetimeFormat: 'MM/DD/YYYY hh:mm A',
+  databaseDateFormat: 'YYYY-MM-DD HH:mm:ss',
   firstDayOfWeek: 1,
   countryCodes: [
     {
@@ -100,7 +101,7 @@ export const environment = {
     },
   ],
   tableToServiceMap: {
-      work_order: 'WorkOrderService',
+      work_orders: 'WorkOrderService',
   }
 };
 /*

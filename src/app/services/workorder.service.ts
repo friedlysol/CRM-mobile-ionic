@@ -29,8 +29,6 @@ import { MessagesDatabase } from '@app/services/database/messages.database';
 export class WorkOrderService implements SyncInterface {
   syncTitle = 'work orders';
 
-  apiEndpoint = `${environment.apiEndpoint}workorders/`;
-
   constructor(
     private addressDatabase: AddressDatabase,
     private addressService: AddressService,
@@ -51,8 +49,11 @@ export class WorkOrderService implements SyncInterface {
 
   async sync(): Promise<boolean> {
     const syncData = {
-      workorders: await this.workOrderDatabase.getUnsynchronized(),
+      workorders: await this.databaseService.getUnSynchronized('work_orders'),
       link_person_wo_ids: await this.workOrderDatabase.getAllLinkPersonWoIds(),
+      hashes: {
+        workorders: await this.databaseService.getHashes('work_orders'),
+      },
     };
 
     return this.workOrderApi.sync(syncData)
@@ -88,8 +89,8 @@ export class WorkOrderService implements SyncInterface {
     console.log('tabs', tabs);
   }
 
-  async getUnsynchronizedWorkOrders() {
-    return await this.workOrderDatabase.getUnsynchronized();
+  async getUnSynchronizedWorkOrders() {
+    return await this.workOrderDatabase.getUnSynchronized();
   }
 
   async clearHash() {

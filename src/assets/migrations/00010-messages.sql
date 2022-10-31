@@ -27,3 +27,14 @@ CREATE TABLE `messages`
     `updated_at`           TEXT             DEFAULT NULL,
     PRIMARY KEY (uuid)
 )
+
+CREATE TABLE `message_repeats`
+(
+    `uuid`                  TEXT,
+    `message_id`            INTEGER,
+    `customer_id`           INTEGER,
+    `number_of_repetitions` INTEGER DEFAULT 0,
+    `created_at`            TEXT,
+    `updated_at`            TEXT,
+    PRIMARY KEY (uuid)
+)
