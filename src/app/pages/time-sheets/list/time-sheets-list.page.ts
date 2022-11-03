@@ -30,15 +30,13 @@ export class TimeSheetsListPage implements OnInit {
   ) { }
 
   get currentDate() {
-    const weekOrDay = this.tab === 'daily' ? 'day' : 'week';
-
     if(this.tab === 'daily'){
 
-      return this.utilsService.getLocalDate(new Date().toDateString());
+      return moment().format(environment.dateFormat);
     }else if(this.tab === 'weekly'){
 
-      const startDate = moment().startOf(weekOrDay).format(environment.dateFormat);
-      const endDate = moment().endOf(weekOrDay).format(environment.dateFormat);
+      const startDate = moment().startOf('week').format(environment.dateFormat);
+      const endDate = moment().endOf('week').format(environment.dateFormat);
       const weekNumber = moment(startDate).week();
 
       return `week #${weekNumber} ${startDate} - ${endDate}`;
@@ -46,16 +44,15 @@ export class TimeSheetsListPage implements OnInit {
   }
 
   get dateToDisplay() {
-    const weekOrDay = this.tab === 'daily' ? 'day' : 'week';
     if(this.tab === 'daily'){
 
-      return moment().add(this.differenceFromCurrent, `${weekOrDay}s`).format(environment.dateFormat);
+      return moment().add(this.differenceFromCurrent, 'days').format(environment.dateFormat);
     }else if(this.tab === 'weekly'){
 
-      const startDate = moment().add(this.differenceFromCurrent, `${weekOrDay}s`)
-        .startOf(weekOrDay).format(environment.dateFormat);
-      const endDate = moment().add(this.differenceFromCurrent, `${weekOrDay}s`)
-        .endOf(weekOrDay).format(environment.dateFormat);
+      const startDate = moment().add(this.differenceFromCurrent, 'weeks')
+        .startOf('week').format(environment.dateFormat);
+      const endDate = moment().add(this.differenceFromCurrent, 'weeks')
+        .endOf('week').format(environment.dateFormat);
       const weekNumber = moment(startDate).week();
 
       return `week #${weekNumber} ${startDate} - ${endDate}`;
@@ -106,7 +103,6 @@ export class TimeSheetsListPage implements OnInit {
         ...timeSheet,
         time: this.utilsService.getDatesDifferenceInSeconds(timeSheet.start_at, timeSheet.stop_at)
       }));
-    console.log(this.timeSheets)
   }
 
   onStartActivityClick(){

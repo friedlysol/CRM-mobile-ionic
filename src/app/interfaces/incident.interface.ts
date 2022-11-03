@@ -4,7 +4,7 @@ export interface IncidentInterface {
   incident_type_id: number;
   incident_date: string;
   incident_time: string;
-  location: string;
+  incident_location: string;
   description: string;
   injury_persons?: InjuryPersonInterface[];
   injury_description?: string;
@@ -16,6 +16,7 @@ export interface IncidentInterface {
   damage_description?: string;
   damage_cause?: string;
   person_involved?: IncidentPerson[];
+  status_type_id?: number;
   witnesses?: WitnessInterface[];
   note?: string;
   hash?: string;

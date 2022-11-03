@@ -3,7 +3,29 @@
 </ion-header>
 
 <ion-content>
-  
+  <ion-card *ngFor="let incident of incidents" class="incident ion-padding">
+    <ion-item class="ion-no-padding" lines="none">
+      <ion-thumbnail class="photo">
+        <ion-img src="https://ionicframework.com/docs/img/demos/card-media.png"></ion-img>
+      </ion-thumbnail>
+      <div class="ion-margin-start">
+        <ion-card-title><b>{{ getTypeById(incident.incident_type_id)?.type_value }}</b></ion-card-title>
+        <ion-card-content class="ion-no-padding">
+          {{ incident.created_at }}
+        </ion-card-content>
+        <ion-card-content class="ion-no-padding">
+          {{ incident.status_type_id }}
+        </ion-card-content>
+        <ion-card-content *ngIf="incident.injury_persons && incident.injury_persons.length" class="ion-no-padding">
+          Injured persons:
+          <p class="ion-padding-start" *ngFor="let person of incident.injury_persons">{{person.first_name}} {{person.last_name}}</p>
+        </ion-card-content>
+        <ion-card-content class="ion-no-padding">
+          {{ incident.incident_location }}
+        </ion-card-content>
+      </div>
+    </ion-item>
+  </ion-card>
 </ion-content>
 
 <ion-footer>
@@ -35,7 +57,8 @@
       <ion-button 
         color="medium" 
         expand="full"
-        [routerLink]="['/incidents', 'form']">
+        [routerLink]="['/incidents', 'form']"
+        [replaceUrl]="true">
         Log Incident
       </ion-button>
     </ion-col>
