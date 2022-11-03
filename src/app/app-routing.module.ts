@@ -42,6 +42,10 @@ const routes: Routes = [
     path: 'time-sheets',
     loadChildren: () => import('./pages/time-sheets/time-sheets.module').then( m => m.TimeSheetsPageModule)
   },
+  {
+    path: 'incidents',
+    loadChildren: () => import('./pages/incidents/incidents.module').then( m => m.IncidentsPageModule)
+  },
   {path: '', redirectTo: '/work-order/list', pathMatch: 'full'},
   {path: '**', redirectTo: '/work-order'},
 ];
