@@ -54,7 +54,7 @@
     "@ionic-native/sqlite": "^5.36.0",
     "@ionic-native/status-bar": "^5.36.0",
     "@ionic-native/toast": "^5.36.0",
-    "@ionic/angular": "^6.2.4",
+    "@ionic/angular": "^6.2.7",
     "@ionic/storage-angular": "^3.0.6",
     "@spoonconsulting/cordova-plugin-background-upload": "^4.0.6",
     "@transistorsoft/capacitor-background-fetch": "^1.0.0",
