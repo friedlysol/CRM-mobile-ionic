@@ -1,0 +1,16 @@
+.flex{
+    display: flex;
+}
+
+.person{
+    border: 1px solid var(--ion-color-grey-shade);
+    border-radius: 7px;
+    margin: 5px 0;
+    padding: 5px;
+}
+
+.remove-btn{
+    position: absolute;
+    right: 5px;
+    z-index: 100;
+}

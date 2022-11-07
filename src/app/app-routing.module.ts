@@ -63,6 +63,10 @@ const routes: Routes = [
     path: 'sign-in',
     loadChildren: () => import('./pages/auth/auth.module').then(m => m.AuthPageModule),
   },
+  {
+    path: 'incidents',
+    loadChildren: () => import('./pages/incidents/incidents.module').then( m => m.IncidentsPageModule)
+  },
   {path: '', redirectTo: '/work-order/list', pathMatch: 'full'},
   {path: '**', redirectTo: '/work-order'},
 ];
