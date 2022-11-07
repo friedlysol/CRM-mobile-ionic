@@ -71,13 +71,6 @@ export const environment = {
       isActive: true
     },
     {
-      key: 'time-sheets',
-      label: 'Time Sheets',
-      icon: 'calendar-outline',
-      url: ['/time-sheets', 'list'],
-      isActive: true
-    },
-    {
       key: 'incidents',
       label: 'Incidents',
       icon: 'warning-outline',

@@ -79,36 +79,44 @@ export class PersonFormComponent implements OnInit {
   constructor(
     private modalControler: ModalController,
     private navParams: NavParams,
-  ) {}
+  ) {
+  }
 
   get firstNameCtrl() {
     return this.formGroup.controls.first_name;
   }
+
   get lastNameCtrl() {
     return this.formGroup.controls.last_name;
   }
+
   get phoneNumberCtrl() {
     return this.formGroup.controls.phone_number;
   }
+
   get emailCtrl() {
     return this.formGroup.controls.email;
   }
+
   get injuryTypeCtrl() {
     return this.formGroup.controls.injury_type_id;
   }
+
   get bodyPartCtrl() {
     return this.formGroup.controls.body_part_id;
   }
+
   get treatmentTypeCtrl() {
     return this.formGroup.controls.treatment_type_id;
   }
+
   get statementCtrl() {
     return this.formGroup.controls.statement;
   }
 
   ngOnInit() {
     this.type = this.navParams.data?.type;
-    if(this.type === 'injured'){
+    if (this.type === 'injured') {
       this.formGroup.addControl(
         'injury_type_id',
         new FormControl(null, [Validators.required])
@@ -122,20 +130,20 @@ export class PersonFormComponent implements OnInit {
         new FormControl(null, [Validators.required])
       );
 
-    } else if(this.type === 'witness'){
+    } else if (this.type === 'witness') {
       this.formGroup.addControl(
         'statement',
         new FormControl('', [Validators.required])
       );
     }
 
-    if(this.navParams.data?.person){
+    if (this.navParams.data?.person) {
       this.formGroup.patchValue(this.navParams.data.person);
     }
   }
 
-  getTitle(){
-    switch(this.type){
+  getTitle() {
+    switch (this.type) {
       case 'injured':
         return 'Add injured person';
       case 'involved':
@@ -145,12 +153,12 @@ export class PersonFormComponent implements OnInit {
     }
   }
 
-  onCancelClick(){
+  onCancelClick() {
     this.modalControler.dismiss(null, 'cancel');
   }
 
-  onSubmit(){
-    if(this.formGroup.invalid){
+  onSubmit() {
+    if (this.formGroup.invalid) {
       Object.keys(this.formGroup.controls).forEach(key => {
         this.formGroup.get(key).markAsDirty();
       });

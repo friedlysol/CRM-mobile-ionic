@@ -12,12 +12,12 @@
         <b>First name:</b>
         <span class="required">*</span>
       </ion-label>
-      <ion-input 
+      <ion-input
         class="ion-no-margin"
         [formControl]="firstNameCtrl">
       </ion-input>
-      
-      <ion-text 
+
+      <ion-text
         class="small"
         color="danger"
         *ngIf="firstNameCtrl.invalid && (firstNameCtrl.dirty || firstNameCtrl.touched)">
@@ -33,12 +33,12 @@
         <b>Last name:</b>
         <span class="required">*</span>
       </ion-label>
-      <ion-input 
+      <ion-input
         class="ion-no-margin"
         [formControl]="lastNameCtrl">
       </ion-input>
-      
-      <ion-text 
+
+      <ion-text
         class="small"
         color="danger"
         *ngIf="lastNameCtrl.invalid && (lastNameCtrl.dirty || lastNameCtrl.touched)">
@@ -52,13 +52,13 @@
     <ion-col size="8">
 
       <ion-label><b>Email:</b></ion-label>
-      <ion-input 
+      <ion-input
         class="ion-no-margin"
         type="email"
         [formControl]="emailCtrl">
       </ion-input>
 
-      <ion-text 
+      <ion-text
         class="small"
         color="danger"
         *ngIf="emailCtrl.invalid && emailCtrl.touched">
@@ -72,7 +72,7 @@
     <ion-col size="8">
 
       <ion-label><b>Phone number:</b></ion-label>
-      <ion-input 
+      <ion-input
         class="ion-no-margin"
         type="tel"
         [formControl]="phoneNumberCtrl">
@@ -100,7 +100,7 @@
 
       </ion-select>
 
-      <ion-text 
+      <ion-text
         class="small"
         color="danger"
         *ngIf="injuryTypeCtrl.invalid && (injuryTypeCtrl.dirty)">
@@ -129,7 +129,7 @@
 
       </ion-select>
 
-      <ion-text 
+      <ion-text
         class="small"
         color="danger"
         *ngIf="bodyPartCtrl.invalid && (bodyPartCtrl.dirty)">
@@ -158,7 +158,7 @@
 
       </ion-select>
 
-      <ion-text 
+      <ion-text
         class="small"
         color="danger"
         *ngIf="treatmentTypeCtrl.invalid && (treatmentTypeCtrl.dirty)">
@@ -172,7 +172,7 @@
   <ion-row>
 
     <ion-col>
-      <ion-button expand="full" color="medium" (click)="onCancelClick()">Cancel</ion-button>
+      <ion-button expand="full" color="light" (click)="onCancelClick()">Cancel</ion-button>
     </ion-col>
 
     <ion-col>
