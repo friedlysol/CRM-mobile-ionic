@@ -1,0 +1,219 @@
+<ion-header>
+  <app-header [title]="'Asset view'"></app-header>
+</ion-header>
+
+<ion-content>
+  <ion-list *ngIf="asset">
+    <app-item-value
+        label="Name"
+        [value]="asset.name"
+    ></app-item-value>
+
+    <app-item-value
+        label="Type"
+        [value]="getTypeValue(asset.type_id)"
+    ></app-item-value>
+
+    <app-item-value
+        *ngIf="isSelectedType('window', 'door')"
+        label="Exterior Side"
+        [value]="getTypeValue(asset.exterior_side_type_id)"
+        [note]="asset.exterior_side_comment"
+    ></app-item-value>
+
+    <app-item-value
+        label="Room"
+        [value]="getTypeValue(asset.room_type_id)"
+        [note]="asset.room_comment"
+    ></app-item-value>
+
+    <app-item-value
+        label="Unit number"
+        [value]="asset.unit_number"
+    ></app-item-value>
+
+    <app-item-value
+        *ngIf="isSelectedType('window')"
+        label="Dimension"
+        [value]="getDimensionAsString(asset.dimension)"
+    ></app-item-value>
+
+    <app-item-value
+        *ngIf="isSelectedType('window', 'door')"
+        label="Replacement type"
+        [value]="getTypeValue(asset.replacement_type_id)"
+    ></app-item-value>
+
+    <app-item-value
+        *ngIf="isSelectedType('window', 'door')"
+        label="Material type"
+        [value]="getTypeValue(asset.material_type_id)"
+    ></app-item-value>
+
+    <app-item-value
+        *ngIf="isSelectedType('window', 'door')"
+        label="Material color"
+        [value]="getTypeValue(asset.material_color_type_id)"
+    ></app-item-value>
+
+    <app-item-value
+        *ngIf="isSelectedType('window', 'door')"
+        label="Grid pattern"
+        [value]="getTypeValue(asset.grid_pattern_type_id)"
+    ></app-item-value>
+
+    <app-item-value
+        *ngIf="isSelectedType('window', 'door')"
+        label="Manufacturer"
+        [value]="asset.manufacturer"
+    ></app-item-value>
+
+    <app-item-value
+        *ngIf="isSelectedType('window')"
+        label="Window condition"
+        [value]="getTypeValue(asset.condition_type_id)"
+    ></app-item-value>
+
+    <app-item-value
+        *ngIf="isSelectedType('bath', 'walk_in')"
+        label="Floor Type"
+        [value]="getTypeValue(asset.floor_type_id)"
+        [note]="asset.floor_comment"
+    ></app-item-value>
+
+    <app-item-value
+        *ngIf="isSelectedType('bath', 'walk_in')"
+        label="Wall material"
+        [value]="getTypeValue(asset.wall_material_type_id)"
+    ></app-item-value>
+
+    <app-item-value
+        *ngIf="isSelectedType('bath', 'walk_in')"
+        label="Existing Bath Wall Material"
+        [value]="getTypeValue(asset.existing_bath_wall_material_type_id)"
+    ></app-item-value>
+
+    <app-item-value
+        *ngIf="isSelectedType('bath', 'walk_in')"
+        label="Removal of Material"
+        [value]="getTypeValue(asset.removal_of_material_type_id)"
+    ></app-item-value>
+
+    <app-item-value
+        *ngIf="isSelectedType('bath', 'walk_in')"
+        label="Condo Conditions"
+        [value]="getTypeValue(asset.condo_conditions_type_id)"
+    ></app-item-value>
+
+    <app-item-value
+        *ngIf="isSelectedType('bath')"
+        label="Bath door dimension"
+        [value]="getDimensionAsString(asset.dimension_bath_door)"
+    ></app-item-value>
+
+    <app-item-value
+        *ngIf="isSelectedType('bath')"
+        label="Bath hallway dimension"
+        [value]="getDimensionAsString(asset.dimension_bath_hallway)"
+    ></app-item-value>
+
+    <app-item-value
+        *ngIf="isSelectedType('bath')"
+        label="Bath Door Type"
+        [value]="getTypeValue(asset.bath_door_type_id)"
+    ></app-item-value>
+
+    <app-item-value
+        *ngIf="isSelectedType('bath')"
+        label="Bath Conditions"
+        [value]="getTypeValue(asset.bath_conditions_type_id)"
+    ></app-item-value>
+
+    <app-item-value
+        label="Note"
+        [value]="asset.comment"
+    ></app-item-value>
+
+    <div class="ion-padding">
+      <ion-row class="ion-no-padding gap-2">
+        <ion-col class="ion-no-padding" *ngFor="let type of assetPictures">
+          <app-capture-media
+              [type]="'photo'"
+              [typeId]="type.id"
+              [objectType]="'asset'"
+              [objectUuid]="asset.uuid"
+              [objectId]="asset.id"
+              [mediaOptions]="{buttonLabel: type.type_value, required: true}"
+          ></app-capture-media>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="ion-no-padding mt-3">
+        <ion-col class="ion-no-padding">
+          <ion-button
+              color="medium"
+              expand="full"
+              [routerLink]="['/gallery', 'list', 'asset', assetUuid]"
+              [queryParams]="{readOnly: 'true'}"
+              [skipLocationChange]="true"
+          >Browse Photos
+          </ion-button>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="ion-no-padding mt-3" *ngIf="isSelectedType('bath', 'window')">
+        <ion-col class="ion-no-padding">
+          <ion-button
+              color="medium"
+              expand="full"
+              (click)="onPartRequestClick()"
+          >Part request
+          </ion-button>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="ion-no-padding mt-3">
+        <ion-col class="ion-no-padding">
+          <ion-button
+              color="medium"
+              expand="full"
+              [routerLink]="['/purchase-order', 'list']"
+              [queryParams]="{workOrderUuid: asset.work_order_uuid, assetUuid: asset.uuid}"
+          >Purchase Order
+          </ion-button>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="ion-no-padding mt-3">
+        <ion-col class="ion-no-padding">
+          <ion-button
+              color="medium"
+              expand="full"
+              (click)="onLaborRequestClick()"
+          >Additional Labor Request
+          </ion-button>
+        </ion-col>
+      </ion-row>
+
+      <ion-row class="ion-no-padding gap-2 mt-3">
+        <ion-col class="ion-no-padding">
+          <ion-button
+              [routerLink]="['/asset/form', asset.work_order_uuid, asset.address_uuid, asset.uuid]"
+              color="success"
+              expand="full"
+          >Edit asset
+          </ion-button>
+        </ion-col>
+
+        <ion-col class="ion-no-padding">
+          <ion-button
+              (click)="onDeleteClick()"
+              color="danger"
+              expand="full"
+          >Delete asset
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </div>
+  </ion-list>
+</ion-content>

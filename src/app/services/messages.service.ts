@@ -139,7 +139,7 @@ export class MessagesService implements SyncInterface {
     if (res?.response?.activities_syncs?.length) {
       const queue = [];
       res.response.activities_syncs.forEach(sync => {
-        if (sync?.object_uuid && sync?.object_id) {
+        if (sync.uuid && sync.object_id) {
           queue.push(this.messagesDatabase.getSqlForUpdateActivitySyncStatus(sync));
           queue.push(this.messagesDatabase.getSqlForUpdateFileSyncStatus(sync));
         }
@@ -155,7 +155,7 @@ export class MessagesService implements SyncInterface {
     if (res?.response?.confirmations_syncs?.length) {
       const queue = [];
       res.response.confirmations_syncs.forEach(sync => {
-        if (sync?.object_uuid && sync?.object_id) {
+        if (sync?.uuid && sync?.object_id) {
           queue.push(this.messagesDatabase.getSqlForUpdateConfirmSyncStatus(sync));
         }
       });
@@ -179,7 +179,7 @@ export class MessagesService implements SyncInterface {
         const messageIds = res.response.activities.map(activity => activity.id);
 
         // get existing messages map from app db
-        const existingMessageHashMap = await this.messagesDatabase.getExistingMessageAsMap(messageIds);
+        const existingMessageHashMap = await this.databaseService.getExistingRecordsAsMap(messageIds, 'messages');
 
         const queue = [];
 
@@ -216,7 +216,7 @@ export class MessagesService implements SyncInterface {
     if (res?.response?.files?.length) {
       const queue = [];
       res.response.confirmations_syncs.forEach(sync => {
-        if (sync?.object_uuid && sync?.object_id) {
+        if (sync.uuid && sync.object_id) {
           queue.push(this.messagesDatabase.getSqlForUpdateConfirmSyncStatus(sync));
         }
       });

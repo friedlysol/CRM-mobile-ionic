@@ -31,10 +31,9 @@ export class WorkOrderListPage implements OnInit, OnDestroy {
   private subscriptions = new Subscription();
 
   constructor(
-    private route: ActivatedRoute,
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
-    private alertCtrl: AlertController,
+    private AlertController: AlertController,
     private router: Router,
     private workOrderService: WorkOrderService,
     public addressService: AddressService
@@ -43,7 +42,7 @@ export class WorkOrderListPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.route.queryParams.subscribe((params: any) => {
+    this.activatedRoute.queryParams.subscribe((params: any) => {
       if (params) {
         this.params = Object.assign({}, params);
       }
@@ -92,7 +91,7 @@ export class WorkOrderListPage implements OnInit, OnDestroy {
   }
 
   async logout() {
-    const alert = await this.alertCtrl.create({
+    const alert = await this.AlertController.create({
       header: 'Logout',
       message: 'Do you want to logout?',
       buttons: [

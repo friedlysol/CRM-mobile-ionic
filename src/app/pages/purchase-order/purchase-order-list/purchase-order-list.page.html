@@ -1,0 +1,44 @@
+<ion-header>
+  <app-header [title]="'Purchase Orders'">
+    <ng-container icons>
+      <ion-button (click)="onAddClick()">
+        <ion-icon name="add-circle-outline"></ion-icon>
+      </ion-button>
+    </ng-container>
+  </app-header>
+  <div class="search-box">
+    <ion-row>
+      <ion-col>
+        <ion-input
+            class="clear"
+            [(ngModel)]="query"
+            [debounce]="300"
+            placeholder="Type to search">
+        </ion-input>
+      </ion-col>
+    </ion-row>
+  </div>
+</ion-header>
+
+<ion-content>
+  <ion-card *ngFor="let purchaseOrder of purchaseOrders" [routerLink]="['/purchase-order', 'view', purchaseOrder.uuid]">
+    <ion-card-content>
+
+      <div>
+        <span>PO #: </span>
+        <span class="bold">{{ purchaseOrder.purchase_order_number }}</span>
+      </div>
+
+      <div>
+        <span>Wo #: </span>
+        <span>{{ purchaseOrder.work_order_number }}</span>
+      </div>
+
+      <div>
+        <span>Status: </span>
+        <span>{{ purchaseOrder.status }}</span>
+      </div>
+
+    </ion-card-content>
+  </ion-card>
+</ion-content>

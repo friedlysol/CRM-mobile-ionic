@@ -40,6 +40,7 @@ export interface WorkOrderInterface {
   ivr_number: string;
   ivr_number_forward: string;
   ivr_pin: string;
+  job_type?: string;
   link_person_wo_id: number;
   payment_capture?: string;
   phone: string;
@@ -74,4 +75,5 @@ export interface WorkOrderInterface {
   state?: string;
   zip_code?: string;
   tech_status?: string;
+  label?: string;
 }

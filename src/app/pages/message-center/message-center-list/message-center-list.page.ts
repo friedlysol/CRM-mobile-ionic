@@ -48,8 +48,10 @@ export class MessageCenterListPage implements OnInit {
         ? 'Notes'
         : 'Message center';
     });
+  }
 
-    this.loadList()
+  async ionViewDidEnter() {
+    await this.loadList()
   }
 
   private async loadList(page = 1) {

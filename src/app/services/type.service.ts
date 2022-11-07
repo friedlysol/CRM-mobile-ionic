@@ -26,6 +26,10 @@ export class TypeService implements SyncInterface {
       });
   }
 
+  getById(typeId: number) {
+    return this.typeDatabase.getById(typeId);
+  }
+
   getByKey(key: string): Promise<TypeInterface> {
     return this.typeDatabase.getByKey(key);
   }
@@ -38,7 +42,7 @@ export class TypeService implements SyncInterface {
     const mappedStatuses = {};
     const statuses = await this.getByType(typeName);
 
-    if(statuses) {
+    if (statuses) {
       statuses.map(type => mappedStatuses[type.type_key] = type.id);
     }
 
@@ -49,13 +53,24 @@ export class TypeService implements SyncInterface {
     return this.typeDatabase.getByTypes(types);
   }
 
-  async getByTypeWithMappedKeys(typeName: string){
+  getByTypesAsValueList(types: Array<string>) {
+    return this.getByTypes(types)
+      .then(items => {
+        const list = {};
+
+        items.map(type => list[type.id] = type.type_value);
+
+        return list;
+      });
+  }
+
+  async getByTypeWithMappedKeys(typeName: string) {
     const types = await this.getByType(typeName);
     const mappedTypes = [];
-    for(const type of types) {
+    for (const type of types) {
 
       const key = type.type_key.split('.')[1];
-      if(key) {
+      if (key) {
 
         mappedTypes.push({...type, type_key: key});
       }
@@ -63,6 +78,7 @@ export class TypeService implements SyncInterface {
 
     return mappedTypes;
   }
+
 
   /**
    * Sync time sheet types

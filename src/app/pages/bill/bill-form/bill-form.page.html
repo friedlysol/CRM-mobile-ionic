@@ -1,0 +1,105 @@
+<ion-header>
+  <app-header [title]="'Bill form'"></app-header>
+</ion-header>
+
+<ion-content>
+  <form class="ion-padding" [formGroup]="form" *ngIf="form">
+    <div class="mb-3 mt-3">
+      <ion-label position="stacked" class="bold">
+        Total:<span class="required">*</span>
+      </ion-label>
+      <ion-input type="number" formControlName="price" class="without-margin-top"></ion-input>
+      <app-error-text [field]="price"></app-error-text>
+    </div>
+
+    <div class="mb-3">
+      <ion-label position="stacked" class="bold">
+        Merchant:
+      </ion-label>
+      <ion-input formControlName="supplier_name" class="without-margin-top"></ion-input>
+      <app-error-text [field]="supplierName"></app-error-text>
+    </div>
+
+    <div *ngIf="getTypes('bill_description_type').length > 0" class="mb-3">
+      <app-form-select
+          label="Description"
+          controlName="desc"
+          [form]="form"
+          [options]="getTypes('bill_description_type')"
+      ></app-form-select>
+      <app-error-text [field]="desc"></app-error-text>
+    </div>
+
+    <div class="mb-3" *ngIf="checkIsOtherSelected()">
+      <ion-label position="stacked" class="bold">
+        Comment:<span class="required" >*</span>
+      </ion-label>
+      <ion-textarea [rows]="3" [autoGrow]="true" formControlName="comment" class="without-margin-top"></ion-textarea>
+      <app-error-text [field]="comment"></app-error-text>
+    </div>
+
+    <div class="mb-3 relative">
+      <ion-label position="stacked" class="bold">
+        Out of pocket:
+      </ion-label>
+      <ion-checkbox formControlName="reimbursement" color="medium"></ion-checkbox>
+      <app-error-text [field]="reimbursement"></app-error-text>
+    </div>
+  </form>
+
+  <ion-row class="ion-padding-horizontal">
+    <ion-col class="ion-no-padding">
+      <app-capture-media
+          [type]="'photo'"
+          [typeId]="photoType ? photoType.id : null"
+          [objectType]="'bill'"
+          [objectUuid]="billEntryUuid"
+          [objectId]="billEntry?.bill_id"
+          [mediaOptions]="{buttonLabel: 'Add Photo', required: true}"
+      ></app-capture-media>
+    </ion-col>
+  </ion-row>
+
+  <ion-row class="ion-padding-horizontal mt-3" *ngIf="billEntry">
+    <ion-col class="ion-no-padding">
+      <ion-button
+          color="medium"
+          expand="full"
+          [routerLink]="['/gallery', 'list', 'bill', billEntryUuid]"
+          [queryParams]="{readOnly: 'true'}"
+          [skipLocationChange]="true"
+      >Browse Photos
+      </ion-button>
+    </ion-col>
+  </ion-row>
+
+  <ion-row class="ion-padding-horizontal mt-5" *ngIf="billEntry && billEntry.sync === 0">
+    <ion-col class="ion-no-padding">
+      <ion-button color="danger" expand="full" (click)="onDeleteClick()">
+        Delete
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</ion-content>
+
+<ion-footer>
+  <ion-row class="buttons">
+    <ion-col>
+      <ion-button
+          expand="full"
+          color="light"
+          (click)="onCancelClick()">
+        Cancel
+      </ion-button>
+    </ion-col>
+
+    <ion-col>
+      <ion-button
+          expand="full"
+          color="medium"
+          (click)="onSaveClick()">
+        Save
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</ion-footer>

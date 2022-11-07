@@ -10,24 +10,34 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'asset',
+    loadChildren: () => import('./pages/asset/asset.module').then(m => m.AssetPageModule),
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'supplies-request',
-    loadChildren: () => import('./pages/supplies-request/supplies-request.module').then(m => m.SuppliesRequestModule)
+    loadChildren: () => import('./pages/supplies-request/supplies-request.module').then(m => m.SuppliesRequestModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'survey',
-    loadChildren: () => import('./pages/survey/survey.module').then(m => m.SurveyPageModule)
+    loadChildren: () => import('./pages/survey/survey.module').then(m => m.SurveyPageModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'vehicle-inspection',
-    loadChildren: () => import('./pages/vehicle-inspection/vehicle-inspection.module').then(m => m.VehicleInspectionModule)
+    loadChildren: () => import('./pages/vehicle-inspection/vehicle-inspection.module').then(m => m.VehicleInspectionModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'message-center',
-    loadChildren: () => import('./pages/message-center/message-center.module').then(m => m.MessageCenterModule)
+    loadChildren: () => import('./pages/message-center/message-center.module').then(m => m.MessageCenterModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'gallery',
     loadChildren: () => import('./pages/gallery/gallery.module').then(m => m.GalleryModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'settings',
@@ -35,12 +45,23 @@ const routes: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'sign-in',
-    loadChildren: () => import('./pages/auth/auth.module').then(m => m.AuthPageModule),
+    path: 'time-sheets',
+    loadChildren: () => import('./pages/time-sheets/time-sheets.module').then(m => m.TimeSheetsPageModule),
+    canActivate: [AuthGuard]
   },
   {
-    path: 'time-sheets',
-    loadChildren: () => import('./pages/time-sheets/time-sheets.module').then( m => m.TimeSheetsPageModule)
+    path: 'bill',
+    loadChildren: () => import('./pages/bill/bill.module').then(m => m.BillModule),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'purchase-order',
+    loadChildren: () => import('./pages/purchase-order/purchase-order.module').then(m => m.PurchaseOrderModule),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'sign-in',
+    loadChildren: () => import('./pages/auth/auth.module').then(m => m.AuthPageModule),
   },
   {path: '', redirectTo: '/work-order/list', pathMatch: 'full'},
   {path: '**', redirectTo: '/work-order'},

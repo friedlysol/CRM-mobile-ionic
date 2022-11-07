@@ -1,0 +1,298 @@
+<ion-header>
+  <app-header [title]="'Asset form'"></app-header>
+</ion-header>
+
+<ion-content>
+  <form class="ion-padding" [formGroup]="form" *ngIf="form">
+    <div class="mb-3">
+      <ion-label position="stacked" class="bold">Name:</ion-label>
+      <ion-input formControlName="name" class="without-margin-top"></ion-input>
+    </div>
+
+    <div *ngIf="getTypes('asset_type').length > 0" class="mb-3">
+      <app-form-select
+          label="Type"
+          controlName="type_id"
+          [form]="form"
+          [options]="getTypes('asset_type')"
+      ></app-form-select>
+    </div>
+
+    <div *ngIf="getTypes('asset_level_type').length > 0" class="mb-3">
+      <app-form-select
+          label="Level"
+          controlName="level_type_id"
+          [form]="form"
+          [options]="getTypes('asset_level_type')"
+      ></app-form-select>
+
+      <ion-input
+          *ngIf="checkIsOtherSelected('level_type_id', 'asset_level_type.other')"
+          formControlName="level_comment"
+          placeholder="Comment"
+          class="without-label"
+      ></ion-input>
+    </div>
+
+    <div *ngIf="isSelectedType('window', 'door') && getTypes('asset_exterior_side_type').length > 0" class="mb-3">
+      <app-form-select
+          label="Exterior Side"
+          controlName="exterior_side_type_id"
+          [form]="form"
+          [options]="getTypes('asset_exterior_side_type')"
+      ></app-form-select>
+
+      <ion-input
+          *ngIf="checkIsOtherSelected('exterior_side_type_id', 'asset_exterior_side_type.other')"
+          formControlName="exterior_side_comment"
+          placeholder="Comment"
+          class="without-label"
+      ></ion-input>
+    </div>
+
+    <div *ngIf="getTypes('asset_room_type').length > 0" class="mb-3">
+      <app-form-select
+          label="Room"
+          controlName="room_type_id"
+          [form]="form"
+          [options]="getTypes('asset_room_type')"
+      ></app-form-select>
+
+      <ion-input
+          *ngIf="checkIsOtherSelected('room_type_id', 'asset_room_type.other')"
+          formControlName="room_comment"
+          placeholder="Comment"
+          class="without-label"
+      ></ion-input>
+    </div>
+
+    <div *ngIf="getTypes('unit_number_type').length > 0" class="mb-3">
+      <app-form-select
+          label="Unit number"
+          controlName="unit_number"
+          order="id"
+          [form]="form"
+          [options]="getTypes('unit_number_type')"
+      ></app-form-select>
+    </div>
+
+    <div *ngIf="isSelectedType('window')" class="mb-3">
+      <ion-label position="stacked" class="bold">Dimension:</ion-label>
+      <ion-row class="ion-no-padding">
+        <ion-col class="ion-no-padding">
+          <ion-input
+              type="tel"
+              placeholder="Width"
+              formControlName="dimension_width"
+              class="without-margin-top"
+          ></ion-input>
+        </ion-col>
+        <ion-col class="ion-no-padding ion-padding-horizontal">
+          <ion-input
+              type="tel"
+              placeholder="Height"
+              formControlName="dimension_height"
+              class="without-margin-top"
+          ></ion-input>
+        </ion-col>
+        <ion-col class="ion-no-padding">
+          <ion-input
+              type="tel"
+              placeholder="Depth"
+              formControlName="dimension_depth"
+              class="without-margin-top"
+          ></ion-input>
+        </ion-col>
+      </ion-row>
+    </div>
+
+    <div *ngIf="isSelectedType('window', 'door') && getTypes('asset_replacement_type').length > 0" class="mb-3">
+      <app-form-select
+          label="Replacement type"
+          controlName="replacement_type_id"
+          [form]="form"
+          [options]="getTypes('asset_replacement_type')"
+      ></app-form-select>
+    </div>
+
+    <div *ngIf="isSelectedType('window', 'door') && getTypes('asset_materials_type').length > 0" class="mb-3">
+      <app-form-select
+          label="Material type"
+          controlName="material_type_id"
+          [form]="form"
+          [options]="getTypes('asset_materials_type')"
+      ></app-form-select>
+    </div>
+
+    <div *ngIf="isSelectedType('window', 'door') && getTypes('asset_material_colors_type').length > 0" class="mb-3">
+      <app-form-select
+          label="Material color"
+          controlName="material_color_type_id"
+          [form]="form"
+          [options]="getTypes('asset_material_colors_type')"
+      ></app-form-select>
+    </div>
+
+    <div *ngIf="isSelectedType('window', 'door') && getTypes('asset_grid_pattern_type').length > 0" class="mb-3">
+      <app-form-select
+          label="Grid pattern"
+          controlName="grid_pattern_type_id"
+          [form]="form"
+          [options]="getTypes('asset_grid_pattern_type')"
+      ></app-form-select>
+    </div>
+
+    <div *ngIf="isSelectedType('window', 'door') && manufacturers.length > 0" class="mb-3">
+      <app-form-select
+          label="Manufacturer"
+          controlName="manufacturer"
+          labelKey="label"
+          valueKey="label"
+          [form]="form"
+          [options]="manufacturers"
+      ></app-form-select>
+    </div>
+
+    <div *ngIf="isSelectedType('window') && getTypes('asset_window_condition_type').length > 0" class="mb-3">
+      <app-form-select
+          label="Window condition"
+          controlName="condition_type_id"
+          [form]="form"
+          [options]="getTypes('asset_window_condition_type')"
+      ></app-form-select>
+    </div>
+
+    <div *ngIf="isSelectedType('bath', 'walk_in') && getTypes('asset_floor_type').length > 0" class="mb-3">
+      <app-form-select
+          label="Floor Type"
+          controlName="floor_type_id"
+          [form]="form"
+          [options]="getTypes('asset_floor_type')"
+      ></app-form-select>
+
+      <ion-input
+          *ngIf="checkIsOtherSelected('floor_type_id', 'asset_floor_type.other')"
+          formControlName="floor_comment"
+          placeholder="Comment"
+          class="without-label"
+      ></ion-input>
+    </div>
+
+    <div *ngIf="isSelectedType('bath', 'walk_in') && getTypes('asset_wall_material_type').length > 0" class="mb-3">
+      <app-form-select
+          label="Wall material"
+          controlName="wall_material_type_id"
+          [form]="form"
+          [options]="getTypes('asset_wall_material_type')"
+      ></app-form-select>
+    </div>
+
+    <div *ngIf="isSelectedType('bath', 'walk_in') && getTypes('asset_existing_bath_wall_material_type').length > 0" class="mb-3">
+      <app-form-select
+          label="Existing Bath Wall Material"
+          controlName="existing_bath_wall_material_type_id"
+          [form]="form"
+          [options]="getTypes('asset_existing_bath_wall_material_type')"
+      ></app-form-select>
+    </div>
+
+    <div *ngIf="isSelectedType('bath', 'walk_in') && getTypes('asset_removal_of_material_type').length > 0" class="mb-3">
+      <app-form-select
+          label="Removal of Material"
+          controlName="removal_of_material_type_id"
+          [form]="form"
+          [options]="getTypes('asset_removal_of_material_type')"
+      ></app-form-select>
+    </div>
+
+    <div *ngIf="getTypes('asset_condo_conditions_type').length > 0" class="mb-3">
+      <app-form-select
+          label="Condo Conditions"
+          controlName="condo_conditions_type_id"
+          [form]="form"
+          [options]="getTypes('asset_condo_conditions_type')"
+      ></app-form-select>
+    </div>
+
+    <div *ngIf="isSelectedType('bath')" class="mb-3">
+      <ion-label position="stacked" class="bold">Bath door dimension:</ion-label>
+      <ion-row class="ion-no-padding gap-2">
+        <ion-col class="ion-no-padding">
+          <ion-input
+              type="tel"
+              class="without-margin-top"
+              placeholder="Width"
+              formControlName="dimension_bath_door_width"
+          ></ion-input>
+        </ion-col>
+        <ion-col class="ion-no-padding">
+          <ion-input
+              type="tel"
+              class="without-margin-top"
+              placeholder="Height"
+              formControlName="dimension_bath_door_height"
+          ></ion-input>
+        </ion-col>
+      </ion-row>
+    </div>
+
+    <div *ngIf="isSelectedType('bath')" class="mb-3">
+      <ion-label position="stacked" class="bold">Bath hallway dimension:</ion-label>
+      <ion-row class="ion-no-padding gap-2">
+        <ion-col class="ion-no-padding">
+          <ion-input
+              type="tel"
+              class="without-margin-top"
+              placeholder="Width"
+              formControlName="dimension_bath_hallway_width"
+          ></ion-input>
+        </ion-col>
+      </ion-row>
+    </div>
+
+    <div *ngIf="isSelectedType('bath') && getTypes('asset_bath_door_type').length > 0" class="mb-3">
+      <app-form-select
+          label="Bath Door Type"
+          controlName="bath_door_type_id"
+          [form]="form"
+          [options]="getTypes('asset_bath_door_type')"
+      ></app-form-select>
+    </div>
+
+    <div *ngIf="isSelectedType('bath') && getTypes('asset_bath_conditions_type').length > 0" class="mb-3">
+      <app-form-select
+          label="Bath Conditions"
+          controlName="bath_conditions_type_id"
+          [form]="form"
+          [options]="getTypes('asset_bath_conditions_type')"
+      ></app-form-select>
+    </div>
+
+    <div>
+      <ion-label position="stacked" class="bold">Note:</ion-label>
+      <ion-textarea [rows]="3" [autoGrow]="true" formControlName="comment" class="without-margin-top"></ion-textarea>
+    </div>
+  </form>
+</ion-content>
+
+<ion-footer>
+  <ion-row class="buttons">
+    <ion-col>
+      <ion-button
+          expand="full"
+          color="light"
+          (click)="onCancelClick()">
+        Cancel
+      </ion-button>
+    </ion-col>
+
+    <ion-col>
+      <ion-button
+          expand="full"
+          color="medium"
+          (click)="onSaveClick()">
+        Save
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</ion-footer>

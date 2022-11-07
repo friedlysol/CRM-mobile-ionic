@@ -12,7 +12,7 @@ export class SubquestionsModalComponent implements OnInit {
 
   constructor(
     params: NavParams,
-    private modalCtrl: ModalController,
+    private modalController: ModalController,
     private toastController: ToastController,
   ) {
     this.subquestions = params.data.subquestions != null ? params.data.subquestions : [];
@@ -26,7 +26,7 @@ export class SubquestionsModalComponent implements OnInit {
   }
 
   onCancel() {
-    this.modalCtrl.dismiss(null, 'back');
+    this.modalController.dismiss(null, 'back');
   }
 
   onSubmit() {
@@ -38,11 +38,11 @@ export class SubquestionsModalComponent implements OnInit {
       }
     }
 
-    this.modalCtrl.dismiss(this.subquestions, 'submit');
+    this.modalController.dismiss(this.subquestions, 'submit');
   }
 
 
   goBack() {
-    this.modalCtrl.dismiss(null, 'back');
+    this.modalController.dismiss(null, 'back');
   }
 }

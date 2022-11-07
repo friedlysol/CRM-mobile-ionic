@@ -19,6 +19,8 @@ import { UtilsService } from '@app/services/utils.service';
 
 import { environment } from '@env/environment';
 import { VehicleInspectionService } from '@app/services/vehicle-inspection.service';
+import { PartRequestComponent } from '@app/modals/part-request/part-request.component';
+import { ModalController } from '@ionic/angular';
 
 @Component({
   selector: 'app-work-order-view',
@@ -42,7 +44,8 @@ export class WorkOrderViewPage implements OnInit, OnDestroy {
   constructor(
     private addressDatabase: AddressDatabase,
     private launchNavigator: LaunchNavigator,
-    private route: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
+    private modalController: ModalController,
     private router: Router,
     private staticService: StaticService,
     private techStatusDatabase: TechStatusDatabase,
@@ -58,7 +61,7 @@ export class WorkOrderViewPage implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
-    this.route.paramMap.subscribe(async params => {
+    this.activatedRoute.paramMap.subscribe(async params => {
       this.workOrderUuid = params.get('workOrderUuid');
 
       this.workOrder = await this.workOrderDatabase.getByUuid(this.workOrderUuid);
@@ -143,6 +146,22 @@ export class WorkOrderViewPage implements OnInit, OnDestroy {
   showConfirmButton() {
     return this.workOrder.status === environment.workOrderStatuses.issued;
   };
+
+  async onPartRequestClick() {
+    console.log('asd');
+    const modal = await this.modalController.create({
+      component: PartRequestComponent,
+      componentProps: {
+        objectType: 'work_order',
+        objectUuid: this.workOrder.uuid
+      },
+      cssClass: 'popup',
+      backdropDismiss: false,
+
+    });
+
+    await modal.present();
+  }
 
   async changeStatus() {
     // abort checking if the newly selected status is the same as the current one

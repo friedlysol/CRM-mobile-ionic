@@ -3,11 +3,11 @@ import { DatabaseService } from '@app/services/database.service';
 import { FileInterface } from '@app/interfaces/file.interface';
 import { PrevNextInterface } from '@app/interfaces/prev-next.interface';
 import { GeolocationService } from '@app/services/geolocation.service';
+import { Directory, Filesystem } from '@capacitor/filesystem';
+import { FileApiInterface } from '@app/providers/api/interfaces/file-api.interface';
 
 import * as sqlBuilder from 'sql-bricks';
 import * as _ from 'underscore';
-import { Directory, Filesystem } from '@capacitor/filesystem';
-
 
 @Injectable({
   providedIn: 'root'
@@ -35,6 +35,21 @@ export class FileDatabase {
     private databaseService: DatabaseService,
     private geolocationService: GeolocationService
   ) {
+  }
+
+  getUnSynchronized(): Promise<FileInterface[]> {
+    const query = sqlBuilder
+      .select()
+      .from('files')
+      .where('sync', 0)
+      .where(sqlBuilder.or(
+        sqlBuilder.notEq('sync_bg_status', 'QUEUED'),
+        sqlBuilder.isNull('sync_bg_status')
+      ))
+      .where(sqlBuilder.not(sqlBuilder.like('path', 'http%')))
+      .where(sqlBuilder.isNotNull('object_id'));
+
+    return this.databaseService.findAsArray(query.toString(), query.toParams());
   }
 
   /**
@@ -202,7 +217,8 @@ export class FileDatabase {
           path: file.path.split(/(\/)/g).pop(),
           directory: Directory.Documents
         });
-      } catch (err) {}
+      } catch (err) {
+      }
 
       if (file.thumbnail && file.thumbnail.search(/file:/) === 0) {
         try {
@@ -210,7 +226,8 @@ export class FileDatabase {
             path: file.thumbnail.split(/(\/)/g).pop(),
             directory: Directory.Documents
           });
-        } catch (err) {}
+        } catch (err) {
+        }
       }
     }
 
@@ -261,19 +278,20 @@ export class FileDatabase {
     ]);
   }
 
-  // /**
-  //  * Create sql query as string
-  //  *
-  //  * @param address
-  //  */
-  // getSqlForCreateFromApiData(address: AddressApiInterface) {
-  //   return sqlBuilder.insert('addresses', Object.assign({
-  //     uuid: this.databaseService.getUuid(),
-  //     created_at: this.databaseService.getTimeStamp(),
-  //     updated_at: null,
-  //     sync: 0
-  //   }, this.addressDatabaseObj(address)));
-  // }
+  /**
+   * Create sql query as string
+   *
+   * @param file
+   */
+  getSqlForCreateFromApiData(file: FileApiInterface) {
+    return sqlBuilder.insert('files', Object.assign({
+      uuid: this.databaseService.getUuid(),
+      created_at: this.databaseService.getTimeStamp(),
+      updated_at: null,
+      sync: 0
+    }, this.fileDatabaseObj(file)));
+  }
+
   //
   // /**
   //  * Update sql query as string
@@ -286,17 +304,29 @@ export class FileDatabase {
   //     .where(condition);
   // }
   //
-  // /**
-  //  * Get database object based on api response
-  //  *
-  //  * @param file
-  //  * @private
-  //  */
-  // private fileDatabaseObj(file: FileApiInterface): FileInterface {
-  //   return {
-  //
-  //   };
-  // }
-
-
+  /**
+   * Get database object based on api response
+   *
+   * @param file
+   * @private
+   */
+  private fileDatabaseObj(file: FileApiInterface): FileInterface {
+    return {
+      id: file.id,
+      type: file.type || 'photo',
+      type_id: file.type_id || null,
+      path: file.filename || null,
+      object_type: file.table_name || null,
+      object_uuid: file.object_uuid || null,
+      object_id: file.record_id || null,
+      gps_coords: file.gps_location || null,
+      description: file.description || null,
+      link_person_wo_id: file.link_person_wo_id || null,
+      sync: 1,
+      crc: file.crc || null,
+      thumbnail: file.link,
+      hash: file.hash || null,
+      created_at: file.created_at,
+    };
+  }
 }

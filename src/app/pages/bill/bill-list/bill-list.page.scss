@@ -1,0 +1,46 @@
+ion-thumbnail {
+  --size: 80px;
+}
+
+.details {
+  div {
+    margin-bottom: 2px;
+  }
+}
+
+.date {
+  font-size: 0.7rem;
+}
+
+.status {
+  &.waiting_for_approval {
+    color: orange;
+    font-weight: normal;
+  }
+
+  &.approved {
+    color: green;
+    font-weight: normal;
+  }
+
+  &.rejected {
+    color: red;
+    font-weight: normal;
+  }
+}
+
+.status_comment {
+  border: 1px solid #dddddd;
+  border-radius: 5px;
+  padding: 10px;
+
+  &.approved {
+    border-color: green;
+    font-weight: normal;
+  }
+
+  &.rejected {
+    border-color: red;
+    font-weight: normal;
+  }
+}

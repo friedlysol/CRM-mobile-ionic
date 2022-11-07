@@ -38,7 +38,7 @@ export class DailyInspectionPage implements OnInit {
   showErrors = false;
 
   constructor(
-    private route: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
     private router: Router,
     private toastController: ToastController,
     private typeService: TypeService,
@@ -61,7 +61,7 @@ export class DailyInspectionPage implements OnInit {
   }
 
   async ngOnInit() {
-    this.route.queryParamMap.subscribe(params => {
+    this.activatedRoute.queryParamMap.subscribe(params => {
       this.withoutPreview = params.get('withoutPreview') === '1';
       this.redirectTo = params.get('redirectTo');
     });

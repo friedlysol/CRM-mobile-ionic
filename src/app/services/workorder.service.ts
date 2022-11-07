@@ -251,7 +251,7 @@ export class WorkOrderService implements SyncInterface {
     if (res?.response?.syncs?.length) {
       const queue = [];
       res.response.syncs.forEach(sync => {
-        if (sync?.object_uuid && sync?.object_id) {
+        if (sync?.uuid && sync?.object_id) {
           queue.push(this.workOrderDatabase.getSqlForUpdateSyncStatus(sync));
         }
       });
@@ -275,13 +275,13 @@ export class WorkOrderService implements SyncInterface {
       const workOrderIds = res.response.workorders.map(workOrder => workOrder.id);
 
       // get existing work orders map from app db
-      const existingWorkOrdersHashMap = await this.workOrderDatabase.getExistingWorkOrdersAsMap(workOrderIds);
+      const existingWorkOrdersHashMap = await this.databaseService.getExistingRecordsAsMap(workOrderIds, 'work_orders');
 
       // get address ids from api response
       const addressIds = res.response.workorders.map(workOrder => workOrder.address_id);
 
       // get existing addresses map from app db
-      const existingAddressesHashMap = await this.addressDatabase.getExistingAddressesAsMap(addressIds);
+      const existingAddressesHashMap = await this.databaseService.getExistingRecordsAsMap(addressIds, 'addresses');
 
       const queue = [];
 

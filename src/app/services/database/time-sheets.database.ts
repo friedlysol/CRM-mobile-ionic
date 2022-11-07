@@ -219,7 +219,7 @@ export class TimeSheetsDatabase {
         updated_at: this.databaseService.getTimeStamp()
       })
       .where('uuid', timeSheet.uuid);
-console.log('query', query);
+
     return this.databaseService.query(query.toString(), query.toParams())
       .then(() => this.getByUuid(timeSheet.uuid));
   };

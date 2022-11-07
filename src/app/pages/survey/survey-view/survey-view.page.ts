@@ -35,15 +35,15 @@ export class SurveyViewPage implements OnInit {
 
   constructor(
     private location: Location,
-    private modalCtrl: ModalController,
-    private route: ActivatedRoute,
+    private modalController: ModalController,
+    private activatedRoute: ActivatedRoute,
     private surveyDatabase: SurveyDatabase,
     private typeService: TypeService,
   ) {
   }
 
   async ngOnInit() {
-    this.route.paramMap.subscribe(async params => {
+    this.activatedRoute.paramMap.subscribe(async params => {
       this.objectUuid = params.get('objectUuid');
       this.surveyUuid = params.get('surveyUuid');
 
@@ -147,7 +147,7 @@ export class SurveyViewPage implements OnInit {
   }
 
   async openCommentModal(comment: string) {
-    const modal = await this.modalCtrl.create({
+    const modal = await this.modalController.create({
       component: CommentModalComponent,
       cssClass: 'popup',
       backdropDismiss: false,
@@ -162,7 +162,7 @@ export class SurveyViewPage implements OnInit {
   }
 
   async openSubquestionsModal(options) {
-    const modal = await this.modalCtrl.create({
+    const modal = await this.modalController.create({
       component: SubquestionsModalComponent,
       backdropDismiss: false,
       componentProps: {

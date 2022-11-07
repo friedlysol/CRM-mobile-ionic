@@ -13,7 +13,17 @@ export class TypeDatabase {
   }
 
   /**
-   * Get types by key
+   * Get type by id
+   *
+   * @param typeId
+   */
+  getById(typeId: number): Promise<TypeInterface> {
+    return this.databaseService
+      .findOrNull(`select * from types where id = ?`, [typeId]);
+  }
+
+  /**
+   * Get type by key
    *
    * @param key
    */

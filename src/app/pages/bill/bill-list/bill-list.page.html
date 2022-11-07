@@ -1,0 +1,84 @@
+<ion-header>
+  <app-header [title]="'Bills'">
+    <ng-container icons>
+      <ion-button (click)="onAddClick()">
+        <ion-icon name="add-circle-outline"></ion-icon>
+      </ion-button>
+    </ng-container>
+  </app-header>
+  <div class="search-box">
+    <ion-row>
+      <ion-col>
+        <ion-input
+            class="clear"
+            [(ngModel)]="filters.query"
+            [debounce]="300"
+            (ionChange)="loadList(1, true)"
+            placeholder="Type to search">
+        </ion-input>
+      </ion-col>
+    </ion-row>
+  </div>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-card *ngFor="let bill of bills" (click)="onEditClick(bill)">
+      <ion-card-header>
+        <ion-row>
+          <ion-col size="8">
+            <ion-note
+                class="date">{{ utilsService.getLocalDatetime(bill.created_at) }} {{ bill.supplier_name}}</ion-note>
+          </ion-col>
+          <ion-col class="ion-text-right" size="4">
+            <div class="bold">{{ bill.price | currency }}</div>
+          </ion-col>
+        </ion-row>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-row>
+          <ion-col size="4">
+            <ion-thumbnail>
+              <img [src]="getFilePath(bill)"/>
+            </ion-thumbnail>
+          </ion-col>
+
+          <ion-col class="details ion-no-padding" size="8">
+            <div *ngIf="bill.desc">{{ bill.desc }}</div>
+
+            <div>
+              <span>Out of pocket: </span>
+              <span>{{ bill.reimbursement ? 'Yes' : 'No' }}</span>
+            </div>
+
+            <div class="mt-3">
+              <span class="status {{ bill.type_key}}">{{ bill.type_value}}</span>
+            </div>
+
+            <div *ngIf="bill.comment && ['approved', 'rejected'].includes(bill.type_key)"
+                 class="status_comment {{ bill.type_key}}"
+            >
+              <div *ngIf="bill.type_key === 'rejected' && bill.incorrect_bill"
+                   class="status {{ bill.type_key}} mb-2"
+              >{{bill.incorrect_bill}}</div>
+
+              {{bill.comment}}
+            </div>
+          </ion-col>
+        </ion-row>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+
+  <ion-infinite-scroll threshold="100px" (ionInfinite)="nextPage($event)">
+    <ion-infinite-scroll-content
+        loadingSpinner="bubbles"
+        loadingText="Loading bills...">
+    </ion-infinite-scroll-content>
+  </ion-infinite-scroll>
+</ion-content>
+
+<ion-footer>
+  <app-sync></app-sync>
+</ion-footer>

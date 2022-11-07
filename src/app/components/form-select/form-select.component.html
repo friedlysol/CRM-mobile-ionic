@@ -1,0 +1,14 @@
+<div [formGroup]="form">
+  <ion-label position="stacked" class="bold">
+    {{label}}:<span class="required" *ngIf="required">*</span>
+  </ion-label>
+  <ion-select
+      placeholder="Select type"
+      interface="action-sheet"
+      [formControlName]="controlName"
+  >
+    <ion-select-option *ngFor="let option of options | orderBy:order" [value]="option[valueKey]">
+      {{ option[labelKey] }}
+    </ion-select-option>
+  </ion-select>
+</div>

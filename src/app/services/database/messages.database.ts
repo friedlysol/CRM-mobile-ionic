@@ -24,37 +24,6 @@ export class MessagesDatabase {
   ) {
   }
 
-  /**
-   * Get map with uuid and hash
-   *
-   * @param messagesIds
-   */
-  getExistingMessageAsMap(messagesIds): Promise<Record<string, HashMapInterface>> {
-    if (messagesIds && Array.isArray(messagesIds) && messagesIds.length) {
-      const query = sqlBuilder
-        .select('uuid', 'id', 'hash')
-        .from('messages')
-        .where(sqlBuilder.in('id', ...messagesIds));
-
-      return this.databaseService
-        .findAsArray(query.toString(), query.toParams())
-        .then(messages => {
-          const messagesMap = {};
-
-          if (messages && messages.length) {
-            messages.forEach(message => messagesMap[Number(message.id)] = {
-              hash: message.hash,
-              uuid: message.uuid
-            });
-          }
-
-          return messagesMap;
-        });
-    }
-
-    return Promise.resolve({});
-  }
-
   getUnSynchronized() {
     const query = sqlBuilder
       .select()
@@ -691,19 +660,19 @@ export class MessagesDatabase {
   getSqlForUpdateActivitySyncStatus(sync: SyncApiInterface) {
     return sqlBuilder
       .update('messages', {id: sync.object_id, sync: 1})
-      .where('uuid', sync.object_uuid);
+      .where('uuid', sync.uuid);
   }
 
   getSqlForUpdateConfirmSyncStatus(sync: SyncApiInterface) {
     return sqlBuilder
       .update('message_confirmations', {id: sync.object_id, sync: 1})
-      .where('uuid', sync.object_uuid);
+      .where('uuid', sync.uuid);
   }
 
   getSqlForUpdateFileSyncStatus(sync: SyncApiInterface) {
     return sqlBuilder
       .update('files', {object_id: sync.object_id, sync: 1})
-      .where('uuid', sync.object_uuid)
+      .where('uuid', sync.uuid)
       .where('object_type', 'activity');
   }
 

@@ -22,7 +22,7 @@ export class SuppliesRequestListPage implements OnInit {
   statuses: TypeInterface[] = [];
 
   constructor(
-    private modalCtrl: ModalController,
+    private modalController: ModalController,
     private typeService: TypeService,
     private supplyDatabase: SupplyDatabase,
     private supplyService: SupplyService,
@@ -37,7 +37,7 @@ export class SuppliesRequestListPage implements OnInit {
   }
 
   async openFormModal() {
-    const modal = await this.modalCtrl.create({
+    const modal = await this.modalController.create({
       component: SuppliesRequestFormComponent,
       cssClass: 'popup',
       backdropDismiss: false
@@ -49,7 +49,7 @@ export class SuppliesRequestListPage implements OnInit {
   }
 
   async openStatusModal(request: SupplyInterface) {
-    const modal = await this.modalCtrl.create({
+    const modal = await this.modalController.create({
       component: SuppliesRequestEditStatusFormComponent,
       cssClass: 'popup',
       backdropDismiss: false,

@@ -1,0 +1,34 @@
+<ion-header>
+  <app-header [title]="'Assets'">
+    <ng-container icons>
+      <ion-button (click)="onAddClick()">
+        <ion-icon name="add-circle-outline"></ion-icon>
+      </ion-button>
+    </ng-container>
+  </app-header>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-card *ngFor="let asset of assets" (click)="goToAsset(asset.uuid)">
+      <ion-card-header>
+        <ion-card-title>
+          {{ asset.name }}
+
+          <div class="total-photos"
+               [routerLink]="['/gallery', 'list', 'asset', asset.uuid]"
+               [skipLocationChange]="true"
+          >
+            <ion-badge color="medium" slot="">{{ asset.total_photos}}</ion-badge>
+            <ion-icon name="images-outline"></ion-icon>
+          </div>
+        </ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-row>
+          <b>Type</b>: {{ getTypeValue(asset.type_id) }}
+        </ion-row>
+      </ion-card-content>
+    </ion-card>
+  </ion-list>
+</ion-content>

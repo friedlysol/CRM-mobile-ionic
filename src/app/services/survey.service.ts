@@ -55,7 +55,7 @@ export class SurveyService implements SyncInterface {
     if (res?.response?.syncs?.length) {
       const queue = [];
       res.response.syncs.forEach(sync => {
-        if (sync?.object_uuid && sync?.object_id) {
+        if (sync?.uuid && sync?.object_id) {
           queue.push(this.surveyDatabase.getSqlForUpdateSyncStatus(sync));
         }
       });
@@ -79,7 +79,7 @@ export class SurveyService implements SyncInterface {
       const surveyInstanceIds = res.response.surveys.map(survey => survey.survey_instance_id);
 
       // get existing work orders map from app db
-      const existingSurveysHashMap = await this.surveyDatabase.getExistingSurveysAsMap(surveyInstanceIds);
+      const existingSurveysHashMap = await this.databaseService.getExistingRecordsAsMap(surveyInstanceIds, 'surveys');
 
       const queue = [];
 
@@ -121,7 +121,7 @@ export class SurveyService implements SyncInterface {
       const surveyQuestionIds = res.response.questions.map(question => question.survey_question_id);
 
       // get existing surveys map from app db
-      const existingQuestionsHashMap = await this.surveyDatabase.getExistingQuestionsAsMap(surveyQuestionIds);
+      const existingQuestionsHashMap = await this.databaseService.getExistingRecordsAsMap(surveyQuestionIds, 'survey_questions');
 
       const queue = [];
 
@@ -159,13 +159,13 @@ export class SurveyService implements SyncInterface {
       const surveyAnswerIds = res.response.answers.map(answer => answer.survey_result_id);
 
       // get existing surveys map from app db
-      const existingAnswersHashMap = await this.surveyDatabase.getExistingAnswersAsMap(surveyAnswerIds);
+      const existingAnswersHashMap = await this.databaseService.getExistingRecordsAsMap(surveyAnswerIds, 'survey_results');
 
       // get survey ids from api response
       const surveyInstanceIds = res.response.answers.map(answer => answer.survey_instance_id);
 
       // get existing work orders map from app db
-      const existingSurveysHashMap = await this.surveyDatabase.getExistingSurveysAsMap(surveyInstanceIds);
+      const existingSurveysHashMap = await this.databaseService.getExistingRecordsAsMap(surveyInstanceIds, 'surveys');
 
       const queue = [];
 

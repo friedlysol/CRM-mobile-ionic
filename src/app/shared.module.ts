@@ -11,16 +11,27 @@ import { CaptureMediaComponent } from './components/capture-media/capture-media.
 import { SideSwipeDirective } from './directives/side-swipe.directive';
 import { RouterModule } from '@angular/router';
 import { YesOrNoOptionsComponent } from './components/yes-or-no-options/yes-or-no-options.component';
+import { FormSelectComponent } from '@app/components/form-select/form-select.component';
+import { OrderModule } from 'ngx-order-pipe';
+import { ItemValueComponent } from '@app/components/item-value/item-value.component';
+import { PartRequestComponent } from '@app/modals/part-request/part-request.component';
+import { LaborRequestComponent } from '@app/modals/labor-request/labor-request.component';
+import { ErrorTextComponent } from '@app/components/error-text/error-text.component';
 
 @NgModule({
   declarations: [
+    CaptureMediaComponent,
+    ErrorTextComponent,
+    FormSelectComponent,
     HeaderComponent,
-    SyncComponent,
+    ItemValueComponent,
+    LaborRequestComponent,
+    PartRequestComponent,
+    SideSwipeDirective,
+    SignatureCanvasComponent,
     SignatureComponent,
     SignatureFormComponent,
-    SignatureCanvasComponent,
-    CaptureMediaComponent,
-    SideSwipeDirective,
+    SyncComponent,
     YesOrNoOptionsComponent,
   ],
   imports: [
@@ -28,12 +39,18 @@ import { YesOrNoOptionsComponent } from './components/yes-or-no-options/yes-or-n
     IonicModule,
     ReactiveFormsModule,
     RouterModule,
+    OrderModule,
   ],
   exports: [
-    HeaderComponent,
-    SyncComponent,
-    SignatureComponent,
     CaptureMediaComponent,
+    ErrorTextComponent,
+    FormSelectComponent,
+    HeaderComponent,
+    ItemValueComponent,
+    LaborRequestComponent,
+    PartRequestComponent,
+    SignatureComponent,
+    SyncComponent,
     YesOrNoOptionsComponent,
   ],
   providers: [

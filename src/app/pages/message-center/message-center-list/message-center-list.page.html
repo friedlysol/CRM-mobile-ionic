@@ -34,9 +34,10 @@
           <ion-col size="2">
             <div class="total-photos"
                  [routerLink]="['/gallery', 'list', message.type, message.uuid]"
+                 [skipLocationChange]="true"
                  *ngIf="message.total_photos"
             >
-              <ion-badge slot="">{{ message.total_photos}}</ion-badge>
+              <ion-badge color="medium" slot="">{{ message.total_photos}}</ion-badge>
               <ion-icon name="images-outline"></ion-icon>
             </div>
           </ion-col>

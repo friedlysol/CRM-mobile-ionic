@@ -21,7 +21,7 @@ export class SuppliesRequestFormComponent implements OnInit {
   });
 
   constructor(
-    private modalCtrl: ModalController,
+    private modalController: ModalController,
     private supplyDatabase: SupplyDatabase,
     private typeService: TypeService,
   ) {
@@ -59,10 +59,10 @@ export class SuppliesRequestFormComponent implements OnInit {
 
     request = await this.supplyDatabase.createRequest(request);
 
-    await this.modalCtrl.dismiss(request, 'submit');
+    await this.modalController.dismiss(request, 'submit');
   }
 
   onCancel() {
-    this.modalCtrl.dismiss();
+    this.modalController.dismiss();
   }
 }

@@ -13,37 +13,6 @@ export class AddressDatabase {
   constructor(private databaseService: DatabaseService) {
   }
 
-  /**
-   * Get map with uuid and hash
-   *
-   * @param addressIds
-   */
-  getExistingAddressesAsMap(addressIds): Promise<Record<string, HashMapInterface>> {
-    if (addressIds && Array.isArray(addressIds) && addressIds.length) {
-      const query = sqlBuilder
-        .select('uuid', 'id', 'hash')
-        .from('addresses')
-        .where(sqlBuilder.in('id', ...addressIds));
-
-      return this.databaseService
-        .findAsArray(query.toString(), query.toParams())
-        .then(addresses => {
-          const addressMap = {};
-
-          if (addresses && addresses.length) {
-            addresses.forEach(address => addressMap[Number(address.id)] = {
-              hash: address.hash,
-              uuid: address.uuid
-            });
-          }
-
-          return addressMap;
-        });
-    }
-
-    return Promise.resolve({});
-  }
-
   getByUuid(uuid: string){
     return this.databaseService.findOrNull(`select * from addresses where uuid = ?`, [uuid]);
   }

@@ -41,37 +41,6 @@ export class WorkOrderDatabase {
   }
 
   /**
-   * Get map with uuid and hash
-   *
-   * @param workOrdersIds
-   */
-  getExistingWorkOrdersAsMap(workOrdersIds): Promise<Record<string, HashMapInterface>> {
-    if (workOrdersIds && Array.isArray(workOrdersIds) && workOrdersIds.length) {
-      const query = sqlBuilder
-        .select('uuid', 'id', 'hash')
-        .from('work_orders')
-        .where(sqlBuilder.in('id', ...workOrdersIds));
-
-      return this.databaseService
-        .findAsArray(query.toString(), query.toParams())
-        .then(workOrders => {
-          const workOrdersMap = {};
-
-          if (workOrders && workOrders.length) {
-            workOrders.forEach(workOrder => workOrdersMap[Number(workOrder.id)] = {
-              hash: workOrder.hash,
-              uuid: workOrder.uuid
-            });
-          }
-
-          return workOrdersMap;
-        });
-    }
-
-    return Promise.resolve({});
-  }
-
-  /**
    * Get wokr orders by tab
    *
    * @param tab
@@ -120,6 +89,14 @@ export class WorkOrderDatabase {
    */
   getUnSynchronized(): Promise<WorkOrderInterface[]> {
     return this.databaseService.getUnSynchronized('work_orders');
+  }
+
+  getActive() {
+    return this.databaseService.findAsArray(`
+      select * 
+      from work_orders
+      where status not in ('canceled', 'completed', 'stock_order')     
+    `);
   }
 
   /**
@@ -321,7 +298,7 @@ export class WorkOrderDatabase {
   getSqlForUpdateSyncStatus(sync: SyncApiInterface) {
     return sqlBuilder
       .update('work_orders', {id: sync.object_id, sync: 1})
-      .where({uuid: sync.object_uuid});
+      .where({uuid: sync.uuid});
   }
 
   clearHash() {

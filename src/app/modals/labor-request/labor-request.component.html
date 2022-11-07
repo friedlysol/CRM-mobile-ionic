@@ -1,0 +1,37 @@
+<h2 class="modal-title ion-text-center">Labor request</h2>
+
+<div class="ion-padding">
+  <form [formGroup]="form" *ngIf="form">
+    <ion-item class="ion-no-padding mb-2" lines="none">
+      <ion-label position="stacked" class="bold">
+        Total requested:<span class="required">*</span>
+      </ion-label>
+      <ion-input type="number" formControlName="quantity"></ion-input>
+    </ion-item>
+
+    <ion-item class="ion-no-padding mb-2" lines="none">
+      <ion-label position="stacked" class="bold">
+        Reason for request:<span class="required">*</span>
+      </ion-label>
+      <ion-textarea formControlName="comment"></ion-textarea>
+    </ion-item>
+
+    <app-capture-media
+        [type]="'photo'"
+        [typeId]="1"
+        [objectType]="'labor'"
+        [objectUuid]="'uuid'"
+        [objectId]="1"
+        [mediaOptions]="{buttonLabel: 'Add photo'}"
+    ></app-capture-media>
+  </form>
+
+  <ion-row class="gap-2 ion-padding-top">
+    <ion-col class="ion-no-padding">
+      <ion-button (click)="onCancel()" color="light" expand="full">Cancel</ion-button>
+    </ion-col>
+    <ion-col class="ion-no-padding">
+      <ion-button (click)="onSubmit()" color="medium" expand="full">Submit</ion-button>
+    </ion-col>
+  </ion-row>
+</div>

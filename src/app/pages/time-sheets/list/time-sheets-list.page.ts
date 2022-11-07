@@ -23,7 +23,7 @@ export class TimeSheetsListPage implements OnInit {
 
   constructor(
     private accountsDatabase: AccountsDatabase,
-    private alertCtrl: AlertController,
+    private AlertController: AlertController,
     private timeSheetsDatabase: TimeSheetsDatabase,
     private timeSheetsTypesDatabase: TimeSheetTypesDatabase,
     public utilsService: UtilsService,
@@ -129,7 +129,7 @@ export class TimeSheetsListPage implements OnInit {
   async showCreateTimeSheetAlert() {
     const notWoRelatedTypes = this.types.filter(type => type.is_work_order_related === 0);
 
-    const alert = await this.alertCtrl.create({
+    const alert = await this.AlertController.create({
       header: 'Select type',
       backdropDismiss: false,
       cssClass: 'form-alert',
@@ -169,7 +169,7 @@ export class TimeSheetsListPage implements OnInit {
   }
 
   async showStopActivityAlert() {
-    const alert = await this.alertCtrl.create({
+    const alert = await this.AlertController.create({
       header: 'Description',
       backdropDismiss: false,
       cssClass: 'form-alert',

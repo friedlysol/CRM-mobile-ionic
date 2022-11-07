@@ -36,7 +36,7 @@ export class AddressService {
       const addressIds = res.response.addresses.map(address => address.address_id);
 
       // get existing addresses map from app db
-      const existingAddressesHashMap = await this.addressDatabase.getExistingAddressesAsMap(addressIds);
+      const existingAddressesHashMap = await this.databaseService.getExistingRecordsAsMap(addressIds, 'addresses');
 
       const queue = [];
 

@@ -49,7 +49,7 @@ export class WeeklyInspectionPage implements OnInit {
     private alertController: AlertController,
     private databaseService: DatabaseService,
     private fileService: FileService,
-    private route: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
     private router: Router,
     private toastController: ToastController,
     private typeService: TypeService,
@@ -83,7 +83,7 @@ export class WeeklyInspectionPage implements OnInit {
   }
 
   async ngOnInit() {
-    this.route.queryParamMap.subscribe(params => {
+    this.activatedRoute.queryParamMap.subscribe(params => {
       this.redirectTo = params.get('redirectTo');
     });
 

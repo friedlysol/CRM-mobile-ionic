@@ -296,37 +296,6 @@ export class SurveyDatabase {
   };
 
   /**
-   * Get survey map with uuid and hash
-   *
-   * @param surveyInstanceIds
-   */
-  async getExistingSurveysAsMap(surveyInstanceIds: number[]): Promise<Record<string, HashMapInterface>> {
-    if (surveyInstanceIds && Array.isArray(surveyInstanceIds) && surveyInstanceIds.length) {
-      const query = sqlBuilder
-        .select('uuid', 'id', 'hash')
-        .from('surveys')
-        .where(sqlBuilder.in('id', ...surveyInstanceIds));
-
-      return this.databaseService
-        .findAsArray(query.toString(), query.toParams())
-        .then(surveys => {
-          const surveysMap = {};
-
-          if (surveys && surveys.length) {
-            surveys.forEach(survey => surveysMap[Number(survey.id)] = {
-              hash: survey.hash,
-              uuid: survey.uuid
-            });
-          }
-
-          return surveysMap;
-        });
-    }
-
-    return Promise.resolve({});
-  }
-
-  /**
    * Create sql query as string
    *
    * @param survey
@@ -366,38 +335,7 @@ export class SurveyDatabase {
   getSqlForUpdateSyncStatus(sync: SyncApiInterface) {
     return sqlBuilder
       .update('survey_results', {id: sync.object_id, sync: 1})
-      .where({uuid: sync.object_uuid});
-  }
-
-  /**
-   * Get question map with uuid and hash
-   *
-   * @param surveyQuestionIds
-   */
-  async getExistingQuestionsAsMap(surveyQuestionIds: number[]): Promise<Record<string, HashMapInterface>> {
-    if (surveyQuestionIds && Array.isArray(surveyQuestionIds) && surveyQuestionIds.length) {
-      const query = sqlBuilder
-        .select('uuid', 'id', 'hash')
-        .from('survey_questions')
-        .where(sqlBuilder.in('id', ...surveyQuestionIds));
-
-      return this.databaseService
-        .findAsArray(query.toString(), query.toParams())
-        .then(questions => {
-          const questionsMap = {};
-
-          if (questions && questions.length) {
-            questions.forEach(question => questionsMap[Number(question.id)] = {
-              hash: question.hash,
-              uuid: question.uuid
-            });
-          }
-
-          return questionsMap;
-        });
-    }
-
-    return Promise.resolve({});
+      .where({uuid: sync.uuid});
   }
 
   /**
@@ -429,37 +367,6 @@ export class SurveyDatabase {
         }, this.questionDatabaseObj(question))
       )
       .where(condition);
-  }
-
-  /**
-   * Get answer map with uuid and hash
-   *
-   * @param surveyAnswerIds
-   */
-  async getExistingAnswersAsMap(surveyAnswerIds: number[]): Promise<Record<string, HashMapInterface>> {
-    if (surveyAnswerIds && Array.isArray(surveyAnswerIds) && surveyAnswerIds.length) {
-      const query = sqlBuilder
-        .select('uuid', 'id', 'hash')
-        .from('survey_results')
-        .where(sqlBuilder.in('id', ...surveyAnswerIds));
-
-      return this.databaseService
-        .findAsArray(query.toString(), query.toParams())
-        .then(answers => {
-          const answersMap = {};
-
-          if (answers && answers.length) {
-            answers.forEach(answer => answersMap[Number(answer.id)] = {
-              hash: answer.hash,
-              uuid: answer.uuid
-            });
-          }
-
-          return answersMap;
-        });
-    }
-
-    return Promise.resolve({});
   }
 
   /**

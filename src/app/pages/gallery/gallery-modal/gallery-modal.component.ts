@@ -19,7 +19,7 @@ export class GalleryModalComponent implements OnInit {
 
   constructor(
     private fileService: FileService,
-    private modalCtrl: ModalController,
+    private modalController: ModalController,
     private params: NavParams,
     public utilsService: UtilsService,
   ) {
@@ -58,6 +58,6 @@ export class GalleryModalComponent implements OnInit {
   }
 
   onCloseClick(){
-    this.modalCtrl.dismiss(null, 'cancel');
+    this.modalController.dismiss(null, 'cancel');
   }
 }

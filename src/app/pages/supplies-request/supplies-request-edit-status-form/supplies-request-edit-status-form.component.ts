@@ -22,7 +22,7 @@ export class SuppliesRequestEditStatusFormComponent implements OnInit {
 
   constructor(
     params: NavParams,
-    private modalCtrl: ModalController,
+    private modalController: ModalController,
     private supplyDatabase: SupplyDatabase,
     private typeService: TypeService,
     ) {
@@ -56,10 +56,10 @@ export class SuppliesRequestEditStatusFormComponent implements OnInit {
 
     this.supplyDatabase.updateRequest(this.request);
 
-    this.modalCtrl.dismiss(this.request, 'submit');
+    this.modalController.dismiss(this.request, 'submit');
   }
 
   onCancel(){
-    this.modalCtrl.dismiss(null, 'cancel');
+    this.modalController.dismiss(null, 'cancel');
   }
 }

@@ -3,17 +3,21 @@ import { FileDatabase } from '@app/services/database/file.database';
 import { Directory, Filesystem } from '@capacitor/filesystem';
 import { FileInterface } from '@app/interfaces/file.interface';
 import { PrevNextInterface } from '@app/interfaces/prev-next.interface';
-import { environment } from '@env/environment';
 import { AuthService } from '@app/services/auth.service';
 import { HttpClient } from '@angular/common/http';
+import { FileApiInterface } from '@app/providers/api/interfaces/file-api.interface';
+import { environment } from '@env/environment';
 import { tap } from 'rxjs/operators';
+import { SyncInterface } from '@app/interfaces/sync.interface';
 
 declare let FileTransferManager: any;
 
 @Injectable({
   providedIn: 'root'
 })
-export class FileService {
+export class FileService implements SyncInterface {
+  syncTitle = 'Files';
+
   private uploader: any;
 
   constructor(
@@ -21,6 +25,15 @@ export class FileService {
     private fileDatabase: FileDatabase,
     private http: HttpClient,
   ) {
+  }
+  async sync(): Promise<boolean> {
+    const files = await this.fileDatabase.getUnSynchronized();
+console.log('files sync', files);
+    if(files.length) {
+      files.forEach(file => this.uploadFile(file));
+    }
+
+    return Promise.resolve(true);
   }
 
   backgroundUploadInit(): void {
@@ -63,6 +76,10 @@ export class FileService {
         this.uploader.acknowledgeEvent(event.eventId);
       }
     });
+  }
+
+  syncFiles(file: FileApiInterface) {
+    return this.fileDatabase.getSqlForCreateFromApiData(file);
   }
 
   cancelUpload(file: FileInterface): void {
@@ -115,6 +132,11 @@ export class FileService {
    * @param file
    */
   async uploadFile(file: FileInterface) {
+    //upload only files with reference object id
+    if(!file.object_id) {
+      return file;
+    }
+
     const uploadData = {
       id: file.uuid,
       filePath: file.path,
@@ -307,7 +329,7 @@ export class FileService {
       file.sync = 0;
 
       return this.fileDatabase.updateFile(file);
-    }else if(file.sync === 0 && file.sync_bg_status == null){
+    } else if (file.sync === 0 && file.sync_bg_status == null) {
       return this.fileDatabase.remove(file);
     }
 
@@ -360,22 +382,22 @@ export class FileService {
     });
   }
 
-  async hasPhotos(objectType: string, objectUuid: string, fileTypeIds?: Array<number>): Promise<Record<number, boolean>>{
+  async hasPhotos(objectType: string, objectUuid: string, fileTypeIds?: Array<number>): Promise<Record<number, boolean>> {
     const records: Record<number, boolean> = {};
-    if(fileTypeIds){
-      for(const typeId of fileTypeIds){
+    if (fileTypeIds) {
+      for (const typeId of fileTypeIds) {
         const files = await this.fileDatabase.getByObjectAndType(objectType, objectUuid, typeId);
-        if(files.length > 0){
+        if (files.length > 0) {
           records[typeId] = true;
-        }else{
+        } else {
           records[typeId] = false;
         }
       }
-    }else{
+    } else {
       const files = await this.fileDatabase.getByObjectAndType(objectType, objectUuid);
-      if(files[0]){
+      if (files[0]) {
         records[files[0].type_id] = true;
-      }else{
+      } else {
         records[0] = false;
       }
     }

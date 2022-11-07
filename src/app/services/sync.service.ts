@@ -10,6 +10,7 @@ import { FileService } from './file.service';
 import { Directory, Filesystem } from '@capacitor/filesystem';
 import { SurveyService } from '@app/services/survey.service';
 import { TechStatusService } from '@app/services/tech-status.service';
+import { BillService } from '@app/services/bill.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,7 @@ import { TechStatusService } from '@app/services/tech-status.service';
 export class SyncService {
   constructor(
     private databaseService: DatabaseService,
+    private billService: BillService,
     private fileService: FileService,
     private http: HttpClient,
     private settingsService: SettingsService,
@@ -36,6 +38,9 @@ export class SyncService {
     await this.typeService.sync();
     await this.workOrderService.sync();
     await this.surveyService.sync();
+    await this.billService.sync();
+
+    await this.fileService.sync();
 
     EventService.endSync.next(true);
   }

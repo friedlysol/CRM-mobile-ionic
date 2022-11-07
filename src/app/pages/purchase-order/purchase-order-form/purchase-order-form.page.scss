@@ -1,0 +1,17 @@
+ion-checkbox {
+  vertical-align: middle;
+  border: 1px solid #dddddd;
+  margin-left: 10px;
+
+  --border-radius: 0;
+}
+
+.entries {
+  background-color: #eeeeee;
+  border: 1px solid #dddddd;
+  padding: 8px;
+
+  ion-icon {
+    font-size: 20px;
+  }
+}

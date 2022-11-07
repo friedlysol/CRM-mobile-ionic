@@ -6,6 +6,7 @@ import { Directory, Encoding, Filesystem } from '@capacitor/filesystem';
 
 import * as moment from 'moment';
 import * as sqlBuilder from 'sql-bricks';
+import { HashMapInterface } from '@app/interfaces/hash-map.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -192,5 +193,38 @@ export class DatabaseService {
 
         return hashMapped;
       });
+  }
+
+
+  /**
+   * Get map with uuid and hash
+   *
+   * @param ids
+   * @param tableName
+   * @param idColumnName
+   */
+  getExistingRecordsAsMap(ids: number[], tableName, idColumnName = 'id'): Promise<Record<string, HashMapInterface>> {
+    if (ids && Array.isArray(ids) && ids.length) {
+      const query = sqlBuilder
+        .select('uuid', idColumnName, 'hash')
+        .from(tableName)
+        .where(sqlBuilder.in(idColumnName, ...ids));
+
+      return this.findAsArray(query.toString(), query.toParams())
+        .then(billEntries => {
+          const billEntriesMap = {};
+
+          if (billEntries && billEntries.length) {
+            billEntries.forEach(billEntry => billEntriesMap[Number(billEntry[idColumnName])] = {
+              hash: billEntry.hash,
+              uuid: billEntry.uuid
+            });
+          }
+
+          return billEntriesMap;
+        });
+    }
+
+    return Promise.resolve({});
   }
 }

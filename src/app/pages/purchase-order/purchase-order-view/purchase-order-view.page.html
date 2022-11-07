@@ -1,0 +1,66 @@
+<ion-header>
+  <app-header [title]="'Purchase Order View'"></app-header>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <app-item-value label="PO #" [value]="'PM-14376'"></app-item-value>
+    <app-item-value label="WO #" [value]="'1'"></app-item-value>
+    <app-item-value label="WO Type" [value]="'Service (window)'"></app-item-value>
+    <app-item-value label="Status" [value]="'New'"></app-item-value>
+
+    <ion-item lines="none">
+      <ion-button
+          expand="full"
+          color="medium"
+          class="mt-3"
+          [routerLink]="['/message-center', 'list']"
+          [queryParams]="{objectType: 'purchase_order', objectUuid: '1', objectId: 1}"
+      >Notes
+      </ion-button>
+    </ion-item>
+
+    <div class="ion-padding">
+      <div *ngFor="let entry of entries" class="entry mb-2">
+        <app-item-value label="Item" [value]="entry.description + ' ('  + entry.supplier_name + ')'"></app-item-value>
+        <app-item-value label="Ordered" [value]="entry.quantity"></app-item-value>
+        <app-item-value label="Left" [value]="entry.left"></app-item-value>
+
+        <ion-row class="ion-padding-horizontal mt-3">
+          <ion-col size="4" class="ion-text-left ion-no-padding">
+            <ion-button (click)="subQty(entry)" [disabled]="!entry.received_qty">-</ion-button>
+          </ion-col>
+          <ion-col size="4" class="text-center">
+            <ion-input type="number" [(ngModel)]="entry.received_qty" style="padding: 2px !important;
+    margin: 0;"></ion-input>
+          </ion-col>
+          <ion-col size="4" class="ion-text-right ion-no-padding">
+            <ion-button (click)="addQty(entry)" [disabled]="entry.received_qty >= entry.left">+</ion-button>
+          </ion-col>
+        </ion-row>
+      </div>
+    </div>
+  </ion-list>
+</ion-content>
+
+<ion-footer>
+  <ion-row class="buttons">
+    <ion-col>
+      <ion-button
+          expand="full"
+          color="light"
+          (click)="onCancelClick()">
+        Cancel
+      </ion-button>
+    </ion-col>
+
+    <ion-col>
+      <ion-button
+          expand="full"
+          color="medium"
+          (click)="onSaveClick()">
+        Receive
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</ion-footer>

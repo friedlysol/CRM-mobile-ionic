@@ -44,10 +44,24 @@ export const environment = {
     },
     {
       key: 'supplies-request',
-      label: 'Supplies Request',
+      label: 'Supplies Requests',
       icon: 'construct-outline',
       url: ['/supplies-request', 'list'],
       isActive: true
+    },
+    {
+      key: 'purchase-order',
+      label: 'Purchase orders',
+      icon: 'cart-outline',
+      url: ['/purchase-order', 'list'],
+      isActive: true
+    },
+    {
+      key: 'bill',
+      label: 'Bills',
+      icon: 'receipt-outline',
+      url: ['/bill', 'list'],
+      isActive: false
     },
     {
       key: 'message-center',

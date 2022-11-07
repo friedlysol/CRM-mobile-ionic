@@ -45,11 +45,11 @@ export class UtilsService {
   getPagination(total: any, page: number, limit: number): PaginationInterface {
     return {
       total: total,
-      totalPages: Math.round(total / page),
+      totalPages: Math.round(total / limit),
       page: page,
       limit: limit,
       prev: page > 1,
-      next: page < Math.round(total / page)
+      next: page < Math.round(total / limit)
     }
   }
 }

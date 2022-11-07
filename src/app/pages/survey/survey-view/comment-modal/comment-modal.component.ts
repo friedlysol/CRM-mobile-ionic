@@ -10,12 +10,12 @@ export class CommentModalComponent {
   comment = '';
   submitted = false;
 
-  constructor(params: NavParams, private modalCtrl: ModalController) {
+  constructor(params: NavParams, private modalController: ModalController) {
     this.comment = params.data.comment != null ? params.data.comment : '';
   }
 
   onCancel() {
-    this.modalCtrl.dismiss();
+    this.modalController.dismiss();
   }
 
   onSubmit() {
@@ -25,6 +25,6 @@ export class CommentModalComponent {
       return;
     }
 
-    this.modalCtrl.dismiss(this.comment, 'submit');
+    this.modalController.dismiss(this.comment, 'submit');
   }
 }

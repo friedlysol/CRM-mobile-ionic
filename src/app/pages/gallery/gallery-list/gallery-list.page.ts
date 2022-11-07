@@ -38,7 +38,7 @@ export class GalleryListPage implements OnInit {
     private documentViewer: DocumentViewer,
     private fileService: FileService,
     private modalController: ModalController,
-    private route: ActivatedRoute,
+    private activatedRoute: ActivatedRoute,
     private toastController: ToastController,
     private typeService: TypeService
   ) {
@@ -46,12 +46,12 @@ export class GalleryListPage implements OnInit {
   }
 
   async ngOnInit() {
-    this.route.paramMap.subscribe(async params => {
+    this.activatedRoute.paramMap.subscribe(async params => {
       this.objectType = params.get('objectType');
       this.objectUuid = params.get('objectUuid');
     });
 
-    this.route.queryParamMap.subscribe(async params => {
+    this.activatedRoute.queryParamMap.subscribe(async params => {
       this.objectId = params.get('objectId') ? Number(params.get('objectId')) : null;
       this.photoType = params.get('photoType');
       this.readOnly = params.get('readOnly') === 'true';
@@ -115,6 +115,7 @@ export class GalleryListPage implements OnInit {
     });
 
     alert.present();
+
     alert.onDidDismiss().then((data) => {
       if (data.role === 'submit') {
         this.fileService.removeFile(file).then((res) => {

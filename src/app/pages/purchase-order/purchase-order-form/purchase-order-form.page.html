@@ -1,0 +1,88 @@
+<ion-header>
+  <app-header [title]="'Purchase Order Form'"></app-header>
+</ion-header>
+
+
+<ion-content>
+  <form class="ion-padding" [formGroup]="form" *ngIf="form">
+    <div class="mb-3">
+      <app-form-select
+          label="Work Order"
+          controlName="work_order_uuid"
+          [form]="form"
+          [options]="workOrders"
+          [labelKey]="'label'"
+          [valueKey]="'uuid'"
+      ></app-form-select>
+      <app-error-text [field]="woUuid"></app-error-text>
+    </div>
+
+    <div class="mb-3">
+      <ion-label position="stacked" class="bold">PO #:</ion-label>
+      <ion-input formControlName="purchase_order_number" class="without-margin-top"></ion-input>
+      <app-error-text [field]="poNumber"></app-error-text>
+    </div>
+
+    <div class="mb-3">
+      <app-form-select
+          label="Vendor name"
+          controlName="supplier_name"
+          [form]="form"
+          [options]="vendors()"
+      ></app-form-select>
+      <app-error-text [field]="supplierName"></app-error-text>
+    </div>
+
+    <div class="mb-3 relative">
+      <ion-label position="stacked" class="bold">
+        Select if this PO completes the Job:
+      </ion-label>
+      <ion-checkbox formControlName="is_completes_job" color="medium"></ion-checkbox>
+      <app-error-text [field]="isCompletesJob"></app-error-text>
+    </div>
+
+    <div class="mb-3">
+      <ion-label position="stacked" class="bold">Requests:</ion-label>
+
+      <div class="entries">
+        <ion-row *ngFor="let entry of entries">
+          <ion-col size="6">{{ entry.description }}</ion-col>
+          <ion-col size="3" class="ion-text-right">x{{ entry.quantity }}</ion-col>
+          <ion-col size="3" class="ion-text-right ion-color-danger">
+            <ion-icon name="close-circle-outline" (click)="removeEntry(entry)"></ion-icon>
+          </ion-col>
+        </ion-row>
+
+        <div *ngIf="!entries.length" class="text-center">
+          No records
+        </div>
+      </div>
+
+      <div class="full-width text-center mt-3">
+        <ion-icon name="add-circle-outline" size="large" (click)="onAddEntryClick()"></ion-icon>
+      </div>
+    </div>
+  </form>
+</ion-content>
+
+<ion-footer>
+  <ion-row class="buttons">
+    <ion-col>
+      <ion-button
+          expand="full"
+          color="light"
+          (click)="onCancelClick()">
+        Cancel
+      </ion-button>
+    </ion-col>
+
+    <ion-col>
+      <ion-button
+          expand="full"
+          color="medium"
+          (click)="onSaveClick()">
+        Save
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</ion-footer>
