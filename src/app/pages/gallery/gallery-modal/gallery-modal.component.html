@@ -6,22 +6,14 @@
 
 <ion-content>
 
-  <ion-button
-    class="close-btn"
-    fill="clear"
-    (click)="onCloseClick()">
-    <ion-icon 
-      name="close-outline">
-    </ion-icon>
-  </ion-button>
-
   <div class="spacer"></div>
 
   <ion-img
     appSideSwipe
     (swipeLeft)="loadPrev()" 
     (swipeRight)="loadNext()"
-    [src]="getFilePath()">
+    [src]="getFilePath()"
+    (click)="onCloseClick()">
   </ion-img>
 
   <ion-text
