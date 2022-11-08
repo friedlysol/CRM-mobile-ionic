@@ -126,7 +126,7 @@
           </ion-text>
   
           <app-capture-media
-            [typeId]="incident.incident_type_id"
+            [typeId]="photoType?.id"
             type="photo"
             [objectId]="incident.id"
             [objectUuid]="incident.uuid"
@@ -135,7 +135,7 @@
               buttonLabel: 'Add photos',
               required: false
             }">
-        </app-capture-media>
+          </app-capture-media>
 
         </ion-col>
       </ion-row>
@@ -391,6 +391,30 @@
   
         </ion-col>
       </ion-row>
+
+      <ion-row>
+        <ion-col>
+  
+          <ion-label>
+            <b>Corrective action description:</b>
+            <span class="required">*</span>
+          </ion-label>
+          <ion-textarea 
+            class="ion-no-margin"
+            placeholder="Corrective Action Description"
+            [formControl]="analysisCorrectiveActionDescriptionCtrl"
+            [autoGrow]="true">
+          </ion-textarea>
+          
+          <ion-text 
+            class="small"
+            color="danger"
+            *ngIf="analysisCorrectiveActionDescriptionCtrl.invalid && (analysisCorrectiveActionDescriptionCtrl.dirty || analysisCorrectiveActionDescriptionCtrl.touched)">
+            This field is required
+          </ion-text>
+  
+        </ion-col>
+      </ion-row>
     </ion-card>
 
     <ion-card class="ion-padding" *ngIf="isPropertyDamageType">
@@ -462,6 +486,21 @@
             This field is required
           </ion-text>
   
+        </ion-col>
+      </ion-row>
+    </ion-card>
+
+    <ion-card class="ion-padding">
+      <ion-row>
+        <ion-col>
+
+          <ion-label><b>Note:</b></ion-label>
+          <ion-textarea 
+            class="ion-no-margin"
+            [formControl]="noteCtrl"
+            [autoGrow]="true">
+          </ion-textarea>  
+
         </ion-col>
       </ion-row>
     </ion-card>

@@ -1,3 +1,22 @@
 .incident{
     display: flex;
+
+    ion-item{
+        display: flex;
+        align-items: flex-start;
+
+        ion-thumbnail {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgb(223, 223, 223);
+            border: 1px rgb(170, 170, 170) solid;
+            
+            ion-icon{
+                font-size: 40px;
+                color: rgb(170, 170, 170);
+            }
+        }
+        
+    }
 }

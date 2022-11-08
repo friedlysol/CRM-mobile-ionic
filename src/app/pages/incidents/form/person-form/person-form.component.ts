@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { IncidentPerson } from '@app/interfaces/incident.interface';
 import { TypeInterface } from '@app/interfaces/type.interface';
+import { TypeService } from '@app/services/type.service';
 import { ModalController, NavParams } from '@ionic/angular';
 
 @Component({
@@ -11,62 +12,9 @@ import { ModalController, NavParams } from '@ionic/angular';
 })
 export class PersonFormComponent implements OnInit {
 
-  injuryTypes: TypeInterface[] = [
-    {
-      id: 1,
-      type: '',
-      type_key: 'first',
-      type_value: 'First',
-      type_order: 0,
-      type_color: ''
-    },
-    {
-      id: 2,
-      type: '',
-      type_key: 'second',
-      type_value: 'Second',
-      type_order: 0,
-      type_color: ''
-    }
-  ];
-
-  bodyPartTypes: TypeInterface[] = [
-    {
-      id: 1,
-      type: '',
-      type_key: 'first',
-      type_value: 'First',
-      type_order: 0,
-      type_color: ''
-    },
-    {
-      id: 2,
-      type: '',
-      type_key: 'second',
-      type_value: 'Second',
-      type_order: 0,
-      type_color: ''
-    }
-  ];
-
-  treatmentTypes: TypeInterface[] = [
-    {
-      id: 1,
-      type: '',
-      type_key: 'first',
-      type_value: 'First',
-      type_order: 0,
-      type_color: ''
-    },
-    {
-      id: 2,
-      type: '',
-      type_key: 'second',
-      type_value: 'Second',
-      type_order: 0,
-      type_color: ''
-    }
-  ];
+  injuryTypes: TypeInterface[] = [];
+  bodyPartTypes: TypeInterface[] = [];
+  treatmentTypes: TypeInterface[] = [];
 
   formGroup: FormGroup = new FormGroup({
     first_name: new FormControl('', [Validators.required]),
@@ -79,8 +27,8 @@ export class PersonFormComponent implements OnInit {
   constructor(
     private modalControler: ModalController,
     private navParams: NavParams,
-  ) {
-  }
+    private typeService: TypeService,
+  ) {}
 
   get firstNameCtrl() {
     return this.formGroup.controls.first_name;
@@ -114,7 +62,11 @@ export class PersonFormComponent implements OnInit {
     return this.formGroup.controls.statement;
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    this.injuryTypes = await this.typeService.getByType('incident_injury_type');
+    this.bodyPartTypes = await this.typeService.getByType('incident_body_part');
+    this.treatmentTypes = await this.typeService.getByType('incident_treatment_type');
+
     this.type = this.navParams.data?.type;
     if (this.type === 'injured') {
       this.formGroup.addControl(

@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { IncidentsFormPage } from './form/incidents-form.page';
 import { IncidentsListPage } from './list/incidents-list.page';
+import { IncidentsViewPage } from './view/incidents-view.page';
 
 const routes: Routes = [
   {
@@ -11,7 +12,12 @@ const routes: Routes = [
   {
     path: 'form',
     component: IncidentsFormPage,
+  },
+  {
+    path: 'view/:incidentUuid',
+    component: IncidentsViewPage,
   }
+
 ];
 
 @NgModule({

@@ -8,8 +8,8 @@ import { IncidentsPageRoutingModule } from './incidents-routing.module';
 import { IncidentsListPage } from './list/incidents-list.page';
 import { SharedModule } from '@app/shared.module';
 import { IncidentsFormPage } from './form/incidents-form.page';
-import { InjuredPersonsFormComponent } from './form/injured-persons-form/injured-persons-form.component';
 import { PersonFormComponent } from './form/person-form/person-form.component';
+import { IncidentsViewPage } from './view/incidents-view.page';
 
 @NgModule({
   imports: [
@@ -23,8 +23,8 @@ import { PersonFormComponent } from './form/person-form/person-form.component';
   declarations: [
     IncidentsListPage,
     IncidentsFormPage,
-    InjuredPersonsFormComponent,
     PersonFormComponent,
+    IncidentsViewPage,
   ],
 })
 export class IncidentsPageModule {}

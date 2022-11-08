@@ -9,6 +9,7 @@ import * as _ from 'underscore';
 })
 export class IncidentsDatabase {
     allowFields: Array<string> = [
+        'status_type_id',
         'incident_type_id',
         'incident_date',
         'incident_time',
@@ -16,6 +17,7 @@ export class IncidentsDatabase {
         'description',
         'injury_description',
         'analysis_root_cause_type_id',
+        'analysis_risk_type_id',
         'analysis_activity_being_performed_type_id',
         'analysis_corrective_action_description',
         'damage_property_owner',
@@ -29,10 +31,10 @@ export class IncidentsDatabase {
     getByUuid(uuid: string): Promise<IncidentInterface> {
         return this.databaseService.findOrNull(`
             select *
-            from incidents
+            from incidents i
             where uuid = ?`, [
-          uuid
-        ]).then((incident) => this.mapJsonFieldsToObjects(incident));
+            uuid
+            ]).then((incident) => this.mapJsonFieldsToObjects(incident));
     };
 
     async getAll(): Promise<IncidentInterface[]> {
@@ -41,6 +43,16 @@ export class IncidentsDatabase {
             from incidents
             order by created_at desc`
         ).then((incidents) => incidents.map(incident => this.mapJsonFieldsToObjects(incident)));
+    };
+
+    async getByStatus(statusId: number): Promise<IncidentInterface[]> {
+        return this.databaseService.findAsArray(
+            `select *
+            from incidents
+            where status_type_id = ?
+            order by created_at desc`, [
+                statusId
+            ]).then((incidents) => incidents.map(incident => this.mapJsonFieldsToObjects(incident)));
     };
 
     /**
