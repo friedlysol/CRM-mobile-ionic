@@ -7,6 +7,7 @@ CREATE TABLE `persons`
     `first_name`     TEXT,
     `last_name`      TEXT,
     `status_type_id` INTEGER,
+    `hash`           TEXT,
     `created_at`     TEXT,
     `updated_at`     TEXT,
     PRIMARY KEY (uuid)

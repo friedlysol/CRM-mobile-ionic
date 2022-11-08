@@ -1,5 +1,11 @@
 <ion-header>
-  <app-header [title]="title"></app-header>
+  <app-header [title]="title">
+    <ng-container icons *ngIf="!isNote">
+      <ion-button (click)="openFormModal()">
+        <ion-icon name="add-circle-outline"></ion-icon>
+      </ion-button>
+    </ng-container>
+  </app-header>
   <div class="search-box">
     <ion-row>
       <ion-col>
@@ -27,8 +33,8 @@
             <span class="bold">Created</span>
             {{ utilsService.getLocalDatetime(message.created_at) }}
             <span *ngIf="message.from_person_first_name">
-          - {{ message.from_person_first_name }} {{ message.from_person_last_name }}
-        </span>
+              - {{ message.from_person_first_name }} {{ message.from_person_last_name }}
+            </span>
           </ion-col>
 
           <ion-col size="2">
@@ -45,21 +51,26 @@
       </ion-card-content>
     </ion-card>
   </ion-list>
-
-
-
 </ion-content>
 
 <ion-footer>
   <ion-footer>
     <app-sync></app-sync>
 
-    <ion-row>
+    <ion-row class="tab-content" *ngIf="!isNote">
+      <ng-container *ngFor="let tab of tabs">
+        <ion-col [class]="{active: tab.isActive}" (click)="setActiveTab(tab.key)">
+          <ion-label>{{ tab.label }}</ion-label>
+        </ion-col>
+      </ng-container>
+    </ion-row>
+
+    <ion-row *ngIf="isNote">
       <ion-col>
       </ion-col>
 
       <ion-col>
-        <ion-button expand="full" color="medium" (click)="openFormModal()" *ngIf="objectType">
+        <ion-button expand="full" color="medium" (click)="openFormModal()">
           New
         </ion-button>
       </ion-col>

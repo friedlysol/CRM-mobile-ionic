@@ -11,6 +11,7 @@ import { Directory, Filesystem } from '@capacitor/filesystem';
 import { SurveyService } from '@app/services/survey.service';
 import { TechStatusService } from '@app/services/tech-status.service';
 import { BillService } from '@app/services/bill.service';
+import { PersonService } from '@app/services/person.service';
 
 @Injectable({
   providedIn: 'root'
@@ -21,6 +22,7 @@ export class SyncService {
     private billService: BillService,
     private fileService: FileService,
     private http: HttpClient,
+    private personService: PersonService,
     private settingsService: SettingsService,
     private staticService: StaticService,
     private surveyService: SurveyService,
@@ -35,6 +37,7 @@ export class SyncService {
 
     await this.settingsService.sync();
     await this.techStatusService.sync();
+    await this.personService.sync();
     await this.typeService.sync();
     await this.workOrderService.sync();
     await this.surveyService.sync();

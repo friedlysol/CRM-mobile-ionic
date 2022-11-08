@@ -116,7 +116,7 @@ export class MessagesDatabase {
    * @param limit
    */
   async getAllByTab(
-    tabName?: 'new' | 'completed' | 'sent',
+    tabName?: string,
     objectType?: string,
     objectUuid?: string,
     page: number = 1,
@@ -195,7 +195,7 @@ export class MessagesDatabase {
    * @param limit
    */
   async getCountByTab(
-    tabName?: 'new' | 'completed' | 'sent',
+    tabName?: string,
     objectType?: string,
     objectUuid?: string,
     page: number = 1,
@@ -219,7 +219,7 @@ export class MessagesDatabase {
   }
 
   async getFiltersForMessages(
-    tabName?: 'new' | 'completed' | 'sent',
+    tabName?: string,
     objectType?: string,
     objectUuid?: string,
     search?: string
@@ -266,13 +266,13 @@ export class MessagesDatabase {
 
         params.push(objectUuid);
       } else {
-        query += `and messages.object_uuid = ?`;
+        query += ` and messages.object_uuid = ?`;
       }
 
-      query += `and messages.object_type = ?`;
+      query += ` and messages.object_type = ?`;
       params.push(objectType);
     } else {
-      query += `and messages.object_type is null`;
+      query += ` and messages.object_type is null`;
     }
 
     if(search) {

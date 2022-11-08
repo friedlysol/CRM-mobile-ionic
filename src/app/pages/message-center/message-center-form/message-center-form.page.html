@@ -1,21 +1,7 @@
-<h2 class="modal-title ion-text-center">Create note</h2>
+<h2 class="modal-title ion-text-center">Create {{ isNote ? 'note' : 'message' }}</h2>
 
 <ng-container *ngIf="form">
   <form [formGroup]="form" (ngSubmit)="onSubmit()" class="modal-message ion-padding">
-    <div class="mb-2">
-      <ion-label class="bold">Description</ion-label>
-      <ion-textarea [rows]="4"
-          formControlName="description"
-          class="ion-no-margin">
-      </ion-textarea>
-
-      <ion-text class="small"
-                color="danger"
-                *ngIf="description.invalid && (description.dirty || description.touched)">
-        This field is required
-      </ion-text>
-    </div>
-
     <div class="mb-2">
       <app-capture-media
           [objectType]="type"
@@ -27,6 +13,40 @@
             buttonLabel: 'Add photo'
           }"
       ></app-capture-media>
+    </div>
+
+    <div class="mb-2">
+      <ion-label class="bold">Description</ion-label>
+      <ion-textarea [rows]="4"
+                    formControlName="description"
+                    class="ion-no-margin">
+      </ion-textarea>
+
+      <ion-text class="small"
+                color="danger"
+                *ngIf="description.invalid && (description.dirty || description.touched)">
+        This field is required
+      </ion-text>
+    </div>
+
+    <div class="mb-3">
+      <app-form-select
+          *ngIf="!isNote"
+          [label]="'Send to'"
+          [labelKey]="'label'"
+          [options]="persons"
+          [form]="form"
+          [controlName]="'person_id'"
+          [defaultOptionLabel]="'Everyone'"
+          [defaultOptionValue]="0"
+      ></app-form-select>
+    </div>
+
+    <div class="mb-3 relative" *ngIf="!isNote">
+      <ion-label position="stacked" class="bold">
+        Is hot:
+      </ion-label>
+      <ion-checkbox formControlName="hot" color="medium"></ion-checkbox>
     </div>
 
     <ion-row class="gap-2 ion-padding-top">

@@ -363,12 +363,12 @@ ion-modal {
 
   &.popup {
     --width: fit-content;
-    --min-width: 80vw;
+    --min-width: 90vw;
     --height: fit-content;
     --border-radius: 6px;
     --box-shadow: 0 28px 48px rgba(0, 0, 0, 0.4);
     :nth-child(1){
-      max-height: 90vh;
+      max-height: 80vh;
       overflow-y: scroll;
     }
   }
@@ -455,4 +455,30 @@ ion-modal {
     right: 11px;
     top: 2px;
   }
+}
+
+.tab-content {
+  color: #3d3b3b;
+  background-color: #e8e4dc;
+  height: 40px;
+  vertical-align: middle;
+
+  ion-col {
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+
+    &.active {
+      background-color: #82817e;
+      color: #e8e4dc;
+    }
+  }
+}
+
+ion-checkbox {
+  vertical-align: middle;
+  border: 1px solid #dddddd;
+  margin-left: 10px;
+
+  --border-radius: 0;
 }

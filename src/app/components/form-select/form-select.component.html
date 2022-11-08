@@ -7,6 +7,9 @@
       interface="action-sheet"
       [formControlName]="controlName"
   >
+    <ion-select-option *ngIf="defaultOptionLabel" [value]="defaultOptionValue">
+      {{ defaultOptionLabel }}
+    </ion-select-option>
     <ion-select-option *ngFor="let option of options | orderBy:order" [value]="option[valueKey]">
       {{ option[labelKey] }}
     </ion-select-option>

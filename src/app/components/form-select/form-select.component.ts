@@ -17,6 +17,9 @@ export class FormSelectComponent implements OnInit {
   @Input() valueKey?: string = 'id';
   @Input() order?: string = 'type_value';
 
+  @Input() defaultOptionLabel?: string = null;
+  @Input() defaultOptionValue?: any = null;
+
   constructor() {
   }
 

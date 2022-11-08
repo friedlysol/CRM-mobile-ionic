@@ -79,9 +79,8 @@ export class TypeService implements SyncInterface {
     return mappedTypes;
   }
 
-
   /**
-   * Sync time sheet types
+   * Sync types
    *
    * @param res
    * @private

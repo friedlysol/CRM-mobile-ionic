@@ -54,7 +54,7 @@ export class MessagesService implements SyncInterface {
   }
 
   async getMessagesWithPagination(
-    tabName?: 'new' | 'completed' | 'sent',
+    tabName?: string,
     objectType?: string,
     objectUuid?: string,
     page: number = 1,
