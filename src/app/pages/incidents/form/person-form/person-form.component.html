@@ -119,7 +119,8 @@
       </ion-label>
       <ion-select
         formControlName="body_part_id"
-        interface="popover">
+        interface="popover"
+        [multiple]="true">
 
         <ion-select-option
           *ngFor="let type of bodyPartTypes"

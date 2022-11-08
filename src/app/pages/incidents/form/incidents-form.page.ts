@@ -1,12 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Type } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { IncidentInterface, IncidentPerson, InjuryPersonInterface } from '@app/interfaces/incident.interface';
+import { IncidentInterface } from '@app/interfaces/incident.interface';
 import { TypeInterface } from '@app/interfaces/type.interface';
 import { DatabaseService } from '@app/services/database.service';
 import { IncidentsDatabase } from '@app/services/database/incidents.database';
-import { AlertController, ModalController } from '@ionic/angular';
-import { InjuredPersonsFormComponent } from './injured-persons-form/injured-persons-form.component'; 
+import { TypeService } from '@app/services/type.service';
+import { ModalController } from '@ionic/angular';
+import * as moment from 'moment';
 import { PersonFormComponent } from './person-form/person-form.component';
 
 @Component({
@@ -15,78 +16,12 @@ import { PersonFormComponent } from './person-form/person-form.component';
   styleUrls: ['./incidents-form.page.scss'],
 })
 export class IncidentsFormPage implements OnInit {
-  incidentsTypes: TypeInterface[] = [
-    {
-      id: 1,
-      type: '',
-      type_key: 'injury',
-      type_value: 'Injury',
-      type_order: 0,
-      type_color: ''
-    },
-    {
-      id: 2,
-      type: '',
-      type_key: 'property_damage',
-      type_value: 'Property Damage',
-      type_order: 0,
-      type_color: ''
-    }
-  ];
-  analysisRootCauseTypes: TypeInterface[] = [
-    {
-      id: 1,
-      type: '',
-      type_key: 'first',
-      type_value: 'First',
-      type_order: 0,
-      type_color: ''
-    },
-    {
-      id: 2,
-      type: '',
-      type_key: 'second',
-      type_value: 'Second',
-      type_order: 0,
-      type_color: ''
-    }
-  ];
-  analysisRiskTypes: TypeInterface[] = [
-    {
-      id: 1,
-      type: '',
-      type_key: 'first',
-      type_value: 'First',
-      type_order: 0,
-      type_color: ''
-    },
-    {
-      id: 2,
-      type: '',
-      type_key: 'second',
-      type_value: 'Second',
-      type_order: 0,
-      type_color: ''
-    }
-  ];
-  analysisActivityBeingPerformedTypes: TypeInterface[] = [
-    {
-      id: 1,
-      type: '',
-      type_key: 'first',
-      type_value: 'First',
-      type_order: 0,
-      type_color: ''
-    },
-    {
-      id: 2,
-      type: '',
-      type_key: 'second',
-      type_value: 'Second',
-      type_order: 0,
-      type_color: ''
-    }
-  ];
+  statuses: TypeInterface[] = [];
+  incidentsTypes: TypeInterface[] = [];
+  analysisRootCauseTypes: TypeInterface[] = [];
+  analysisRiskTypes: TypeInterface[] = [];
+  analysisActivityBeingPerformedTypes: TypeInterface[] = [];
+  photoType: TypeInterface;
 
   formGroup = new FormGroup({
     incident: new FormGroup({
@@ -97,6 +32,7 @@ export class IncidentsFormPage implements OnInit {
       description: new FormControl('', [Validators.required]),
       person_involved: new FormControl([]),
       witnesses: new FormControl([]),
+      note: new FormControl(''),
     }),
     injury: new FormGroup({
       injury_persons: new FormControl([]),
@@ -104,6 +40,7 @@ export class IncidentsFormPage implements OnInit {
       analysis_root_cause_type_id: new FormControl(null, [Validators.required]),
       analysis_risk_type_id: new FormControl(null, [Validators.required]),
       analysis_activity_being_performed_type_id: new FormControl(null, [Validators.required]),
+      analysis_corrective_action_description: new FormControl('', [Validators.required]),
     }),
     damage_property: new FormGroup({
       damage_property_owner: new FormControl('', [Validators.required]),
@@ -126,6 +63,7 @@ export class IncidentsFormPage implements OnInit {
     private incidentsDatabase: IncidentsDatabase,
     private modalControler: ModalController,
     private router: Router,
+    private typeService: TypeService,
   ) { }
 
   get incidentTypeCtrl() {
@@ -143,44 +81,57 @@ export class IncidentsFormPage implements OnInit {
   get descriptionCtrl() {
     return this.formGroup.controls.incident.controls.description;
   }
-  get injuryPersonsCtrl(){
+  get injuryPersonsCtrl() {
     return this.formGroup.controls.injury.controls.injury_persons;
   }
-  get injuryDescriptionCtrl(){
+  get injuryDescriptionCtrl() {
     return this.formGroup.controls.injury.controls.injury_description;
   }
-  get analysisRootCauseCtrl(){
+  get analysisRootCauseCtrl() {
     return this.formGroup.controls.injury.controls.analysis_root_cause_type_id;
   }
-  get analysisRiskCtrl(){
+  get analysisRiskCtrl() {
     return this.formGroup.controls.injury.controls.analysis_risk_type_id;
   }
-  get analysisActivityBeingPerformedCtrl(){
+  get analysisActivityBeingPerformedCtrl() {
     return this.formGroup.controls.injury.controls.analysis_activity_being_performed_type_id;
   }
-  get damagePropertyOwnerCtrl(){
+  get analysisCorrectiveActionDescriptionCtrl(){
+    return this.formGroup.controls.injury.controls.analysis_corrective_action_description;
+  }
+  get damagePropertyOwnerCtrl() {
     return this.formGroup.controls.damage_property.controls.damage_property_owner;
   }
-  get damageDescriptionCtrl(){
+  get damageDescriptionCtrl() {
     return this.formGroup.controls.damage_property.controls.damage_description;
   }
-  get damageCauseCtrl(){
+  get damageCauseCtrl() {
     return this.formGroup.controls.damage_property.controls.damage_cause;
   }
-  get personInvolvedCtrl(){
+  get personInvolvedCtrl() {
     return this.formGroup.controls.incident.controls.person_involved;
   }
-  get witnessesCtrl(){
+  get witnessesCtrl() {
     return this.formGroup.controls.incident.controls.witnesses;
   }
-  get isInjuryType(){
-    return this.incident.incident_type_id === this.incidentsTypes.find(type => type.type_key === 'injury')?.id;
+  get noteCtrl() {
+    return this.formGroup.controls.incident.controls.note;
   }
-  get isPropertyDamageType(){
-    return this.incident.incident_type_id === this.incidentsTypes.find(type => type.type_key === 'property_damage')?.id;
+  get isInjuryType() {
+    return this.incident.incident_type_id === this.incidentsTypes.find(type => type.type_key === 'incident_type.injury')?.id;
+  }
+  get isPropertyDamageType() {
+    return this.incident.incident_type_id === this.incidentsTypes.find(type => type.type_key === 'incident_type.property_demage')?.id;
   }
 
-  ngOnInit() {}
+  async ngOnInit() {
+    this.statuses = await this.typeService.getByType('incident_status');
+    this.incidentsTypes = await this.typeService.getByType('incident_type');
+    this.analysisRootCauseTypes = await this.typeService.getByType('incident_root_cause');
+    this.analysisRiskTypes = await this.typeService.getByType('incident_risk_type');
+    this.analysisActivityBeingPerformedTypes = await this.typeService.getByType('incident_activity_being_performed');
+    this.photoType = await this.typeService.getByKey('incident_photo_type.description');
+  }
 
   onTypeChange(e){
     this.incident.incident_type_id = e.detail.value;
@@ -230,34 +181,34 @@ export class IncidentsFormPage implements OnInit {
   }
 
   async onSubmit(){
-    if(this.formGroup.controls.incident.invalid){
-      Object.keys(this.formGroup.controls.incident.controls).forEach(key => {
-        this.formGroup.controls.incident.get(key).markAsDirty();
-      });
-      console.log('inc')
-      return;
-    }
-    if(this.isInjuryType && this.formGroup.controls.injury.invalid){
-      Object.keys(this.formGroup.controls.injury.controls).forEach(key => {
-        this.formGroup.controls.injury.get(key).markAsDirty();
-      });
-      console.log('inj')
-      return;
-    }
-    if(this.isPropertyDamageType && this.formGroup.controls.damage_property.invalid){
-      Object.keys(this.formGroup.controls.damage_property.controls).forEach(key => {
-        this.formGroup.controls.damage_property.get(key).markAsDirty();
-      });
-      console.log('dmg')
+    Object.keys(this.formGroup.controls.incident.controls).forEach(key => {
+      this.formGroup.controls.incident.get(key).markAsDirty();
+    });
+    Object.keys(this.formGroup.controls.injury.controls).forEach(key => {
+      this.formGroup.controls.injury.get(key).markAsDirty();
+    });
+    Object.keys(this.formGroup.controls.damage_property.controls).forEach(key => {
+      this.formGroup.controls.damage_property.get(key).markAsDirty();
+    });
+
+    if(this.formGroup.controls.incident.invalid ||
+      this.isInjuryType && this.formGroup.controls.injury.invalid ||
+      this.isPropertyDamageType && this.formGroup.controls.damage_property.invalid){
+
       return;
     }
 
     const newIncident: IncidentInterface = {
       uuid: this.incident.uuid,
+      status_type_id: this.statuses.find(status => status.type_key === 'incident_status.open')?.id,
       ...this.formGroup.getRawValue().incident,
       ...this.formGroup.getRawValue().injury,
       ...this.formGroup.getRawValue().damage_property,
     };
+    const dateTime = moment(newIncident.incident_date + ' ' + newIncident.incident_time).utc(false);
+    newIncident.incident_date = dateTime.format('YYYY-MM-DD');
+    newIncident.incident_time = dateTime.format('HH:mm');
+
     await this.incidentsDatabase.create(newIncident);
     this.router.navigateByUrl('incidents/list', {replaceUrl: true});
   }

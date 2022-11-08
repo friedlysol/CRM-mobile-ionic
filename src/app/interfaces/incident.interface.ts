@@ -23,6 +23,8 @@ export interface IncidentInterface {
   sync?: number;
   created_at?: string;
   updated_at?: string;
+
+  thumbnail_path?: string;
 }
 
 export interface InjuryPersonInterface extends IncidentPerson {

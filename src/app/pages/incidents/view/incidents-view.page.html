@@ -1,0 +1,216 @@
+<ion-header>
+  <app-header [title]="'Incident'"></app-header>
+</ion-header>
+
+<ion-content *ngIf="incident">
+  <div class="ion-padding-horizontal">
+    <app-capture-media
+    [typeId]="photoType?.id"
+    type="photo"
+    [objectId]="incident.id"
+    [objectUuid]="incident.uuid"
+    objectType="incidents"
+    [mediaOptions]="{
+      buttonLabel: 'Add photos',
+      required: false
+    }">
+  </app-capture-media>
+  </div>
+
+  <ion-card class="ion-padding ion-margin">
+
+    <ion-card-title>Incident Details</ion-card-title>
+
+    <ion-card-content>
+
+      <ion-row>
+        <ion-col><b>Type</b></ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>{{getIncidentType(incident.incident_type_id)?.type_value || '-' }}</ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col><b>Location</b></ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>{{incident.incident_location || '-' }}</ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col><b>Incident Date/Time</b></ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>{{ utilsService.getLocalDatetime(incident.incident_date + ' ' + incident.incident_time) }}</ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col><b>Created at</b></ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>{{ utilsService.getLocalDatetime(incident.created_at)}}</ion-col>
+      </ion-row>
+
+    </ion-card-content>
+
+  </ion-card>
+
+  <ion-card class="ion-padding ion-margin">
+
+    <ion-card-title>Description</ion-card-title>
+
+    <ion-card-content>
+
+      {{incident.description}}
+
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card class="ion-padding ion-margin" *ngIf="isInjuryType">
+
+    <ion-card-title>Root Cause Analysis</ion-card-title>
+
+    <ion-card-content>
+
+      <ion-row>
+        <ion-col><b>Root Cause Type</b></ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>{{ getRootCauseType(incident.analysis_root_cause_type_id)?.type_value || '-' }}</ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col><b>Risk Type</b></ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>{{ getRiskType(incident.analysis_risk_type_id)?.type_value || '-' }}</ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col><b>Activity Being Performed</b></ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>{{ getActivityBeingPerformedType(incident.analysis_activity_being_performed_type_id)?.type_value || '-' }}</ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col><b>Corrective action description</b></ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>{{ incident.analysis_corrective_action_description || '-' }}</ion-col>
+      </ion-row>
+
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card class="ion-padding ion-margin">
+
+    <ion-card-title>Person(s) Involved</ion-card-title>
+
+    <ion-card-content>
+
+      <ion-row *ngFor="let person of incident.person_involved">
+        <ion-col>{{person.first_name}} {{person.last_name}}</ion-col>
+      </ion-row>
+      <ion-row *ngIf="!incident.person_involved.length">
+        <ion-col><b>-</b></ion-col>
+      </ion-row>
+
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card class="ion-padding ion-margin" *ngIf="isInjuryType">
+
+    <ion-card-title>Injury Person(s)</ion-card-title>
+
+    <ion-card-content>
+
+      <ion-row *ngFor="let person of incident.injury_persons">
+        <ion-col size="12"><b>{{person.first_name}} {{person.last_name}}</b></ion-col>
+
+        <ion-col size="6">Injury:</ion-col>
+        <ion-col size="6">{{ getInjuryType(person.injury_type_id)?.type_value || '-' }}</ion-col>
+
+        <ion-col size="6">Body parts:</ion-col>
+        <ion-col size="6">{{ getBodyPartTypes(person.body_part_id) || '-' }}</ion-col>
+
+        <ion-col size="6">Treatment:</ion-col>
+        <ion-col size="6">{{ getTreatmentType(person.treatment_type_id)?.type_value || '-' }}</ion-col>
+      </ion-row>
+      <ion-row *ngIf="!incident.injury_persons.length">
+        <ion-col><b>-</b></ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col><b>Injury description</b></ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>{{ incident.injury_description || '-' }}</ion-col>
+      </ion-row>
+
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card class="ion-padding ion-margin">
+
+    <ion-card-title>Witnesses</ion-card-title>
+
+    <ion-card-content>
+
+      <ion-row *ngFor="let person of incident.witnesses">
+        <ion-col size="12"><b>{{ person.first_name }} {{ person.last_name }}</b></ion-col>
+        <ion-col>{{ person.statement || '-' }}</ion-col>
+      </ion-row>
+      <ion-row *ngIf="!incident.witnesses.length">
+        <ion-col><b>-</b></ion-col>
+      </ion-row>
+
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card class="ion-padding ion-margin" *ngIf="isPropertyDamageType">
+
+    <ion-card-title>Property Damage</ion-card-title>
+
+    <ion-card-content>
+
+      <ion-row>
+        <ion-col><b>Property Owner</b></ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>{{ incident.damage_property_owner }}</ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col><b>Damage description</b></ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>{{ incident.damage_description }}</ion-col>
+      </ion-row>
+
+      <ion-row>
+        <ion-col><b>Damage Cause</b></ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>{{ incident.damage_cause }}</ion-col>
+      </ion-row>
+
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card class="ion-padding ion-margin">
+
+    <ion-card-title>Note</ion-card-title>
+
+    <ion-card-content>
+
+      {{ incident.note || '-'}}
+
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>
+
+<ion-footer>
+  <app-sync></app-sync>
+</ion-footer>
