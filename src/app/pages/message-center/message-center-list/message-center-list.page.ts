@@ -27,7 +27,7 @@ export class MessageCenterListPage implements OnInit {
 
   public messages: MessageInterface[] = [];
   public pagination?: PaginationInterface;
-  public title: string = "";
+  public title: string = '';
 
   public params: any = {
     query: ''
@@ -35,12 +35,12 @@ export class MessageCenterListPage implements OnInit {
 
   public tabs: TabInterface[] = [{
     key: 'new',
-    label: "New",
+    label: 'New',
     isActive: true,
     icon: 'document-text-outline'
   }, {
     key: 'completed',
-    label: "Completed",
+    label: 'Completed',
     isActive: false,
     icon: 'checkmark-done-circle-outline'
   }, {
@@ -95,7 +95,7 @@ export class MessageCenterListPage implements OnInit {
   }
 
   async ionViewDidEnter() {
-    await this.loadList()
+    await this.loadList();
   }
 
   public async loadList(page = 1) {

@@ -62,6 +62,7 @@ export class MessageCenterFormPage implements OnInit {
       });
     }
 
+
     console.log(this.persons);
 
     this.initForm();
@@ -115,7 +116,7 @@ export class MessageCenterFormPage implements OnInit {
     };
 
     if(!this.isNote) {
-      controls['person_id'] = new FormControl(0);
+      controls['person_id'] = new FormControl(this.navParams.data.person_id || 0);
       controls['hot'] = new FormControl(0);
     }
 
