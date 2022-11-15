@@ -10,7 +10,7 @@ import { GalleryModalComponent } from '../gallery-modal/gallery-modal.component'
 import { TypeService } from '@app/services/type.service';
 import { TypeInterface } from '@app/interfaces/type.interface';
 import { ActivatedRoute } from '@angular/router';
-import { DocumentViewer } from '@awesome-cordova-plugins/document-viewer/ngx';
+import { FileOpener } from '@capacitor-community/file-opener';
 
 @Component({
   selector: 'app-gallery-list',
@@ -33,14 +33,13 @@ export class GalleryListPage implements OnInit {
   types: TypeInterface[];
 
   constructor(
+    private activatedRoute: ActivatedRoute,
     private alertController: AlertController,
     private databaseService: DatabaseService,
-    private documentViewer: DocumentViewer,
     private fileService: FileService,
     private modalController: ModalController,
-    private activatedRoute: ActivatedRoute,
     private toastController: ToastController,
-    private typeService: TypeService
+    private typeService: TypeService,
   ) {
 
   }
@@ -60,6 +59,7 @@ export class GalleryListPage implements OnInit {
     });
 
     this.files = await this.loadFiles();
+    console.log(this.files)
 
     this.filesToDownload = await this.fileService.getArrayByObjectAndType(
       this.objectType,
@@ -258,22 +258,10 @@ export class GalleryListPage implements OnInit {
     const ext = this.getExtension(file.path);
     const prefix = this.getPrefix(file.path);
     if(ext === '.pdf'){
-      this.documentViewer.viewDocument(
-        file.path,
-        'application/pdf',
-        {
-          title: file.description,
-        }
-      );
-      // const path = await Filesystem.getUri({
-      //   path: 'test.pdf',
-      //   directory: Directory.Data,
-      // });
-      // console.log(path);
-      // FileOpener.open({
-      //   filePath: file.path,
-      //   openWithDefault: false,
-      // });
+      FileOpener.open({
+        filePath: file.path,
+        contentType: 'application/pdf',
+      });
       return;
     }
     if(ext !== '.html' &&  prefix === 'http'){

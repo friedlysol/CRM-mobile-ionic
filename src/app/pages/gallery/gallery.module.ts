@@ -6,7 +6,6 @@ import { SharedModule } from '@app/shared.module';
 import { IonicModule } from '@ionic/angular';
 import { GalleryModalComponent } from './gallery-modal/gallery-modal.component';
 import { HammerModule } from '@angular/platform-browser';
-import { DocumentViewer } from '@awesome-cordova-plugins/document-viewer/ngx';
 
 @NgModule({
   declarations: [
@@ -23,8 +22,5 @@ import { DocumentViewer } from '@awesome-cordova-plugins/document-viewer/ngx';
   exports: [
     GalleryListPage,
   ],
-  providers: [
-    DocumentViewer,
-  ]
 })
 export class GalleryModule { }

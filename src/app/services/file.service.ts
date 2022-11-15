@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { FileDatabase } from '@app/services/database/file.database';
-import { Directory, Filesystem } from '@capacitor/filesystem';
+import { Directory, Filesystem, WriteFileResult } from '@capacitor/filesystem';
 import { FileInterface } from '@app/interfaces/file.interface';
 import { PrevNextInterface } from '@app/interfaces/prev-next.interface';
 import { AuthService } from '@app/services/auth.service';
@@ -9,6 +9,7 @@ import { FileApiInterface } from '@app/providers/api/interfaces/file-api.interfa
 import { environment } from '@env/environment';
 import { tap } from 'rxjs/operators';
 import { SyncInterface } from '@app/interfaces/sync.interface';
+import { StaticService } from './static.service';
 
 declare let FileTransferManager: any;
 
@@ -24,6 +25,7 @@ export class FileService implements SyncInterface {
     private authService: AuthService,
     private fileDatabase: FileDatabase,
     private http: HttpClient,
+    private staticService: StaticService,
   ) {
   }
   async sync(): Promise<boolean> {
@@ -314,11 +316,27 @@ console.log('files sync', files);
   }
 
   async createFileAndGetUrl(fileBase64: string, fileName: string): Promise<string> {
-    const writeFile = await Filesystem.writeFile({
-      path: fileName,
-      data: fileBase64,
-      directory: Directory.Documents,
-    });
+    let writeFile: WriteFileResult;
+    if(this.staticService.isAndroid){
+      try{
+        await Filesystem.mkdir({
+          path: `/Download/crm`,
+          recursive: true,
+          directory: Directory.ExternalStorage,
+        });
+      }catch(e){}
+      writeFile = await Filesystem.writeFile({
+        path: `/Download/crm/${fileName}`,
+        data: fileBase64,
+        directory: Directory.ExternalStorage,
+      });
+    }else{
+      writeFile = await Filesystem.writeFile({
+        path: fileName,
+        data: fileBase64,
+        directory: Directory.Data,
+      });
+    }
 
     return writeFile.uri;
   }
@@ -328,8 +346,23 @@ console.log('files sync', files);
       file.is_deleted = 1;
       file.sync = 0;
 
+      if(file.path){
+        Filesystem.deleteFile({path: file.path}).catch();
+      }
+      if(file.thumbnail){
+        Filesystem.deleteFile({path: file.thumbnail}).catch();
+      }
+
       return this.fileDatabase.updateFile(file);
-    } else if (file.sync === 0 && file.sync_bg_status == null) {
+    }
+    else if (file.sync === 0 && file.sync_bg_status == null) {
+      if(file.path){
+        Filesystem.deleteFile({path: file.path}).catch();
+      }
+      if(file.thumbnail){
+        Filesystem.deleteFile({path: file.thumbnail}).catch();
+      }
+
       return this.fileDatabase.remove(file);
     }
 
