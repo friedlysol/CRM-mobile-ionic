@@ -64,62 +64,81 @@ export class IncidentsFormPage implements OnInit {
     private modalControler: ModalController,
     private router: Router,
     private typeService: TypeService,
-  ) { }
+  ) {
+  }
 
   get incidentTypeCtrl() {
     return this.formGroup.controls.incident.controls.incident_type_id;
   }
+
   get incidentDateCtrl() {
     return this.formGroup.controls.incident.controls.incident_date;
   }
+
   get incidentTimeCtrl() {
     return this.formGroup.controls.incident.controls.incident_time;
   }
+
   get incidentLocationCtrl() {
     return this.formGroup.controls.incident.controls.incident_location;
   }
+
   get descriptionCtrl() {
     return this.formGroup.controls.incident.controls.description;
   }
+
   get injuryPersonsCtrl() {
     return this.formGroup.controls.injury.controls.injury_persons;
   }
+
   get injuryDescriptionCtrl() {
     return this.formGroup.controls.injury.controls.injury_description;
   }
+
   get analysisRootCauseCtrl() {
     return this.formGroup.controls.injury.controls.analysis_root_cause_type_id;
   }
+
   get analysisRiskCtrl() {
     return this.formGroup.controls.injury.controls.analysis_risk_type_id;
   }
+
   get analysisActivityBeingPerformedCtrl() {
     return this.formGroup.controls.injury.controls.analysis_activity_being_performed_type_id;
   }
-  get analysisCorrectiveActionDescriptionCtrl(){
+
+  get analysisCorrectiveActionDescriptionCtrl() {
     return this.formGroup.controls.injury.controls.analysis_corrective_action_description;
   }
+
   get damagePropertyOwnerCtrl() {
     return this.formGroup.controls.damage_property.controls.damage_property_owner;
   }
+
   get damageDescriptionCtrl() {
     return this.formGroup.controls.damage_property.controls.damage_description;
   }
+
   get damageCauseCtrl() {
     return this.formGroup.controls.damage_property.controls.damage_cause;
   }
+
   get personInvolvedCtrl() {
     return this.formGroup.controls.incident.controls.person_involved;
   }
+
   get witnessesCtrl() {
     return this.formGroup.controls.incident.controls.witnesses;
   }
+
   get noteCtrl() {
     return this.formGroup.controls.incident.controls.note;
   }
+
   get isInjuryType() {
     return this.incident.incident_type_id === this.incidentsTypes.find(type => type.type_key === 'incident_type.injury')?.id;
   }
+
   get isPropertyDamageType() {
     return this.incident.incident_type_id === this.incidentsTypes.find(type => type.type_key === 'incident_type.property_demage')?.id;
   }
@@ -133,16 +152,16 @@ export class IncidentsFormPage implements OnInit {
     this.photoType = await this.typeService.getByKey('incident_photo_type.description');
   }
 
-  onTypeChange(e){
+  onTypeChange(e) {
     this.incident.incident_type_id = e.detail.value;
   }
 
-  onRemovePersonClick(type: 'injured' | 'witness' | 'involved', index: number){
+  onRemovePersonClick(type: 'injured' | 'witness' | 'involved', index: number) {
     this.getPersonControlByType(type)?.value.splice(index, 1);
   }
 
-  getPersonControlByType(type: 'injured' | 'witness' | 'involved'){
-    switch(type){
+  getPersonControlByType(type: 'injured' | 'witness' | 'involved') {
+    switch (type) {
       case 'injured':
         return this.injuryPersonsCtrl;
       case 'witness':
@@ -152,7 +171,7 @@ export class IncidentsFormPage implements OnInit {
     }
   }
 
-  async showPersonForm(type: 'injured' | 'witness' | 'involved', personIndex?: number){
+  async showPersonForm(type: 'injured' | 'witness' | 'involved', personIndex?: number) {
     const control = this.getPersonControlByType(type);
     const person = control?.value[personIndex];
 
@@ -165,35 +184,37 @@ export class IncidentsFormPage implements OnInit {
         type,
       }
     });
+
     modal.present();
 
     const res = await modal.onDidDismiss();
-    if(res.role === 'submit'){
-      if(person){
+    if (res.role === 'submit') {
+      if (person) {
 
         control.value[personIndex] = res.data;
-      }else{
+      } else {
 
         control.value.push(res.data);
       }
     }
-
   }
 
-  async onSubmit(){
+  async onSubmit() {
     Object.keys(this.formGroup.controls.incident.controls).forEach(key => {
       this.formGroup.controls.incident.get(key).markAsDirty();
     });
+
     Object.keys(this.formGroup.controls.injury.controls).forEach(key => {
       this.formGroup.controls.injury.get(key).markAsDirty();
     });
+
     Object.keys(this.formGroup.controls.damage_property.controls).forEach(key => {
       this.formGroup.controls.damage_property.get(key).markAsDirty();
     });
 
-    if(this.formGroup.controls.incident.invalid ||
+    if (this.formGroup.controls.incident.invalid ||
       this.isInjuryType && this.formGroup.controls.injury.invalid ||
-      this.isPropertyDamageType && this.formGroup.controls.damage_property.invalid){
+      this.isPropertyDamageType && this.formGroup.controls.damage_property.invalid) {
 
       return;
     }
@@ -205,11 +226,14 @@ export class IncidentsFormPage implements OnInit {
       ...this.formGroup.getRawValue().injury,
       ...this.formGroup.getRawValue().damage_property,
     };
+
     const dateTime = moment(newIncident.incident_date + ' ' + newIncident.incident_time).utc(false);
+
     newIncident.incident_date = dateTime.format('YYYY-MM-DD');
     newIncident.incident_time = dateTime.format('HH:mm');
 
     await this.incidentsDatabase.create(newIncident);
-    this.router.navigateByUrl('incidents/list', {replaceUrl: true});
+
+    return this.router.navigateByUrl('incidents/list', {replaceUrl: true});
   }
 }

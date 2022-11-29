@@ -18,6 +18,11 @@ import { AlertController, ToastController } from '@ionic/angular';
 export class WeeklyInspectionPage implements OnInit {
   redirectTo: string;
 
+  prevValues = {
+    vehicleNumber: '',
+    odometerReading: ''
+  }
+
   photosTypes: TypeInterface[] = [];
   inspection: WeeklyInspectionInterface = {
     uuid: this.databaseService.getUuid(),
@@ -36,7 +41,7 @@ export class WeeklyInspectionPage implements OnInit {
   };
   showErrors = false;
 
-  formGroup = new FormGroup({
+  inspectionForm = new FormGroup({
     vehicleNumber: new FormControl('', [Validators.required, Validators.pattern('^[0-9]{5}$')]),
     odometerReading: new FormControl('', [Validators.required]),
     frontDriver: new FormControl('', [Validators.required]),
@@ -59,27 +64,27 @@ export class WeeklyInspectionPage implements OnInit {
   }
 
   get vehicleNumberCtrl() {
-    return this.formGroup.controls.vehicleNumber;
+    return this.inspectionForm.controls.vehicleNumber;
   }
 
   get odometerReadingCtrl() {
-    return this.formGroup.controls.odometerReading;
+    return this.inspectionForm.controls.odometerReading;
   }
 
   get frontDriverCtrl() {
-    return this.formGroup.controls.frontDriver;
+    return this.inspectionForm.controls.frontDriver;
   }
 
   get rearDriverCtrl() {
-    return this.formGroup.controls.rearDriver;
+    return this.inspectionForm.controls.rearDriver;
   }
 
   get frontPassengerCtrl() {
-    return this.formGroup.controls.frontPassenger;
+    return this.inspectionForm.controls.frontPassenger;
   }
 
   get rearPassengerCtrl() {
-    return this.formGroup.controls.rearPassenger;
+    return this.inspectionForm.controls.rearPassenger;
   }
 
   async ngOnInit() {
@@ -90,9 +95,23 @@ export class WeeklyInspectionPage implements OnInit {
     this.photosTypes = await this.typeService.getByType('weekly_inspections');
   }
 
+  async ionViewDidEnter() {
+    this.vehicleInspectionsDatabase.getLastVinAndOdometer()
+      .then(result => {
+        console.log('getLastVinAndOdometer', result);
+        if (result) {
+          this.prevValues.vehicleNumber = result.vehicle_number;
+          this.prevValues.odometerReading = result.odometer_reading;
+
+
+          this.setVinAndOdometer();
+        }
+      });
+  }
+
   async onClearClick() {
     this.showErrors = false;
-    this.formGroup.reset();
+    this.inspectionForm.reset();
     this.inspection = {
       uuid: this.inspection.uuid,
       oil: null,
@@ -108,6 +127,8 @@ export class WeeklyInspectionPage implements OnInit {
       card_in_vehicle: null,
       registration_in_vehicle: null
     };
+
+    this.setVinAndOdometer();
   }
 
   async onSaveClick() {
@@ -118,11 +139,11 @@ export class WeeklyInspectionPage implements OnInit {
       this.photosTypes.map(type => type.id)
     );
 
-    if (this.formGroup.invalid ||
+    if (this.inspectionForm.invalid ||
       this.inspection.registration_in_vehicle == null ||
       this.inspection.card_in_vehicle == null) {
 
-      this.formGroup.markAllAsTouched();
+      this.inspectionForm.markAllAsTouched();
       this.showErrors = true;
 
       return;
@@ -130,10 +151,9 @@ export class WeeklyInspectionPage implements OnInit {
 
     for (const value of Object.values(typeHasPhoto)) {
       if (!value) {
-        this.showErrorToast('Please add all required photos.');
         this.showErrors = true;
 
-        return;
+        return this.showErrorToast('Please add all required photos.');
       }
     }
 
@@ -147,13 +167,18 @@ export class WeeklyInspectionPage implements OnInit {
     await this.vehicleInspectionsDatabase.createWeekly(this.inspection);
     this.vehicleInspectionService.setIsWeeklyInspectionRequired(false);
 
-    if (!this.inspection.oil || !this.inspection.brake || !this.inspection.washer ||
-      this.inspection.tires_pressure_front_driver <= 32 || this.inspection.tires_pressure_front_passenger <= 32 ||
-      this.inspection.tires_pressure_rear_driver <= 38 || this.inspection.tires_pressure_rear_passenger <= 38
+    if (
+      !this.inspection.oil ||
+      !this.inspection.brake ||
+      !this.inspection.washer ||
+      this.inspection.tires_pressure_front_driver < 25 ||
+      this.inspection.tires_pressure_front_passenger < 25 ||
+      this.inspection.tires_pressure_rear_driver < 25 ||
+      this.inspection.tires_pressure_rear_passenger < 25
     ) {
       const alert = await this.alertController.create({
         header: 'Message Alert',
-        message: 'Vehicle state is not good!\nPlease contact your manager!',
+        message: 'Vehicle state is not good, fluids are low or the tires pressure isn\'t good!',
         backdropDismiss: false,
         buttons: [
           {
@@ -163,7 +188,7 @@ export class WeeklyInspectionPage implements OnInit {
         ]
       });
 
-      alert.present();
+      await alert.present();
 
       await alert.onDidDismiss();
     }
@@ -171,9 +196,9 @@ export class WeeklyInspectionPage implements OnInit {
     this.showErrors = false;
 
     if (this.redirectTo) {
-      this.router.navigateByUrl(this.redirectTo, {replaceUrl: true});
+      return this.router.navigateByUrl(this.redirectTo, {replaceUrl: true});
     } else {
-      this.router.navigateByUrl('/work-order/list', {replaceUrl: true});
+      return this.router.navigateByUrl('/work-order/list', {replaceUrl: true});
     }
   }
 
@@ -184,6 +209,25 @@ export class WeeklyInspectionPage implements OnInit {
       position: 'top',
     });
 
-    toast.present();
+    return toast.present();
+  }
+
+  private setVinAndOdometer() {
+    this.inspectionForm.controls.vehicleNumber.setValue(this.prevValues.vehicleNumber);
+    this.inspectionForm.controls.odometerReading.setValue(this.prevValues.odometerReading);
+  }
+
+  onlyNumber(control: string, max = null) {
+    const value = this.inspectionForm.controls[control].value;
+
+    if(value) {
+      if (value.search(/[^0-9]/) > -1) {
+        this.inspectionForm.controls[control].setValue(value.replace(/[^0-9]/, ''));
+      }
+
+      if (max && this.inspectionForm.controls[control].value > max) {
+        this.inspectionForm.controls[control].setValue(String(max));
+      }
+    }
   }
 }

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
-import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+import { PreloadAllModules, Route, RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from '@app/guards/auth.guard';
+import { environment } from '@env/environment';
 
 
 const routes: Routes = [
@@ -65,11 +66,18 @@ const routes: Routes = [
   },
   {
     path: 'incidents',
-    loadChildren: () => import('./pages/incidents/incidents.module').then( m => m.IncidentsPageModule)
+    loadChildren: () => import('./pages/incidents/incidents.module').then(m => m.IncidentsPageModule)
   },
-  {path: '', redirectTo: '/work-order/list', pathMatch: 'full'},
-  {path: '**', redirectTo: '/work-order'},
+
 ];
+
+if (environment.hasOwnProperty('defaultRoutes') && environment.defaultRoutes.length) {
+  environment.defaultRoutes.map(item => routes.push(item as Route));
+} else {
+  routes.push({path: '', redirectTo: '/work-order/list', pathMatch: 'full'});
+  routes.push({path: '**', redirectTo: '/work-order'});
+}
+console.log('routes', routes);
 
 @NgModule({
   imports: [

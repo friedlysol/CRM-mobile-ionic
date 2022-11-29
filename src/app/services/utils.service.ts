@@ -10,6 +10,10 @@ export class UtilsService {
   constructor() {
   }
 
+  is(company) {
+    return environment.company === company;
+  }
+
   getHashMap(data, idColumnName = 'id', hashColumnName = 'hash') {
     const hashMap = {};
 

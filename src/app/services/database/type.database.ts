@@ -74,6 +74,14 @@ export class TypeDatabase {
       });
   }
 
+  removeByTypeIds(typeIds: number[]) {
+    const query = sqlBuilder
+      .delete('types')
+      .where(sqlBuilder.not(sqlBuilder.in('id', typeIds)));
+
+    return this.databaseService.query(query.toString(), query.toParams());
+  }
+
   getSqlForCreateFromApiData(type: TypeApiInterface) {
     return sqlBuilder.insert('types', this.typeDatabaseObj(type));
   }

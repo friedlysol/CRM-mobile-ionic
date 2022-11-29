@@ -3,9 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  appUrl: 'https://ahd.friendlysol.com/',
-  apiEndpoint: 'https://ahd.friendlysol.com/',
-  production: false,
+  appUrl: 'https://hw911.friendlysol.com/',
+  apiEndpoint: 'https://hw911.friendlysol.com/',
+  production: true,
   company: 'dt',
   companyName: 'Design Temperature',
   authBy: 'email', //'device-id' | 'email' | 'phone-number'
@@ -110,7 +110,11 @@ export const environment = {
   ],
   tableToServiceMap: {
       work_orders: 'WorkOrderService',
-  }
+  },
+  defaultRoutes: [
+    {path: '', redirectTo: '/bill/list', pathMatch: 'full'},
+    {path: '**', redirectTo: '/bill'},
+  ]
 };
 /*
  * For easier debugging in development mode, you can import the following file

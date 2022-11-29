@@ -16,6 +16,12 @@ import { VehicleInspectionService } from '@app/services/vehicle-inspection.servi
 })
 export class DailyInspectionPage implements OnInit {
   @ViewChild(IonContent) content: IonContent;
+  @ViewChild('odometerReading', {static: false}) ionOdometerReading: { setFocus: () => void; setSelectionRange: () => void };
+
+  prevValues = {
+    vehicleNumber: '',
+    odometerReading: ''
+  }
 
   withoutPreview: boolean;
   redirectTo: string;
@@ -42,7 +48,7 @@ export class DailyInspectionPage implements OnInit {
     private router: Router,
     private toastController: ToastController,
     private typeService: TypeService,
-    private vehicleInspectionDatabase: VehicleInspectionsDatabase,
+    private vehicleInspectionsDatabase: VehicleInspectionsDatabase,
     private vehicleInspectionService: VehicleInspectionService,
     public utilsService: UtilsService,
   ) {
@@ -66,7 +72,7 @@ export class DailyInspectionPage implements OnInit {
       this.redirectTo = params.get('redirectTo');
     });
 
-    const prevInspection = await this.vehicleInspectionDatabase.getLastDaily();
+    const prevInspection = await this.vehicleInspectionsDatabase.getLastDaily();
 
     if (prevInspection) {
       this.inspection = prevInspection;
@@ -79,6 +85,19 @@ export class DailyInspectionPage implements OnInit {
     }
 
     this.questions = await this.typeService.getByTypeWithMappedKeys('daily_inspection_questions');
+  }
+
+  async ionViewDidEnter() {
+    this.vehicleInspectionsDatabase.getLastVinAndOdometer()
+      .then(result => {
+        console.log('getLastVinAndOdometer', result);
+        if (result) {
+          this.prevValues.vehicleNumber = result.vehicle_number;
+          this.prevValues.odometerReading = result.odometer_reading;
+
+          this.setVinAndOdometer();
+        }
+      });
   }
 
   onAnswerClick(question: TypeInterface, satisfactory: boolean) {
@@ -98,9 +117,8 @@ export class DailyInspectionPage implements OnInit {
     for (const question of this.questions) {
       if (this.inspection[question.type_key] == null) {
         this.showErrors = true;
-        this.showErrorToast('Each questions should be "satisfactory" or "unsatisfactory"');
 
-        return;
+        return this.showErrorToast('Each questions should be "satisfactory" or "unsatisfactory"');
       }
     }
 
@@ -108,7 +126,7 @@ export class DailyInspectionPage implements OnInit {
     this.inspection.odometer_reading = this.odometerReadingCtrl.value;
     this.inspection.note = this.noteCtrl.value;
 
-    await this.vehicleInspectionDatabase.createDaily(this.inspection);
+    await this.vehicleInspectionsDatabase.createDaily(this.inspection);
 
     this.vehicleInspectionService.setIsDailyInspectionRequired(false);
 
@@ -126,15 +144,22 @@ export class DailyInspectionPage implements OnInit {
       note: '',
       route: '',
     };
+
     this.inspectionForm.reset();
     this.showErrors = false;
+
+    this.setVinAndOdometer();
   }
 
   onNextClick() {
     this.onClearClick();
     this.isPreview = false;
 
-    this.content.scrollToTop(400);
+    setTimeout(() => {
+      this.ionOdometerReading.setFocus();
+    }, 200);
+
+    return this.content.scrollToTop(0);
   }
 
   async showErrorToast(message: string) {
@@ -144,6 +169,19 @@ export class DailyInspectionPage implements OnInit {
       position: 'top',
     });
 
-    toast.present();
+    return toast.present();
+  }
+
+  private setVinAndOdometer() {
+    this.inspectionForm.controls.vehicleNumber.setValue(this.prevValues.vehicleNumber);
+    this.inspectionForm.controls.odometerReading.setValue(this.prevValues.odometerReading);
+  }
+
+  onlyNumber(control: string) {
+    const value = this.inspectionForm.controls[control].value;
+
+    if (value && value.search(/[^0-9]/) > -1) {
+      this.inspectionForm.controls[control].setValue(value.replace(/[^0-9]/, ''));
+    }
   }
 }

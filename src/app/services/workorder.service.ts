@@ -47,16 +47,17 @@ export class WorkOrderService implements SyncInterface {
   ) {
   }
 
-  async sync(): Promise<boolean> {
+  async sync(params = {}): Promise<boolean> {
     const syncData = {
       workorders: await this.databaseService.getUnSynchronized('work_orders'),
+      //status_history: await this.databaseService.getUnSynchronized('work_order_status_history'),
       link_person_wo_ids: await this.workOrderDatabase.getAllLinkPersonWoIds(),
       hashes: {
         workorders: await this.databaseService.getHashes('work_orders'),
       },
     };
 
-    return this.workOrderApi.sync(syncData)
+    return this.workOrderApi.sync(Object.assign(syncData, params))
       .toPromise()
       .then(async (res: ResponseWorkOrderApiInterface) => {
         await this.syncStatus(res);
@@ -272,7 +273,7 @@ export class WorkOrderService implements SyncInterface {
       });
 
       // get work order ids from api response
-      const workOrderIds = res.response.workorders.map(workOrder => workOrder.id);
+      const workOrderIds = res.response.workorders.map(workOrder => workOrder.link_person_wo_id);
 
       // get existing work orders map from app db
       const existingWorkOrdersHashMap = await this.databaseService.getExistingRecordsAsMap(workOrderIds, 'work_orders');
@@ -287,7 +288,7 @@ export class WorkOrderService implements SyncInterface {
 
       res.response.workorders.forEach(workOrder => {
         const addressId = Number(workOrder.address_id);
-        const workOrderId = Number(workOrder.id);
+        const workOrderId = Number(workOrder.link_person_wo_id);
 
         if (existingAddressesHashMap.hasOwnProperty(addressId)) {
           //set address_uuid to based on address_id
@@ -297,7 +298,7 @@ export class WorkOrderService implements SyncInterface {
         let query = null;
 
         if (existingWorkOrdersHashMap.hasOwnProperty(workOrderId)) {
-          const existingWorkOrder = existingWorkOrdersHashMap[workOrder.id];
+          const existingWorkOrder = existingWorkOrdersHashMap[workOrder.link_person_wo_id];
 
           if (workOrder.hash !== existingWorkOrder.hash) {
             query = this.workOrderDatabase.getSqlForUpdateFromApiData(workOrder, {uuid: existingWorkOrder.uuid});

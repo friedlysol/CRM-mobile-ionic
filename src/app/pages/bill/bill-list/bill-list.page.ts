@@ -19,7 +19,7 @@ export class BillListPage implements OnInit, OnDestroy {
   public bills: BillEntryInterface[];
   public pagination: PaginationInterface;
 
-  private filters: BillEntryFiltersInterface = {
+  public filters: BillEntryFiltersInterface = {
     query: null,
     reimbursement: null,
     date_from: null,
@@ -62,7 +62,7 @@ export class BillListPage implements OnInit, OnDestroy {
     }
   }
 
-  private async loadList(page = 1, resetList = true) {
+  public async loadList(page = 1, resetList = true) {
     const bill = await this.billService.getBillsWithPagination(this.filters, page);
 
     if(resetList) {

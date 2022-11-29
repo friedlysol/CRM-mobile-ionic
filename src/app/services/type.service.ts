@@ -22,6 +22,8 @@ export class TypeService implements SyncInterface {
       .then(async (res: ResponseTypeApiInterface) => {
         await this.syncTypes(res);
 
+        await this.removeOldRecords(res);
+
         return true;
       });
   }
@@ -116,5 +118,17 @@ export class TypeService implements SyncInterface {
     console.log('syncTypes', queue);
 
     return this.databaseService.bulkQueries(queue);
+  }
+
+  private async removeOldRecords(res: ResponseTypeApiInterface) {
+    const types = res?.response?.types || [];
+
+    if(types.length) {
+      const typeIds = types.map(type => type.id);
+
+      return this.typeDatabase.removeByTypeIds(typeIds);
+    }
+
+    return Promise.resolve(null);
   }
 }

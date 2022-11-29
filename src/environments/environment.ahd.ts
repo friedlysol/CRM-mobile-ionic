@@ -3,11 +3,129 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
+  appUrl: 'https://ahd.friendlysol.com/',
   apiEndpoint: 'https://ahd.friendlysol.com/',
   production: true,
-  tag: 'ahd',
+  company: 'ahd',
   companyName: 'American Home Design',
-  authByDeviceId: true
+  authBy: 'email', //'device-id' | 'email' | 'phone-number'
+  settings: {},
+  defaultPageSize: 20,
+  galleryPageSize: 15,
+  surveyPageSize: 10,
+  dateFormat: 'MM/DD/YYYY',
+  datetimeFormat: 'MM/DD/YYYY hh:mm A',
+  databaseDateFormat: 'YYYY-MM-DD HH:mm:ss',
+  firstDayOfWeek: 1,
+  countryCodes: [
+    {
+      label: 'USA (+1)',
+      value: '+1'
+    },
+    {
+      label: 'Poland (+48)',
+      value: '+48'
+    }
+  ],
+  menu: [
+    {
+      key: 'work-order',
+      label: 'Open Work Orders',
+      icon: 'clipboard-outline',
+      url: ['/work-order', 'list'],
+      isActive: true
+    },
+    {
+      key: 'time-sheets',
+      label: 'Time Sheets',
+      icon: 'calendar-outline',
+      url: ['/time-sheets', 'list'],
+      isActive: true
+    },
+    {
+      key: 'supplies-request',
+      label: 'Supplies Requests',
+      icon: 'construct-outline',
+      url: ['/supplies-request', 'list'],
+      isActive: true
+    },
+    {
+      key: 'purchase-order',
+      label: 'Purchase orders',
+      icon: 'cart-outline',
+      url: ['/purchase-order', 'list'],
+      isActive: true
+    },
+    {
+      key: 'bill',
+      label: 'Bills',
+      icon: 'receipt-outline',
+      url: ['/bill', 'list'],
+      isActive: false
+    },
+    {
+      key: 'message-center',
+      label: 'Message Center',
+      icon: 'chatbubble-outline',
+      url: ['/message-center', 'list'],
+      isActive: true
+    },
+    {
+      key: 'incidents',
+      label: 'Incidents',
+      icon: 'warning-outline',
+      url: ['/incidents', 'list'],
+      isActive: true
+    },
+    {
+      key: 'job-search',
+      label: 'Job Search',
+      icon: 'search-outline',
+      url: ['/job-search', 'list'],
+      isActive: false
+    },
+    {
+      key: 'settings',
+      label: 'Settings',
+      icon: 'settings-outline',
+      url: ['/settings', 'list'],
+      isActive: true
+    },
+  ],
+  techStatuses: {
+    assigned: 1512,
+    inRoute: 1513,
+    wip: 1511,
+    completed: 1514,
+    incomplete: 1515
+  },
+  workOrderStatuses: {
+    issued: 'issued',
+    confirmed: 'confirmed',
+    inProgress: 'in_progress',
+    inProgressAndHold: 'in_progress_and_hold',
+    canceled: 'canceled',
+    completed: 'completed'
+  },
+  workOrderTabs: [
+    {
+      key: 'open',
+      label: 'Open',
+      isActive: true
+    },
+    {
+      key: 'today',
+      label: 'Today',
+    },
+    {
+      key: 'completed',
+      label: 'Completed',
+    },
+  ],
+  tableToServiceMap: {
+    work_orders: 'WorkOrderService',
+  },
+  defaultRoutes: []
 };
 /*
  * For easier debugging in development mode, you can import the following file

@@ -3,8 +3,8 @@
 </ion-header>
 
 <ion-content>
-  <form 
-    [formGroup]="formGroup" 
+  <form
+    [formGroup]="formGroup"
     (ngSubmit)="onSubmit()">
 
     <ion-card class="ion-padding">
@@ -18,22 +18,22 @@
             [formControl]="incidentTypeCtrl"
             (ionChange)="onTypeChange($event)"
             interface="popover">
-  
+
             <ion-select-option
               *ngFor="let type of incidentsTypes"
               [value]="type.id">
               {{ type.type_value }}
             </ion-select-option>
-  
+
           </ion-select>
-  
-          <ion-text 
+
+          <ion-text
             class="small"
             color="danger"
             *ngIf="incidentTypeCtrl.invalid && (incidentTypeCtrl.dirty)">
             This field is required
           </ion-text>
-  
+
         </ion-col>
       </ion-row>
 
@@ -43,63 +43,63 @@
             <b>Incident date:</b>
             <span class="required">*</span>
           </ion-label>
-          <ion-input 
+          <ion-input
             class="ion-no-margin"
-            [formControl]="incidentDateCtrl" 
+            [formControl]="incidentDateCtrl"
             type="date">
           </ion-input>
-          
-          <ion-text 
+
+          <ion-text
             class="small"
             color="danger"
             *ngIf="incidentDateCtrl.invalid && (incidentDateCtrl.dirty || incidentDateCtrl.touched)">
             This field is required
           </ion-text>
-  
+
         </ion-col>
       </ion-row>
-  
+
       <ion-row>
         <ion-col size="8">
           <ion-label>
             <b>Incident time:</b>
             <span class="required">*</span>
           </ion-label>
-          <ion-input 
+          <ion-input
             class="ion-no-margin"
-            [formControl]="incidentTimeCtrl" 
+            [formControl]="incidentTimeCtrl"
             type="time">
           </ion-input>
-          
-          <ion-text 
+
+          <ion-text
             class="small"
             color="danger"
             *ngIf="incidentTimeCtrl.invalid && (incidentTimeCtrl.dirty || incidentTimeCtrl.touched)">
             This field is required
           </ion-text>
-  
+
         </ion-col>
       </ion-row>
-  
+
       <ion-row>
         <ion-col>
           <ion-label>
             <b>Incident location:</b>
             <span class="required">*</span>
           </ion-label>
-          <ion-textarea 
+          <ion-textarea
             class="ion-no-margin"
             [formControl]="incidentLocationCtrl"
             [autoGrow]="true">
           </ion-textarea>
-          
-          <ion-text 
+
+          <ion-text
             class="small"
             color="danger"
             *ngIf="incidentLocationCtrl.invalid && (incidentLocationCtrl.dirty || incidentLocationCtrl.touched)">
             This field is required
           </ion-text>
-  
+
         </ion-col>
       </ion-row>
     </ion-card>
@@ -111,20 +111,20 @@
             <b>Description:</b>
             <span class="required">*</span>
           </ion-label>
-          <ion-textarea 
+          <ion-textarea
             class="ion-no-margin"
             [formControl]="descriptionCtrl"
             placeholder="Incident Description"
             [autoGrow]="true">
           </ion-textarea>
-          
-          <ion-text 
+
+          <ion-text
             class="small"
             color="danger"
             *ngIf="descriptionCtrl.invalid && (descriptionCtrl.dirty || descriptionCtrl.touched)">
             This field is required
           </ion-text>
-  
+
           <app-capture-media
             [typeId]="photoType?.id"
             type="photo"
@@ -144,348 +144,348 @@
 
     <ion-card class="ion-padding">
       <ion-row>
-  
+
         <ion-col>
           <ion-label class="flex ion-align-items-center">
             <b>Involved person(s):</b>
-            <ion-button 
-              color="medium" 
+            <ion-button
+              color="medium"
               fill="clear"
               (click)="showPersonForm('involved')">
               <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
             </ion-button>
           </ion-label>
-          
-          <div 
-            *ngFor="let person of personInvolvedCtrl.value; index as i" 
+
+          <div
+            *ngFor="let person of personInvolvedCtrl.value; index as i"
             class="person"
             (click)="showPersonForm('involved', i)">
-  
+
             <ion-row>
               <ion-col class="ion-no-padding">
-                <ion-button 
+                <ion-button
                   class="ion-no-padding remove-btn"
-                  color="medium" 
-                  fill="clear" 
+                  color="medium"
+                  fill="clear"
                   (click)="onRemovePersonClick('involved', i)">
                   <ion-icon name="close-outline"></ion-icon>
                 </ion-button>
               </ion-col>
             </ion-row>
-  
+
             <ion-row>
               <ion-col size="4"><small><b>First name:</b></small></ion-col>
               <ion-col><small>{{person.first_name}}</small></ion-col>
             </ion-row>
-  
+
             <ion-row>
               <ion-col size="4"><small><b>Last name:</b></small></ion-col>
               <ion-col><small>{{person.last_name}}</small></ion-col>
             </ion-row>
-  
+
           </div>
         </ion-col>
-  
+
       </ion-row>
     </ion-card>
 
     <ion-card class="ion-padding" *ngIf="isInjuryType">
       <ion-row>
-  
+
         <ion-col>
           <ion-label class="flex ion-align-items-center">
             <b>Injured Person(s):</b>
-            <ion-button 
-              color="medium" 
+            <ion-button
+              color="medium"
               fill="clear"
               (click)="showPersonForm('injured')">
               <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
             </ion-button>
           </ion-label>
-          
-          <div 
-            *ngFor="let person of injuryPersonsCtrl.value; index as i" 
+
+          <div
+            *ngFor="let person of injuryPersonsCtrl.value; index as i"
             class="person"
             (click)="showPersonForm('injured', i)">
-  
+
             <ion-row>
               <ion-col class="ion-no-padding">
-                <ion-button 
+                <ion-button
                   class="ion-no-padding remove-btn"
-                  color="medium" 
-                  fill="clear" 
+                  color="medium"
+                  fill="clear"
                   (click)="onRemovePersonClick('injured', i)">
                   <ion-icon name="close-outline"></ion-icon>
                 </ion-button>
               </ion-col>
             </ion-row>
-  
+
             <ion-row>
               <ion-col size="4"><small><b>First name:</b></small></ion-col>
               <ion-col><small>{{person.first_name}}</small></ion-col>
             </ion-row>
-  
+
             <ion-row>
               <ion-col size="4"><small><b>Last name:</b></small></ion-col>
               <ion-col><small>{{person.last_name}}</small></ion-col>
             </ion-row>
-  
+
           </div>
         </ion-col>
-  
+
       </ion-row>
-  
+
       <ion-row>
         <ion-col>
-  
+
           <ion-label>
             <b>Injury description:</b>
             <span class="required">*</span>
           </ion-label>
-          <ion-textarea 
+          <ion-textarea
             class="ion-no-margin"
             [formControl]="injuryDescriptionCtrl"
             placeholder="What happend?"
             [autoGrow]="true">
           </ion-textarea>
-          
-          <ion-text 
+
+          <ion-text
             class="small"
             color="danger"
             *ngIf="injuryDescriptionCtrl.invalid && (injuryDescriptionCtrl.dirty || injuryDescriptionCtrl.touched)">
             This field is required
           </ion-text>
-  
+
         </ion-col>
       </ion-row>
     </ion-card>
 
     <ion-card class="ion-padding">
       <ion-row>
-  
+
         <ion-col>
           <ion-label class="flex ion-align-items-center">
             <b>Witness(es):</b>
-            <ion-button 
-              color="medium" 
+            <ion-button
+              color="medium"
               fill="clear"
               (click)="showPersonForm('witness')">
               <ion-icon slot="icon-only" name="add-circle-outline"></ion-icon>
             </ion-button>
           </ion-label>
-          
-          <div 
-            *ngFor="let person of witnessesCtrl.value; index as i" 
+
+          <div
+            *ngFor="let person of witnessesCtrl.value; index as i"
             class="person"
             (click)="showPersonForm('witness', i)">
-  
+
             <ion-row>
               <ion-col class="ion-no-padding">
-                <ion-button 
+                <ion-button
                   class="ion-no-padding remove-btn"
-                  color="medium" 
-                  fill="clear" 
+                  color="medium"
+                  fill="clear"
                   (click)="onRemovePersonClick('witness', i)">
                   <ion-icon name="close-outline"></ion-icon>
                 </ion-button>
               </ion-col>
             </ion-row>
-  
+
             <ion-row>
               <ion-col size="4"><small><b>First name:</b></small></ion-col>
               <ion-col><small>{{person.first_name}}</small></ion-col>
             </ion-row>
-  
+
             <ion-row>
               <ion-col size="4"><small><b>Last name:</b></small></ion-col>
               <ion-col><small>{{person.last_name}}</small></ion-col>
             </ion-row>
-  
+
           </div>
         </ion-col>
-  
+
       </ion-row>
     </ion-card>
 
-    <ion-card class="ion-padding" *ngIf="isInjuryType">
-      <ion-row>
-        <ion-col size="8">
-          <ion-label>
-            <b>Analysis root cause:</b>
-            <span class="required">*</span>
-          </ion-label>
-          <ion-select
-            [formControl]="analysisRootCauseCtrl"
-            interface="popover">
-  
-            <ion-select-option
-              *ngFor="let type of analysisRootCauseTypes"
-              [value]="type.id">
-              {{ type.type_value }}
-            </ion-select-option>
-  
-          </ion-select>
-  
-          <ion-text 
-            class="small"
-            color="danger"
-            *ngIf="analysisRootCauseCtrl.invalid && (analysisRootCauseCtrl.dirty)">
-            This field is required
-          </ion-text>
-  
-        </ion-col>
-      </ion-row>
-  
-      <ion-row>
-        <ion-col size="8">
-          <ion-label>
-            <b>Analysis risk:</b>
-            <span class="required">*</span>
-          </ion-label>
-          <ion-select
-            [formControl]="analysisRiskCtrl"
-            interface="popover">
-  
-            <ion-select-option
-              *ngFor="let type of analysisRiskTypes"
-              [value]="type.id">
-              {{ type.type_value }}
-            </ion-select-option>
-  
-          </ion-select>
-  
-          <ion-text 
-            class="small"
-            color="danger"
-            *ngIf="analysisRiskCtrl.invalid && (analysisRiskCtrl.dirty)">
-            This field is required
-          </ion-text>
-  
-        </ion-col>
-      </ion-row>
-  
-      <ion-row>
-        <ion-col size="8">
-          <ion-label>
-            <b>Analysis activity being performed:</b>
-            <span class="required">*</span>
-          </ion-label>
-          <ion-select
-            [formControl]="analysisActivityBeingPerformedCtrl"
-            interface="popover">
-  
-            <ion-select-option
-              *ngFor="let type of analysisActivityBeingPerformedTypes"
-              [value]="type.id">
-              {{ type.type_value }}
-            </ion-select-option>
-  
-          </ion-select>
-  
-          <ion-text 
-            class="small"
-            color="danger"
-            *ngIf="analysisActivityBeingPerformedCtrl.invalid && (analysisActivityBeingPerformedCtrl.dirty)">
-            This field is required
-          </ion-text>
-  
-        </ion-col>
-      </ion-row>
+<!--    <ion-card class="ion-padding" *ngIf="isInjuryType">-->
+<!--      <ion-row>-->
+<!--        <ion-col size="8">-->
+<!--          <ion-label>-->
+<!--            <b>Analysis root cause:</b>-->
+<!--            <span class="required">*</span>-->
+<!--          </ion-label>-->
+<!--          <ion-select-->
+<!--            [formControl]="analysisRootCauseCtrl"-->
+<!--            interface="popover">-->
+<!--  -->
+<!--            <ion-select-option-->
+<!--              *ngFor="let type of analysisRootCauseTypes"-->
+<!--              [value]="type.id">-->
+<!--              {{ type.type_value }}-->
+<!--            </ion-select-option>-->
+<!--  -->
+<!--          </ion-select>-->
+<!--  -->
+<!--          <ion-text -->
+<!--            class="small"-->
+<!--            color="danger"-->
+<!--            *ngIf="analysisRootCauseCtrl.invalid && (analysisRootCauseCtrl.dirty)">-->
+<!--            This field is required-->
+<!--          </ion-text>-->
+<!--  -->
+<!--        </ion-col>-->
+<!--      </ion-row>-->
+<!--  -->
+<!--      <ion-row>-->
+<!--        <ion-col size="8">-->
+<!--          <ion-label>-->
+<!--            <b>Analysis risk:</b>-->
+<!--            <span class="required">*</span>-->
+<!--          </ion-label>-->
+<!--          <ion-select-->
+<!--            [formControl]="analysisRiskCtrl"-->
+<!--            interface="popover">-->
+<!--  -->
+<!--            <ion-select-option-->
+<!--              *ngFor="let type of analysisRiskTypes"-->
+<!--              [value]="type.id">-->
+<!--              {{ type.type_value }}-->
+<!--            </ion-select-option>-->
+<!--  -->
+<!--          </ion-select>-->
+<!--  -->
+<!--          <ion-text -->
+<!--            class="small"-->
+<!--            color="danger"-->
+<!--            *ngIf="analysisRiskCtrl.invalid && (analysisRiskCtrl.dirty)">-->
+<!--            This field is required-->
+<!--          </ion-text>-->
+<!--  -->
+<!--        </ion-col>-->
+<!--      </ion-row>-->
+<!--  -->
+<!--      <ion-row>-->
+<!--        <ion-col size="8">-->
+<!--          <ion-label>-->
+<!--            <b>Analysis activity being performed:</b>-->
+<!--            <span class="required">*</span>-->
+<!--          </ion-label>-->
+<!--          <ion-select-->
+<!--            [formControl]="analysisActivityBeingPerformedCtrl"-->
+<!--            interface="popover">-->
+<!--  -->
+<!--            <ion-select-option-->
+<!--              *ngFor="let type of analysisActivityBeingPerformedTypes"-->
+<!--              [value]="type.id">-->
+<!--              {{ type.type_value }}-->
+<!--            </ion-select-option>-->
+<!--  -->
+<!--          </ion-select>-->
+<!--  -->
+<!--          <ion-text -->
+<!--            class="small"-->
+<!--            color="danger"-->
+<!--            *ngIf="analysisActivityBeingPerformedCtrl.invalid && (analysisActivityBeingPerformedCtrl.dirty)">-->
+<!--            This field is required-->
+<!--          </ion-text>-->
+<!--  -->
+<!--        </ion-col>-->
+<!--      </ion-row>-->
 
-      <ion-row>
-        <ion-col>
-  
-          <ion-label>
-            <b>Corrective action description:</b>
-            <span class="required">*</span>
-          </ion-label>
-          <ion-textarea 
-            class="ion-no-margin"
-            placeholder="Corrective Action Description"
-            [formControl]="analysisCorrectiveActionDescriptionCtrl"
-            [autoGrow]="true">
-          </ion-textarea>
-          
-          <ion-text 
-            class="small"
-            color="danger"
-            *ngIf="analysisCorrectiveActionDescriptionCtrl.invalid && (analysisCorrectiveActionDescriptionCtrl.dirty || analysisCorrectiveActionDescriptionCtrl.touched)">
-            This field is required
-          </ion-text>
-  
-        </ion-col>
-      </ion-row>
-    </ion-card>
+<!--      <ion-row>-->
+<!--        <ion-col>-->
+<!--  -->
+<!--          <ion-label>-->
+<!--            <b>Corrective action description:</b>-->
+<!--            <span class="required">*</span>-->
+<!--          </ion-label>-->
+<!--          <ion-textarea -->
+<!--            class="ion-no-margin"-->
+<!--            placeholder="Corrective Action Description"-->
+<!--            [formControl]="analysisCorrectiveActionDescriptionCtrl"-->
+<!--            [autoGrow]="true">-->
+<!--          </ion-textarea>-->
+<!--          -->
+<!--          <ion-text -->
+<!--            class="small"-->
+<!--            color="danger"-->
+<!--            *ngIf="analysisCorrectiveActionDescriptionCtrl.invalid && (analysisCorrectiveActionDescriptionCtrl.dirty || analysisCorrectiveActionDescriptionCtrl.touched)">-->
+<!--            This field is required-->
+<!--          </ion-text>-->
+<!--  -->
+<!--        </ion-col>-->
+<!--      </ion-row>-->
+<!--    </ion-card>-->
 
     <ion-card class="ion-padding" *ngIf="isPropertyDamageType">
       <ion-row>
         <ion-col>
-  
+
           <ion-label>
             <b>Damage property owner:</b>
             <span class="required">*</span>
           </ion-label>
-          <ion-textarea 
+          <ion-textarea
             class="ion-no-margin"
             [formControl]="damagePropertyOwnerCtrl"
             [autoGrow]="true">
           </ion-textarea>
-          
-          <ion-text 
+
+          <ion-text
             class="small"
             color="danger"
             *ngIf="damagePropertyOwnerCtrl.invalid && (damagePropertyOwnerCtrl.dirty || damagePropertyOwnerCtrl.touched)">
             This field is required
           </ion-text>
-  
+
         </ion-col>
       </ion-row>
-  
+
       <ion-row>
         <ion-col>
-  
+
           <ion-label>
             <b>Damage description:</b>
             <span class="required">*</span>
           </ion-label>
-          <ion-textarea 
+          <ion-textarea
             class="ion-no-margin"
             [formControl]="damageDescriptionCtrl"
             placeholder="What was the Damage?"
             [autoGrow]="true">
           </ion-textarea>
-          
-          <ion-text 
+
+          <ion-text
             class="small"
             color="danger"
             *ngIf="damageDescriptionCtrl.invalid && (damageDescriptionCtrl.dirty || damageDescriptionCtrl.touched)">
             This field is required
           </ion-text>
-  
+
         </ion-col>
       </ion-row>
-  
+
       <ion-row>
         <ion-col>
-  
+
           <ion-label>
             <b>Damage cause:</b>
             <span class="required">*</span>
           </ion-label>
-          <ion-textarea 
+          <ion-textarea
             class="ion-no-margin"
             [formControl]="damageCauseCtrl"
             placeholder="What was the Cause?"
             [autoGrow]="true">
           </ion-textarea>
-          
-          <ion-text 
+
+          <ion-text
             class="small"
             color="danger"
             *ngIf="damageCauseCtrl.invalid && (damageCauseCtrl.dirty || damageCauseCtrl.touched)">
             This field is required
           </ion-text>
-  
+
         </ion-col>
       </ion-row>
     </ion-card>
@@ -495,11 +495,11 @@
         <ion-col>
 
           <ion-label><b>Note:</b></ion-label>
-          <ion-textarea 
+          <ion-textarea
             class="ion-no-margin"
             [formControl]="noteCtrl"
             [autoGrow]="true">
-          </ion-textarea>  
+          </ion-textarea>
 
         </ion-col>
       </ion-row>

@@ -33,6 +33,7 @@
             Show on map
           </ion-button>
           <ion-button
+              *ngIf="!utilsService.is('ahd')"
               class="m-1"
               color="secondary"
               expand="full"
@@ -56,22 +57,20 @@
     </ion-item>
 
     <ion-item class="ion-item-small" lines="none">
-      <ion-label>Client</ion-label>
+      <ion-label>Customer</ion-label>
       {{ workOrder.client }}
     </ion-item>
 
-    <ion-item lines="none" *ngIf="workOrder.phone">
-      <ion-label>
-        Phone number:
-      </ion-label>
-      {{ workOrder.phone }}
+    <ion-item class="ion-item-small" lines="none">
+      <ion-label>Phone Number</ion-label>
+      <a href="tel:{{ workOrder.phone }}">{{ workOrder.phone }}</a>
     </ion-item>
 
     <ion-item lines="none" *ngIf="workOrder.received_date">
       <ion-label>
         Contract Date:
       </ion-label>
-      {{ utilsService.getLocalDatetime(workOrder.received_date) }}
+      {{ utilsService.getLocalDate(workOrder.received_date) }}
     </ion-item>
 
     <ion-item class="margin-top-5vh" lines="none" *ngIf="woTypes.length > 0 && showConfirmButton()">

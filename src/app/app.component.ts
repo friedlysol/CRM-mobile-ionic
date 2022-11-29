@@ -1,4 +1,4 @@
-import { Component, NgZone, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, NgZone, OnDestroy, OnInit } from '@angular/core';
 import { Platform } from '@ionic/angular';
 import { StorageService } from '@app/services/storage.service';
 import { AuthService } from '@app/services/auth.service';
@@ -9,6 +9,7 @@ import { AppVersion } from '@ionic-native/app-version/ngx';
 import { MenuItemInterface } from '@app/interfaces/menu-item.interface';
 import { FileService } from '@app/services/file.service';
 import { GeolocationService } from '@app/services/geolocation.service';
+import { Keyboard } from '@capacitor/keyboard';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +17,19 @@ import { GeolocationService } from '@app/services/geolocation.service';
   styleUrls: ['app.component.scss'],
 })
 export class AppComponent implements OnInit {
+  @HostListener('document:keypress', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    // console.log('handleKeyboardEvent', event);
+    //
+    // if(event.key === 'Enter') {
+    //   try {
+    //     Keyboard.hide();
+    //
+    //     (event.target as HTMLElement).blur();
+    //   } catch (err) {}
+    // }
+  }
+
   public appName: string = null;
 
   public menu: MenuItemInterface[] = [];

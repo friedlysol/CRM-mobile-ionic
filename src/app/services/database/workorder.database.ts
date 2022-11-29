@@ -49,6 +49,9 @@ export class WorkOrderDatabase {
    * @param limit
    */
   getWorkOrdersByTab(tab: string, search: string, page = 1, limit = 50): Promise<WorkOrderInterface[]> {
+    const inRoute = environment.techStatuses.inRoute || 0;
+    const wip = environment.techStatuses.wip || 0;
+
     let query = sqlBuilder
       .select(
         'work_orders.*',
@@ -57,7 +60,8 @@ export class WorkOrderDatabase {
         'addresses.state',
         'addresses.zip_code',
         'tech_statuses.name as tech_status',
-        'types.type_value as wo_type'
+        'types.type_value as wo_type',
+        `case when tech_statuses.id = ${inRoute} or tech_statuses.id = ${wip} then 1 else 0 end as status_type`
       )
       .from('work_orders')
       .leftJoin('addresses', {'work_orders.address_uuid': 'addresses.uuid'})
@@ -66,6 +70,8 @@ export class WorkOrderDatabase {
 
     query = this.filterByTab(query, tab);
     query = this.filterBySearch(query, search);
+
+    query.orderBy(['status_type desc', 'work_orders.scheduled_date asc'])
 
     return this.databaseService.findAsArray(query.toString(), query.toParams());
   }
@@ -141,7 +147,7 @@ export class WorkOrderDatabase {
       left join types t on w.wo_type_id = t.id
       where uuid = ?
     `, [
-        uuid
+      uuid
     ]);
   }
 
@@ -338,7 +344,7 @@ export class WorkOrderDatabase {
       foundation_type_id: workOrder.foundation_type_id || null,
       hash: workOrder.hash || null,
       hazard_assessment: workOrder.hazard_assessment ? JSON.stringify(workOrder.hazard_assessment) : null,
-      id: workOrder.id,
+      id: workOrder.link_person_wo_id,
       instruction: workOrder.instructions || null,
       integration_info: workOrder.integration_info || null,
       is_deleted: workOrder.is_deleted || 0,

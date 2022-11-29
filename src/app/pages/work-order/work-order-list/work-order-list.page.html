@@ -40,7 +40,7 @@
           <b>Scheduled date</b>: {{ workOrder.scheduled_date || '-' }}
         </ion-row>
         <ion-row class="mt-2" *ngIf="!params.short">
-          <b>Client</b>: {{ workOrder.client }}
+          <b>Customer</b>: {{ workOrder.client }}
         </ion-row>
         <ion-row *ngIf="!params.short">
           <app-address [address]="workOrder"></app-address>

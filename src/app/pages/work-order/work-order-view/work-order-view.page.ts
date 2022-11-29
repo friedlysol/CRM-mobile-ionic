@@ -225,6 +225,8 @@ export class WorkOrderViewPage implements OnInit, OnDestroy {
     }
 
     this.currentTechStatus = await this.workOrderService.setNewTechStatus(this.workOrder, this.currentTechStatus);
+
+    await this.workOrderService.sync({sync_only_from_app: 1});
   }
 
   async confirmWorkOrder(workOrder: WorkOrderInterface) {

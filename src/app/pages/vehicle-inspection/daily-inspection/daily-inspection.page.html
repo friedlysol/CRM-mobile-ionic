@@ -4,19 +4,25 @@
 
 <ion-content>
   <ion-item
-    *ngIf="isPreview"
-    lines="none"
-    class="preview-title">
+      *ngIf="isPreview"
+      lines="none"
+      class="preview-title">
 
     <b class="full-width ion-text-center ion-padding">
       Preview mode for the last inspection<br/>
       from {{utilsService.getLocalDatetime(inspection.created_at)}}
     </b>
-
   </ion-item>
-  <form [formGroup]="inspectionForm">
-    <ion-row>
 
+  <form [formGroup]="inspectionForm">
+    <ion-row class="ion-padding-horizontal mt-2" *ngIf="!isPreview">
+      <ion-col>
+        <small><span class="bold">Notice</span>: false submissions or failure to accurately report could result in
+          disciplinary action</small>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
       <ion-col size="6">
         <ion-item lines="none">
 
@@ -25,34 +31,81 @@
             <span class="required">*</span>
           </ion-label>
 
-          <ion-input [readonly]="isPreview" type="tel" formControlName="vehicleNumber"></ion-input>
+          <ion-input
+              [readonly]="isPreview"
+              type="tel"
+              formControlName="vehicleNumber"
+              maxlength="5"
+              (keydown)="onlyNumber('vehicleNumber')"
+              (ionBlur)="onlyNumber('vehicleNumber')"
+              appSelectOnClick
+          ></ion-input>
 
-          <ion-note
-            color="danger"
-            *ngIf="!isPreview && vehicleNumberCtrl.invalid">
-            <ion-text *ngIf="vehicleNumberCtrl.errors?.required && (vehicleNumberCtrl.dirty || vehicleNumberCtrl.touched)">This field is required<br/></ion-text>
-            <ion-text *ngIf="vehicleNumberCtrl.errors?.pattern && showErrors">This field should have 5 digits</ion-text>
-          </ion-note>
+          <ng-container *ngIf="!isPreview && vehicleNumberCtrl.invalid">
+            <ion-text
+                class="small"
+                color="danger"
+                *ngIf="vehicleNumberCtrl.errors?.required && (vehicleNumberCtrl.dirty || vehicleNumberCtrl.touched)"
+            >
+              This field is required
+            </ion-text>
 
+            <ion-text
+                class="small"
+                color="danger"
+                *ngIf="!vehicleNumberCtrl.errors?.required && vehicleNumberCtrl.errors?.pattern"
+            >
+              This field should have 5 digits
+            </ion-text>
+          </ng-container>
         </ion-item>
       </ion-col>
 
       <ion-col size="6">
         <ion-item lines="none">
-
           <ion-label position="stacked">
             Odometer Reading
             <span class="required">*</span>
           </ion-label>
 
-          <ion-input type="tel" [readonly]="isPreview" formControlName="odometerReading"></ion-input>
+          <ion-input
+              formControlName="odometerReading"
+              type="tel"
+              maxlength="6"
+              [autofocus]="!isPreview"
+              [readonly]="isPreview"
+              (keydown)="onlyNumber('odometerReading')"
+              (ionBlur)="onlyNumber('odometerReading')"
+              appSelectOnClick
+              appDetectFocus
+              #odometerReading
+          ></ion-input>
 
-          <ion-note
-            color="danger"
-            *ngIf="!isPreview && odometerReadingCtrl.invalid && (odometerReadingCtrl.dirty || odometerReadingCtrl.touched)">
-            This field is required
-          </ion-note>
+          <ng-container *ngIf="!isPreview">
+            <ion-text
+                class="small"
+                color="danger"
+                *ngIf="odometerReadingCtrl.invalid && (odometerReadingCtrl.dirty || odometerReadingCtrl.touched)"
+            >
+              This field is required
+            </ion-text>
 
+            <ion-text
+                class="small"
+                color="warning"
+                *ngIf="!odometerReadingCtrl.invalid && odometerReadingCtrl.value > 300000"
+            >
+              Make sure that the specified value is correct
+            </ion-text>
+
+            <ion-text
+                class="small"
+                color="warning"
+                *ngIf="!odometerReadingCtrl.invalid && prevValues.odometerReading && odometerReadingCtrl.value < prevValues.odometerReading"
+            >
+              Value is less than at the previous inspection
+            </ion-text>
+          </ng-container>
         </ion-item>
       </ion-col>
 
@@ -64,7 +117,7 @@
 
           <ion-label position="stacked">Note</ion-label>
 
-          <ion-input [readonly]="isPreview" formControlName="note"></ion-input>
+          <ion-textarea [readonly]="isPreview" [rows]="2" [autoGrow]="true" formControlName="note"></ion-textarea>
 
         </ion-item>
       </ion-col>
@@ -92,13 +145,13 @@
       <tr *ngFor="let question of questions">
         <td class="{{showErrors && inspection[question.type_key] === undefined? 'required': ''}}">{{question.type_value}}</td>
         <td
-          class="unsatisfactory"
-          (click)="onAnswerClick(question, false)">
+            class="unsatisfactory"
+            (click)="onAnswerClick(question, false)">
           <ion-icon *ngIf="inspection[question.type_key] === 0" name="checkmark-outline"></ion-icon>
         </td>
         <td
-          class="satisfactory"
-          (click)="onAnswerClick(question, true)">
+            class="satisfactory"
+            (click)="onAnswerClick(question, true)">
           <ion-icon *ngIf="inspection[question.type_key] === 1" name="checkmark-outline"></ion-icon>
         </td>
       </tr>
@@ -127,18 +180,18 @@
 
       <ion-col>
         <ion-button
-          color="light"
-          expand="full"
-          (click)="onClearClick()">
+            color="light"
+            expand="full"
+            (click)="onClearClick()">
           Clear
         </ion-button>
       </ion-col>
 
       <ion-col>
         <ion-button
-          color="medium"
-          expand="full"
-          (click)="onSaveClick()">
+            color="medium"
+            expand="full"
+            (click)="onSaveClick()">
           Save
         </ion-button>
       </ion-col>

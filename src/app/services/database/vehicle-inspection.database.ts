@@ -109,4 +109,12 @@ export class VehicleInspectionsDatabase {
         return this.databaseService.query(query.toString(), query.toParams())
             .then(() => this.getWeeklyByUuid(uuid));
     }
+
+  getLastVinAndOdometer(): Promise<any> {
+    return this.databaseService.findOrNull(`
+      select vehicle_number, odometer_reading 
+      from daily_inspections 
+      order by created_at desc
+    `);
+  }
 }

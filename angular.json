@@ -18,7 +18,8 @@
               "angular2-uuid",
               "localforage-cordovasqlitedriver",
               "moment",
-              "sql-bricks"
+              "sql-bricks",
+              "localforage"
             ],
             "outputPath": "www",
             "polyfills": "src/polyfills.ts",
@@ -37,8 +38,13 @@
                 "output": "./svg"
               }
             ],
-            "styles": ["src/theme/variables.scss", "src/global.scss"],
-            "scripts": [],
+            "styles": [
+              "src/theme/variables.scss",
+              "src/global.scss"
+            ],
+            "scripts": [
+              "src/assets/js/bootstrap.min.js"
+            ],
             "aot": false,
             "vendorChunk": true,
             "extractLicenses": false,
@@ -57,7 +63,53 @@
               ],
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": false,
+              "sourceMap": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            },
+            "ahd": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.ahd.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": true,
+              "namedChunks": false,
+              "aot": true,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
+            },
+            "dt": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.dt.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -84,6 +136,12 @@
           "configurations": {
             "production": {
               "browserTarget": "app:build:production"
+            },
+            "ahd": {
+              "browserTarget": "app:build:ahd"
+            },
+            "dt": {
+              "browserTarget": "app:build:dt"
             },
             "ci": {
               "progress": false
@@ -144,6 +202,12 @@
             "production": {
               "devServerTarget": "app:serve:production"
             },
+            "ahd": {
+              "devServerTarget": "app:serve:ahd"
+            },
+            "dt": {
+              "devServerTarget": "app:serve:dt"
+            },
             "ci": {
               "devServerTarget": "app:serve:ci"
             }
@@ -157,6 +221,12 @@
           "configurations": {
             "production": {
               "browserTarget": "app:build:production"
+            },
+            "ahd": {
+              "browserTarget": "app:build:ahd"
+            },
+            "dt": {
+              "browserTarget": "app:build:dt"
             }
           }
         },
@@ -170,6 +240,14 @@
             "production": {
               "cordovaBuildTarget": "app:ionic-cordova-build:production",
               "devServerTarget": "app:serve:production"
+            },
+            "ahd": {
+              "cordovaBuildTarget": "app:ionic-cordova-build:ahd",
+              "devServerTarget": "app:serve:ahd"
+            },
+            "dt": {
+              "cordovaBuildTarget": "app:ionic-cordova-build:dt",
+              "devServerTarget": "app:serve:dt"
             }
           }
         }

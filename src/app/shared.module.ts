@@ -17,16 +17,20 @@ import { ItemValueComponent } from '@app/components/item-value/item-value.compon
 import { PartRequestComponent } from '@app/modals/part-request/part-request.component';
 import { LaborRequestComponent } from '@app/modals/labor-request/labor-request.component';
 import { ErrorTextComponent } from '@app/components/error-text/error-text.component';
+import { SelectOnClickDirective } from '@app/directives/select-on-click.directive';
+import { DetectFocusDirective } from '@app/directives/detect-focus.directive';
 
 @NgModule({
   declarations: [
     CaptureMediaComponent,
+    DetectFocusDirective,
     ErrorTextComponent,
     FormSelectComponent,
     HeaderComponent,
     ItemValueComponent,
     LaborRequestComponent,
     PartRequestComponent,
+    SelectOnClickDirective,
     SideSwipeDirective,
     SignatureCanvasComponent,
     SignatureComponent,
@@ -43,12 +47,14 @@ import { ErrorTextComponent } from '@app/components/error-text/error-text.compon
   ],
   exports: [
     CaptureMediaComponent,
+    DetectFocusDirective,
     ErrorTextComponent,
     FormSelectComponent,
     HeaderComponent,
     ItemValueComponent,
     LaborRequestComponent,
     PartRequestComponent,
+    SelectOnClickDirective,
     SignatureComponent,
     SyncComponent,
     YesOrNoOptionsComponent,
