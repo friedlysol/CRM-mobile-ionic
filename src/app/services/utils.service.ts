@@ -56,4 +56,9 @@ export class UtilsService {
       next: page < Math.round(total / limit)
     }
   }
+
+  getLastnameFromFullname(fullName: string){
+    const splited = fullName.split(' ');
+    return splited[splited.length-1];
+  }
 }

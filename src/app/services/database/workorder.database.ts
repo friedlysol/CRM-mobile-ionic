@@ -76,6 +76,27 @@ export class WorkOrderDatabase {
     return this.databaseService.findAsArray(query.toString(), query.toParams());
   }
 
+  getAllForDateRange(startDate: string, endDate: string): Promise<WorkOrderInterface[]> {
+    return this.databaseService.findAsArray(`
+      select work_orders.*,
+        addresses.address,
+        addresses.city,
+        addresses.state,
+        addresses.zip_code,
+        tech_statuses.name as tech_status,
+        types.type_value as wo_type
+      from work_orders
+      join addresses on work_orders.address_uuid = addresses.uuid
+      join tech_statuses on work_orders.tech_status_type_id = tech_statuses.id
+      join types on work_orders.wo_type_id = types.id
+      where date(datetime(scheduled_date, 'localtime')) >= date(?) and date(datetime(scheduled_date, 'localtime')) <= date(?)
+      order by datetime(scheduled_date) asc      
+    `, [
+      startDate,
+      endDate
+    ]);
+  };
+
   getTotalWorkOrdersByTab(tab: string, search: string): Promise<number> {
     let query = sqlBuilder
       .select('count(*) as total')

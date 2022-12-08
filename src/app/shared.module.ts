@@ -19,9 +19,11 @@ import { LaborRequestComponent } from '@app/modals/labor-request/labor-request.c
 import { ErrorTextComponent } from '@app/components/error-text/error-text.component';
 import { SelectOnClickDirective } from '@app/directives/select-on-click.directive';
 import { DetectFocusDirective } from '@app/directives/detect-focus.directive';
+import { AddressComponent } from './components/address/address.component';
 
 @NgModule({
   declarations: [
+    AddressComponent,
     CaptureMediaComponent,
     DetectFocusDirective,
     ErrorTextComponent,
@@ -46,6 +48,7 @@ import { DetectFocusDirective } from '@app/directives/detect-focus.directive';
     OrderModule,
   ],
   exports: [
+    AddressComponent,
     CaptureMediaComponent,
     DetectFocusDirective,
     ErrorTextComponent,

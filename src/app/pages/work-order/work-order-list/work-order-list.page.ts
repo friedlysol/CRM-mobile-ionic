@@ -10,6 +10,7 @@ import { WorkOrderInterface } from '@app/interfaces/work-order.interface';
 import { environment } from '@env/environment';
 import { AddressService } from '@app/services/address.service';
 import { Subscription } from 'rxjs';
+import { UtilsService } from '@app/services/utils.service';
 
 @Component({
   selector: 'app-work-order-list',
@@ -33,10 +34,11 @@ export class WorkOrderListPage implements OnInit, OnDestroy {
   constructor(
     private activatedRoute: ActivatedRoute,
     private authService: AuthService,
-    private AlertController: AlertController,
+    private alertController: AlertController,
     private router: Router,
     private workOrderService: WorkOrderService,
-    public addressService: AddressService
+    public addressService: AddressService,
+    public utilsService: UtilsService,
   ) {
     this.setTabs();
   }
@@ -91,7 +93,7 @@ export class WorkOrderListPage implements OnInit, OnDestroy {
   }
 
   async logout() {
-    const alert = await this.AlertController.create({
+    const alert = await this.alertController.create({
       header: 'Logout',
       message: 'Do you want to logout?',
       buttons: [
@@ -142,11 +144,6 @@ export class WorkOrderListPage implements OnInit, OnDestroy {
         replaceUrl: true
       });
     }
-  }
-
-  getLastNameFromFullname(fullName: string){
-    const splited = fullName.split(' ');
-    return splited[splited.length-1];
   }
 
   async goToWorkOrder(uuid: string) {

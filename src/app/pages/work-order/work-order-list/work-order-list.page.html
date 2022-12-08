@@ -24,7 +24,7 @@
   <ion-list>
     <ion-card *ngFor="let workOrder of workOrders" (click)="goToWorkOrder(workOrder.uuid)">
       <ion-card-header>
-        <ion-card-title>#{{ workOrder.work_order_number }} {{ this.getLastNameFromFullname(workOrder.client) }}</ion-card-title>
+        <ion-card-title>#{{ workOrder.work_order_number }} {{ utilsService.getLastnameFromFullname(workOrder.client) }}</ion-card-title>
       </ion-card-header>
       <ion-card-content>
         <ion-row>
