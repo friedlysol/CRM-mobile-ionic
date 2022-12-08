@@ -24,7 +24,7 @@
   <ion-list>
     <ion-card *ngFor="let workOrder of workOrders" (click)="goToWorkOrder(workOrder.uuid)">
       <ion-card-header>
-        <ion-card-title>#{{ workOrder.work_order_number }}</ion-card-title>
+        <ion-card-title>#{{ workOrder.work_order_number }} {{ this.getLastNameFromFullname(workOrder.client) }}</ion-card-title>
       </ion-card-header>
       <ion-card-content>
         <ion-row>
@@ -38,9 +38,6 @@
         </ion-row>
         <ion-row>
           <b>Scheduled date</b>: {{ workOrder.scheduled_date || '-' }}
-        </ion-row>
-        <ion-row class="mt-2" *ngIf="!params.short">
-          <b>Customer</b>: {{ workOrder.client }}
         </ion-row>
         <ion-row *ngIf="!params.short">
           <app-address [address]="workOrder"></app-address>

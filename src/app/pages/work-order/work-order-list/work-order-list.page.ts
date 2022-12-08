@@ -144,6 +144,11 @@ export class WorkOrderListPage implements OnInit, OnDestroy {
     }
   }
 
+  getLastNameFromFullname(fullName: string){
+    const splited = fullName.split(' ');
+    return splited[splited.length-1];
+  }
+
   async goToWorkOrder(uuid: string) {
     this.router.navigateByUrl('/work-order/view/' + uuid);
   }
