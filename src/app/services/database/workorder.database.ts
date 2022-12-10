@@ -8,6 +8,7 @@ import { WorkOrderInterface } from '@app/interfaces/work-order.interface';
 import { environment } from '@env/environment';
 import * as sqlBuilder from 'sql-bricks';
 import * as _ from 'underscore';
+import { isNotNull } from 'sql-bricks';
 
 @Injectable({
   providedIn: 'root'
@@ -96,6 +97,33 @@ export class WorkOrderDatabase {
       endDate
     ]);
   };
+
+  getScheduledDateClosestToToday(){
+    return this.databaseService.findOrNull(`
+      select scheduled_date
+      from work_orders
+      where scheduled_date is not null
+      order by abs(julianday('now') - julianday(scheduled_date)) asc
+    `);
+  }
+
+  getPreviousClosestScheduledDate(date: string){
+    return this.databaseService.findOrNull(`
+      select scheduled_date
+      from work_orders
+      where strftime('%m', date(?)) - strftime('%m', scheduled_date) > 0
+      order by abs(julianday('now') - julianday(scheduled_date)) asc
+    `, [date]);
+  }
+
+  getNextClosestScheduledDate(date: string){
+    return this.databaseService.findOrNull(`
+      select scheduled_date
+      from work_orders
+      where strftime('%m', date(?)) - strftime('%m', scheduled_date) < 0
+      order by abs(julianday('now') - julianday(scheduled_date)) asc
+    `, [date]);
+  }
 
   getTotalWorkOrdersByTab(tab: string, search: string): Promise<number> {
     let query = sqlBuilder
@@ -425,6 +453,9 @@ export class WorkOrderDatabase {
         query = query
           .where('work_orders.status', 'completed');
         break;
+      case 'calendar':
+        query = query
+          .where(isNotNull('work_orders.scheduled_date'));
     }
 
     return query;

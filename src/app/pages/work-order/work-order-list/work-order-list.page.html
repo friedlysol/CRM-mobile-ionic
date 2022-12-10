@@ -1,6 +1,7 @@
 <ion-header>
   <app-header [title]="'Work orders'"></app-header>
-  <div class="search-box">
+
+  <div class="search-box" *ngIf="getActiveTabKey() !== 'calendar'">
     <ion-row>
       <ion-col>
         <ion-input
@@ -18,10 +19,11 @@
       </ion-col>
     </ion-row>
   </div>
+
 </ion-header>
 
 <ion-content>
-  <ion-list>
+  <ion-list *ngIf="getActiveTabKey() !== 'calendar'">
     <ion-card *ngFor="let workOrder of workOrders" (click)="goToWorkOrder(workOrder.uuid)">
       <ion-card-header>
         <ion-card-title>#{{ workOrder.work_order_number }} {{ utilsService.getLastnameFromFullname(workOrder.client) }}</ion-card-title>
@@ -45,6 +47,12 @@
       </ion-card-content>
     </ion-card>
   </ion-list>
+
+  <app-calendar-views-list 
+    *ngIf="getActiveTabKey() === 'calendar'"
+    [(selectedDate)]="selectedDate">
+  </app-calendar-views-list>
+
 </ion-content>
 
 <ion-footer>

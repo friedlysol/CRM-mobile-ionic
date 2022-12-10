@@ -68,10 +68,6 @@ const routes: Routes = [
     path: 'incidents',
     loadChildren: () => import('./pages/incidents/incidents.module').then(m => m.IncidentsPageModule)
   },
-  {
-    path: 'calendar-views',
-    loadChildren: () => import('./pages/calendar-views/calendar-views.module').then( m => m.CalendarViewsPageModule)
-  },
 
 
 ];
@@ -79,8 +75,8 @@ const routes: Routes = [
 if (environment.hasOwnProperty('defaultRoutes') && environment.defaultRoutes.length) {
   environment.defaultRoutes.map(item => routes.push(item as Route));
 } else {
-  routes.push({path: '', redirectTo: '/calendar-views/list', pathMatch: 'full'});
-  routes.push({path: '**', redirectTo: '/calendar-views'});
+  routes.push({path: '', redirectTo: '/work-order/list', pathMatch: 'full'});
+  routes.push({path: '**', redirectTo: '/work-order'});
 }
 console.log('routes', routes);
 

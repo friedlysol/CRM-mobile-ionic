@@ -1,0 +1,79 @@
+<div class="ion-padding">
+  <ng-container *ngIf="selectedDate; else showCalendar">
+    <div *ngIf="allWorkOrders.length > 0; else noWorkOrders" 
+      class="ion-text-center">
+      Work orders scheduled for {{selectedDate}}
+    </div>
+    
+    <ng-template #noWorkOrders>
+      <div class="ion-text-center">No work orders scheduled for {{selectedDate}}</div>
+    </ng-template>
+    
+    <ion-list>
+      <ion-card *ngFor="let workOrder of allWorkOrders" [routerLink]="['/work-order', 'view', workOrder.uuid]">
+    
+        <ion-card-header>
+          <ion-card-title>#{{ workOrder.work_order_number }} {{ utilsService.getLastnameFromFullname(workOrder.client) }}</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-row>
+            <b>Wo Type</b>: {{ workOrder.wo_type }}
+          </ion-row>
+          <ion-row>
+            <b>Job Type</b>: {{ workOrder.call_type }}
+          </ion-row>
+          <ion-row>
+            <b>Status</b>: {{ workOrder.status }} ({{ workOrder.tech_status }})
+          </ion-row>
+          <ion-row>
+            <b>Scheduled date</b>: {{ workOrder.scheduled_date || '-' }}
+          </ion-row>
+          <ion-row>
+            <app-address [address]="workOrder"></app-address>
+          </ion-row>
+        </ion-card-content>
+    
+      </ion-card>
+    </ion-list>
+  </ng-container>
+  
+  <ng-template #showCalendar>
+    <div class="date-selector">
+      <ion-button [ngClass]="{hidden: !months.prev}" fill="clear" color="medium" (click)="setMonth(months.prev)">
+        <ion-icon name="chevron-back-outline"></ion-icon>
+      </ion-button>
+  
+      <div class="ion-text-center">
+        <div>{{startDate | date:'d MMM'}} - {{endDate | date:'d MMM'}}</div>
+        <div>{{startDate | date:'YYYY'}}</div>
+      </div>
+  
+      <ion-button [ngClass]="{hidden: !months.next}" fill="clear" color="medium" (click)="setMonth(months.next)">
+        <ion-icon name="chevron-forward-outline"></ion-icon>
+      </ion-button>
+    </div>
+    <table class="calendar">
+  
+      <tr class="header">
+        <th *ngFor="let weekDay of weekDays"><b>{{weekDay}}</b></th>
+      </tr>
+  
+      <tr class="week" *ngFor="let week of days">
+  
+        <td 
+          *ngFor="let day of week" 
+          [class]="isCurrentMonth(day)? '': 'not-current-month'"
+          (click)="changeSelectedDate(day)">
+          <div>{{day | date:'MMM d'}}</div>
+          <div class="statuses">
+            <div *ngIf="workOrders.get(day)?.current.length as current" class="current-wo">{{current}}</div>
+            <div *ngIf="workOrders.get(day)?.completed.length as completed" class="completed-wo">{{completed}}</div>
+            <div *ngIf="workOrders.get(day)?.canceled.length as canceled" class="canceled-wo">{{canceled}}</div>
+          </div>
+        </td>
+  
+      </tr>
+  
+    </table>
+  </ng-template>
+</div>

@@ -6,11 +6,12 @@ import { EventService } from '@app/services/event.service';
 import { TabInterface } from '@app/interfaces/tab.interface';
 import { ActivatedRoute, Router } from '@angular/router';
 import { WorkOrderInterface } from '@app/interfaces/work-order.interface';
-
 import { environment } from '@env/environment';
 import { AddressService } from '@app/services/address.service';
 import { Subscription } from 'rxjs';
 import { UtilsService } from '@app/services/utils.service';
+import * as moment from 'moment';
+import { WorkOrderDatabase } from '@app/services/database/workorder.database';
 
 @Component({
   selector: 'app-work-order-list',
@@ -28,6 +29,7 @@ export class WorkOrderListPage implements OnInit, OnDestroy {
   tabs: TabInterface[] = [];
 
   workOrders: WorkOrderInterface[];
+  selectedDate = '';
 
   private subscriptions = new Subscription();
 
@@ -44,6 +46,7 @@ export class WorkOrderListPage implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+
     this.activatedRoute.queryParams.subscribe((params: any) => {
       if (params) {
         this.params = Object.assign({}, params);
@@ -135,6 +138,7 @@ export class WorkOrderListPage implements OnInit, OnDestroy {
     this.tabs.map(tab => tab.isActive = tab.key === selectedTabKey);
 
     this.params.tab = selectedTabKey;
+    this.selectedDate = '';
 
     if (withUpdateParams) {
       this.router.navigate([], {

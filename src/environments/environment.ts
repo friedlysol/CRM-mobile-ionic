@@ -17,6 +17,7 @@ export const environment = {
   datetimeFormat: 'MM/DD/YYYY hh:mm A',
   databaseDateFormat: 'YYYY-MM-DD HH:mm:ss',
   firstDayOfWeek: 1,
+  weekDays: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
   countryCodes: [
     {
       label: 'USA (+1)',
@@ -111,7 +112,6 @@ export const environment = {
     {
       key: 'open',
       label: 'Open',
-      isActive: true
     },
     {
       key: 'today',
@@ -120,6 +120,11 @@ export const environment = {
     {
       key: 'completed',
       label: 'Completed',
+    },
+    {
+      key: 'calendar',
+      label: 'Calendar',
+      isActive: true,
     },
   ],
   tableToServiceMap: {

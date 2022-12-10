@@ -8,6 +8,7 @@ import { WorkOrderListPage } from './work-order-list/work-order-list.page';
 import { SharedModule } from '@app/shared.module';
 import { WorkOrderViewPage } from '@app/pages/work-order/work-order-view/work-order-view.page';
 import { LaunchNavigator } from '@awesome-cordova-plugins/launch-navigator/ngx';
+import { CalendarViewsListPage } from './calendar-views/calendar-views-list.page';
 
 @NgModule({
   imports: [
@@ -17,7 +18,7 @@ import { LaunchNavigator } from '@awesome-cordova-plugins/launch-navigator/ngx';
     SharedModule,
     WorkOrderRoutingModule
   ],
-  declarations: [WorkOrderListPage, WorkOrderViewPage],
+  declarations: [WorkOrderListPage, WorkOrderViewPage, CalendarViewsListPage],
   providers: [LaunchNavigator]
 })
 export class  WorkOrderModule {}
