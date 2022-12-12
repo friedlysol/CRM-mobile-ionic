@@ -21,7 +21,9 @@ export class WeeklyInspectionPage implements OnInit {
   prevValues = {
     vehicleNumber: '',
     odometerReading: ''
-  }
+  };
+
+  vehicles: string[] = [];
 
   photosTypes: TypeInterface[] = [];
   inspection: WeeklyInspectionInterface = {
@@ -92,6 +94,11 @@ export class WeeklyInspectionPage implements OnInit {
       this.redirectTo = params.get('redirectTo');
     });
 
+    await this.vehicleInspectionsDatabase.getVinList()
+      .then(result => {
+        this.vehicles = result.map(vehicle => vehicle.vehicle_number)
+      });
+
     this.photosTypes = await this.typeService.getByType('weekly_inspections');
   }
 
@@ -100,11 +107,11 @@ export class WeeklyInspectionPage implements OnInit {
       .then(result => {
         console.log('getLastVinAndOdometer', result);
         if (result) {
-          this.prevValues.vehicleNumber = result.vehicle_number;
           this.prevValues.odometerReading = result.odometer_reading;
+          this.prevValues.vehicleNumber = result.vehicle_number;
 
-
-          this.setVinAndOdometer();
+          this.inspectionForm.controls.odometerReading.setValue(this.prevValues.odometerReading);
+          this.inspectionForm.controls.vehicleNumber.setValue(this.prevValues.vehicleNumber);
         }
       });
   }
@@ -165,6 +172,7 @@ export class WeeklyInspectionPage implements OnInit {
     this.inspection.tires_pressure_rear_passenger = Number.parseInt(this.rearPassengerCtrl.value, 10);
 
     await this.vehicleInspectionsDatabase.createWeekly(this.inspection);
+
     this.vehicleInspectionService.setIsWeeklyInspectionRequired(false);
 
     if (
@@ -213,7 +221,7 @@ export class WeeklyInspectionPage implements OnInit {
   }
 
   private setVinAndOdometer() {
-    this.inspectionForm.controls.vehicleNumber.setValue(this.prevValues.vehicleNumber);
+    this.inspectionForm.controls.vehicleNumber.setValue(this.prevValues.vehicleNumber[0] || '');
     this.inspectionForm.controls.odometerReading.setValue(this.prevValues.odometerReading);
   }
 

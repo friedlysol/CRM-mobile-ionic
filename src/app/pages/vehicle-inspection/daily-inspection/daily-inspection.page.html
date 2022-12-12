@@ -31,7 +31,21 @@
             <span class="required">*</span>
           </ion-label>
 
+          <ion-select
+              *ngIf="!isPreview"
+              formControlName="vehicleNumber"
+              class="select-vin"
+              interface="popover"
+              placeholder="Select vehicle">
+
+            <ion-select-option *ngFor="let vehicleNumber of  this.vehicles" [value]="vehicleNumber">
+              {{ vehicleNumber }}
+            </ion-select-option>
+
+          </ion-select>
+
           <ion-input
+              *ngIf="isPreview"
               [readonly]="isPreview"
               type="tel"
               formControlName="vehicleNumber"

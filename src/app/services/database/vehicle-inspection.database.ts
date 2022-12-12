@@ -111,23 +111,24 @@ export class VehicleInspectionsDatabase {
     const uuid = inspection.uuid || this.databaseService.getUuid();
 
     const query = sqlBuilder.insert('weekly_inspections', Object.assign({
-        uuid,
-        created_at: this.databaseService.getTimeStamp(),
-        sync: 0,
-      }
-    ), _.pick(inspection, [
-      'oil',
-      'brake',
-      'washer',
-      'jack',
-      'tread',
-      'spare_tire',
-      'tires_pressure_front_driver',
-      'tires_pressure_front_passenger',
-      'tires_pressure_rear_driver',
-      'card_in_vehicle',
-      'registration_in_vehicle',
-    ]));
+      uuid,
+      created_at: this.databaseService.getTimeStamp(),
+      sync: 0,
+      route: inspection.route,
+      vehicle_number: inspection.vehicle_number,
+      odometer_reading: inspection.odometer_reading,
+      oil: inspection.oil || 0,
+      brake: inspection.brake || 0,
+      washer: inspection.washer || 0,
+      jack: inspection.jack || 0,
+      tread: inspection.tread || 0,
+      spare_tire: inspection.spare_tire || 0,
+      tires_pressure_front_driver: inspection.tires_pressure_front_driver || 0,
+      tires_pressure_front_passenger: inspection.tires_pressure_front_passenger || 0,
+      tires_pressure_rear_driver: inspection.tires_pressure_rear_driver || 0,
+      card_in_vehicle: inspection.card_in_vehicle || 0,
+      registration_in_vehicle: inspection.registration_in_vehicle || 0
+    }));
 
     return this.databaseService.query(query.toString(), query.toParams())
       .then(() => this.getWeeklyByUuid(uuid));
@@ -138,6 +139,14 @@ export class VehicleInspectionsDatabase {
       select vehicle_number, odometer_reading 
       from daily_inspections 
       order by created_at desc
+    `);
+  }
+
+  getVinList() {
+    return this.databaseService.findAsArray(`
+      select vehicle_number
+      from vehicles 
+      order by vehicle_number asc
     `);
   }
 

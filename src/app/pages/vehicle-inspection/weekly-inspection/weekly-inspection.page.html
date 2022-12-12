@@ -36,7 +36,19 @@
             Last 5 of vehicle vin
             <span class="required">*</span>
           </ion-label>
-          <ion-input
+
+          <ion-select
+            formControlName="vehicleNumber"
+            class="select-vin"
+            interface="popover"
+            placeholder="Select vehicle">
+
+            <ion-select-option *ngFor="let vehicleNumber of  this.vehicles" [value]="vehicleNumber">
+              {{ vehicleNumber }}
+            </ion-select-option>
+
+          </ion-select>
+          <!-- <ion-input
               formControlName="vehicleNumber"
               type="tel"
               maxlength="5"
@@ -44,7 +56,7 @@
               (keydown)="onlyNumber('vehicleNumber')"
               (ionBlur)="onlyNumber('vehicleNumber')"
               appSelectOnClick
-          ></ion-input>
+          ></ion-input> -->
 
           <ion-text
               class="small"

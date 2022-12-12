@@ -23,6 +23,8 @@ export class DailyInspectionPage implements OnInit {
     odometerReading: ''
   }
 
+  vehicles: string[] = [];
+
   withoutPreview: boolean;
   redirectTo: string;
 
@@ -71,6 +73,11 @@ export class DailyInspectionPage implements OnInit {
       this.withoutPreview = params.get('withoutPreview') === '1';
       this.redirectTo = params.get('redirectTo');
     });
+
+    await this.vehicleInspectionsDatabase.getVinList()
+      .then(result => {
+        this.vehicles = result.map(vehicle => vehicle.vehicle_number)
+      });
 
     const prevInspection = await this.vehicleInspectionsDatabase.getLastDaily();
 
