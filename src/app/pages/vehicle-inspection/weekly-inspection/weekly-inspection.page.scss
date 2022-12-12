@@ -1,0 +1,11 @@
+ion-item{
+    ion-select{
+        margin-top: 8px;
+        height: 2.7em;
+    
+    }
+    
+    ion-select::part(icon) {
+        top: 50%;
+    }
+}

@@ -19,9 +19,9 @@ export class WeeklyInspectionPage implements OnInit {
   redirectTo: string;
 
   prevValues = {
-    vehicleNumber: '',
+    vehicleNumber: [''],
     odometerReading: ''
-  }
+  };
 
   photosTypes: TypeInterface[] = [];
   inspection: WeeklyInspectionInterface = {
@@ -100,12 +100,16 @@ export class WeeklyInspectionPage implements OnInit {
       .then(result => {
         console.log('getLastVinAndOdometer', result);
         if (result) {
-          this.prevValues.vehicleNumber = result.vehicle_number;
           this.prevValues.odometerReading = result.odometer_reading;
 
-
-          this.setVinAndOdometer();
+          this.inspectionForm.controls.odometerReading.setValue(this.prevValues.odometerReading);
         }
+      });
+
+    this.vehicleInspectionsDatabase.getVinList()
+      .then(result => {
+        this.prevValues.vehicleNumber = result.map(r => r.vehicle_number);
+        this.inspectionForm.controls.vehicleNumber.setValue(this.prevValues.vehicleNumber[0] || '');
       });
   }
 
@@ -213,7 +217,7 @@ export class WeeklyInspectionPage implements OnInit {
   }
 
   private setVinAndOdometer() {
-    this.inspectionForm.controls.vehicleNumber.setValue(this.prevValues.vehicleNumber);
+    this.inspectionForm.controls.vehicleNumber.setValue(this.prevValues.vehicleNumber[0] || '');
     this.inspectionForm.controls.odometerReading.setValue(this.prevValues.odometerReading);
   }
 

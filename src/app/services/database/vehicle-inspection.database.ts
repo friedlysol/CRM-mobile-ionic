@@ -117,4 +117,12 @@ export class VehicleInspectionsDatabase {
       order by created_at desc
     `);
   }
+
+  getVinList(){
+    return this.databaseService.findAsArray(`
+      select distinct vehicle_number
+      from daily_inspections 
+      order by created_at desc
+    `);
+  }
 }
