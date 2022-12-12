@@ -657,18 +657,6 @@ export class MessagesDatabase {
     return this.databaseService.findAsArray(query.toString(), query.toParams());
   }
 
-  getSqlForUpdateActivitySyncStatus(sync: SyncApiInterface) {
-    return sqlBuilder
-      .update('messages', {id: sync.object_id, sync: 1})
-      .where('uuid', sync.uuid);
-  }
-
-  getSqlForUpdateConfirmSyncStatus(sync: SyncApiInterface) {
-    return sqlBuilder
-      .update('message_confirmations', {id: sync.object_id, sync: 1})
-      .where('uuid', sync.uuid);
-  }
-
   getSqlForUpdateFileSyncStatus(sync: SyncApiInterface) {
     return sqlBuilder
       .update('files', {object_id: sync.object_id, sync: 1})

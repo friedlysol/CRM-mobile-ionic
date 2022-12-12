@@ -9,13 +9,14 @@
 
   <ion-title>{{ title }}</ion-title>
 
-  
+
   <ion-buttons slot="end">
 
     <ng-content select="[icons]"></ng-content>
 
-    <ion-button>
+    <ion-button class="notification" [routerLink]="['/message-center/list']">
       <ion-icon name="notifications-outline"></ion-icon>
+<!--      <ion-badge>.</ion-badge>-->
     </ion-button>
 
     <ion-button *ngIf="showSync" (click)="syncAll()">

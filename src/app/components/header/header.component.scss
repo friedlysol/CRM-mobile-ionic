@@ -13,3 +13,19 @@ ion-back-button ion-icon {
 ion-back-button{
   margin-right: 13px;
 }
+
+.notification {
+  position: relative;
+
+  ion-badge {
+    border-radius: 40px;
+    color: #3880ff;
+    height: 10px;
+    left: -1px;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 15px;
+    width: 5px;
+  }
+}

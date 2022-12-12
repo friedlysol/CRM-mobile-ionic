@@ -7,6 +7,7 @@ import { Directory, Encoding, Filesystem } from '@capacitor/filesystem';
 import * as moment from 'moment';
 import * as sqlBuilder from 'sql-bricks';
 import { HashMapInterface } from '@app/interfaces/hash-map.interface';
+import { SyncApiInterface } from '@app/providers/api/interfaces/sync-api.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -195,7 +196,6 @@ export class DatabaseService {
       });
   }
 
-
   /**
    * Get map with uuid and hash
    *
@@ -226,5 +226,18 @@ export class DatabaseService {
     }
 
     return Promise.resolve({});
+  }
+
+  getSqlForUpdateSyncStatus(table, sync: SyncApiInterface) {
+    return sqlBuilder
+      .update(table, {id: sync.object_id, sync: 1})
+      .where('uuid', sync.uuid);
+  }
+
+  getSqlForUpdateFileSyncStatus(table: string, sync: SyncApiInterface) {
+    return sqlBuilder
+      .update('files', {object_id: sync.object_id, sync: 1})
+      .where('uuid', sync.uuid)
+      .where('object_type', table);
   }
 }

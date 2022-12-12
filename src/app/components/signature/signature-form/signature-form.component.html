@@ -7,7 +7,7 @@
     </ion-text>
   </ion-item>
 
-  <ion-item class="ion-no-padding" lines="none">
+  <ion-item class="ion-no-padding" lines="none" *ngIf="!utilsService.is('ahd')">
     <ion-label position="stacked" class="bold">Signature owner title</ion-label>
     <ion-input type="text" [formControl]="ownerTitle"></ion-input>
     <ion-text class="small" *ngIf="ownerTitle.invalid && ownerTitle.touched" slot="error">

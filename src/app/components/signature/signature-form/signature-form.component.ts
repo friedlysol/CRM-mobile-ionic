@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
+import { UtilsService } from '@app/services/utils.service';
 
 export interface ISignatureFormData {
   ownerName: string;
@@ -20,7 +21,7 @@ export class SignatureFormComponent implements OnInit {
   ownerName = new FormControl('', [Validators.required]);
   ownerTitle = new FormControl('', [Validators.required]);
 
-  constructor() {
+  constructor(public utilsService: UtilsService) {
   }
 
   ngOnInit() {
@@ -33,9 +34,10 @@ export class SignatureFormComponent implements OnInit {
   }
 
   onNext() {
-    if (this.ownerName.invalid || this.ownerTitle.invalid) {
+    if (this.ownerName.invalid || (!this.utilsService.is('ahd') && this.ownerTitle.invalid)) {
       this.ownerName.markAsTouched();
       this.ownerTitle.markAsTouched();
+
       return;
     }
 

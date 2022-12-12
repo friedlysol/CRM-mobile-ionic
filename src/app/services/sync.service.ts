@@ -12,6 +12,8 @@ import { SurveyService } from '@app/services/survey.service';
 import { TechStatusService } from '@app/services/tech-status.service';
 import { BillService } from '@app/services/bill.service';
 import { PersonService } from '@app/services/person.service';
+import { VehicleService } from '@app/services/vehicle.service';
+import { VehicleInspectionService } from '@app/services/vehicle-inspection.service';
 
 @Injectable({
   providedIn: 'root'
@@ -28,6 +30,8 @@ export class SyncService {
     private surveyService: SurveyService,
     private techStatusService: TechStatusService,
     private typeService: TypeService,
+    private vehicleInspectionService: VehicleInspectionService,
+    private vehicleService: VehicleService,
     private workOrderService: WorkOrderService,
   ) {
   }
@@ -39,9 +43,11 @@ export class SyncService {
     await this.techStatusService.sync();
     await this.personService.sync();
     await this.typeService.sync();
+    await this.vehicleService.sync();
     await this.workOrderService.sync();
     await this.surveyService.sync();
     await this.billService.sync();
+    await this.vehicleInspectionService.sync();
 
     await this.fileService.sync();
 

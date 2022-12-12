@@ -72,12 +72,17 @@ export class SignatureComponent implements OnInit {
   }
 
   async saveSignature(){
+    let description = this.ownerName;
+    if(this.ownerTitle) {
+      description += '_' + this.ownerTitle;
+    }
+
     this.file = {
       object_type: this.objectType,
       object_uuid: this.objectUuid,
       object_id: this.objectId,
       type_id: this.typeId,
-      description: `${this.ownerName}_${this.ownerTitle}`,
+      description,
       sync: 0,
       path: '',
       type: 'signature',
