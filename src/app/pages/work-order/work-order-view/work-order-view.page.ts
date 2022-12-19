@@ -134,13 +134,19 @@ export class WorkOrderViewPage implements OnInit, OnDestroy {
   }
 
   isDisabledSelectStatusOption(index: number) {
-    if (this.woTypes[index].type_key === 'tech_status.incomplete') {
-      return !(this.woTypes[index].id === this.workOrder.tech_status_type_id);
-    }
+    if(Object.keys(environment.techStatusDependencies).length && environment.techStatusDependencies.hasOwnProperty(this.workOrder.tech_status_type_id)) {
+      const availableStatuses = environment.techStatusDependencies[this.workOrder.tech_status_type_id];
 
-    return !(this.woTypes[index].id === this.workOrder.tech_status_type_id ||
-      index > 0 && this.woTypes[index - 1].id === this.workOrder.tech_status_type_id ||
-      index < this.woTypes.length - 1 && this.woTypes[index + 1].id === this.workOrder.tech_status_type_id);
+      return !availableStatuses.includes(this.woTypes[index].id);
+    } else {
+      if (this.woTypes[index].type_key === 'tech_status.incomplete') {
+        return !(this.woTypes[index].id === this.workOrder.tech_status_type_id);
+      }
+
+      return !(this.woTypes[index].id === this.workOrder.tech_status_type_id ||
+        index > 0 && this.woTypes[index - 1].id === this.workOrder.tech_status_type_id ||
+        index < this.woTypes.length - 1 && this.woTypes[index + 1].id === this.workOrder.tech_status_type_id);
+    }
   }
 
   showConfirmButton() {

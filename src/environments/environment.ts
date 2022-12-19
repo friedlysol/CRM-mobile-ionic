@@ -100,6 +100,7 @@ export const environment = {
     completed: 1514,
     incomplete: 1515
   },
+  techStatusDependencies: {},
   workOrderStatuses: {
     issued: 'issued',
     confirmed: 'confirmed',
@@ -108,6 +109,7 @@ export const environment = {
     canceled: 'canceled',
     completed: 'completed'
   },
+
   workOrderTabs: [
     {
       key: 'open',
@@ -128,7 +130,7 @@ export const environment = {
     },
   ],
   tableToServiceMap: {
-      work_orders: 'WorkOrderService',
+    work_orders: 'WorkOrderService',
   },
   defaultRoutes: []
 };

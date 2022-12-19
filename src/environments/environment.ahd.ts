@@ -99,6 +99,7 @@ export const environment = {
     completed: 1514,
     incomplete: 1515
   },
+  techStatusDependencies: {},
   workOrderStatuses: {
     issued: 'issued',
     confirmed: 'confirmed',
@@ -135,3 +136,16 @@ export const environment = {
  * on performance if an error is thrown.
  */
 // import 'zone.js/dist/zone-error';  // Included with Angular CLI.
+
+
+// Status must move first to In Route from Assigned
+environment.techStatusDependencies[environment.techStatuses.assigned] = [environment.techStatuses.inRoute];
+
+// Status after In Route should move only to WIP
+environment.techStatusDependencies[environment.techStatuses.inRoute] = [environment.techStatuses.assigned, environment.techStatuses.wip];
+
+// Status must move to Incomplete only from WIP (not from In Route previous one)
+environment.techStatusDependencies[environment.techStatuses.wip] = [environment.techStatuses.inRoute, environment.techStatuses.incomplete, environment.techStatuses.completed];
+
+// Incomplete status can only be changed to WIP and In Route
+environment.techStatusDependencies[environment.techStatuses.incomplete] = [environment.techStatuses.inRoute, environment.techStatuses.wip];
