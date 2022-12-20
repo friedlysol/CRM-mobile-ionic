@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MediaOptionsInterface } from '@app/interfaces/media-options.interface';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
@@ -12,13 +12,15 @@ import { MessagesService } from '@app/services/messages.service';
 import { PaginationInterface } from '@app/interfaces/pagination.interface';
 import { UtilsService } from '@app/services/utils.service';
 import { TabInterface } from '@app/interfaces/tab.interface';
+import { Subscription } from 'rxjs';
+import { EventService } from '@app/services/event.service';
 
 @Component({
   selector: 'app-message-center-list',
   templateUrl: './message-center-list.page.html',
   styleUrls: ['./message-center-list.page.scss'],
 })
-export class MessageCenterListPage implements OnInit {
+export class MessageCenterListPage implements OnInit, OnDestroy {
   public objectType: string;
   public objectUuid: string;
   public objectId: number;
@@ -49,6 +51,8 @@ export class MessageCenterListPage implements OnInit {
     isActive: false,
     icon: 'send-outline'
   }];
+
+  private subscriptions = new Subscription();
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -92,6 +96,16 @@ export class MessageCenterListPage implements OnInit {
         await this.loadList();
       }
     });
+
+    this.subscriptions.add(EventService.endSync.subscribe(status => {
+      if (status) {
+        this.loadList();
+      }
+    }));
+  }
+
+  ngOnDestroy() {
+    this.subscriptions.unsubscribe();
   }
 
   async ionViewDidEnter() {

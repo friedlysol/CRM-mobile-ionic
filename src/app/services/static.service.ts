@@ -14,6 +14,8 @@ export class StaticService {
   public invalidToken = new BehaviorSubject<boolean | null>(null);
   public startSync = new BehaviorSubject<boolean | null>(null);
 
+  public newMessages = 0;
+
   public authEmail: string = null;
   public deviceToken: string = null;
   public deviceTokenType: string = null;

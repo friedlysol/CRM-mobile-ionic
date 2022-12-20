@@ -2,6 +2,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { EventService } from '@app/services/event.service';
 import { IonRouterOutlet, MenuController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
+import { StaticService } from '@app/services/static.service';
 
 @Component({
   selector: 'app-header',
@@ -16,7 +17,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   private subscriptions = new Subscription();
 
-  constructor(private menuController: MenuController, private routerOutlet: IonRouterOutlet) {
+  constructor(private menuController: MenuController, private routerOutlet: IonRouterOutlet, public staticService: StaticService) {
   }
 
   ngOnInit() {
@@ -25,6 +26,11 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
       console.log('this.syncInProgress', this.syncInProgress);
     }));
+
+    this.subscriptions.add(EventService.newMessages.subscribe(newMessages => {
+      this.staticService.newMessages = newMessages
+    }));
+
   }
 
   ngOnDestroy() {

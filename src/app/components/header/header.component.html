@@ -16,7 +16,7 @@
 
     <ion-button class="notification" [routerLink]="['/message-center/list']">
       <ion-icon name="notifications-outline"></ion-icon>
-<!--      <ion-badge>.</ion-badge>-->
+      <ion-badge *ngIf="staticService.newMessages">.</ion-badge>
     </ion-button>
 
     <ion-button *ngIf="showSync" (click)="syncAll()">

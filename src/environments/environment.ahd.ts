@@ -112,15 +112,23 @@ export const environment = {
     {
       key: 'open',
       label: 'Open',
-      isActive: true
+      isActive: true,
+      withTotal: true
     },
     {
       key: 'today',
       label: 'Today',
+      withTotal: true
     },
     {
       key: 'completed',
       label: 'Completed',
+      withTotal: false
+    },
+    {
+      key: 'calendar',
+      label: 'Calendar',
+      withTotal: false
     },
   ],
   tableToServiceMap: {

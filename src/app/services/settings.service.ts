@@ -69,8 +69,6 @@ export class SettingsService implements SyncInterface {
 
         EventService.syncDetailsDone.next(true);
 
-        EventService.endSync.next(true);
-
         return true;
       });
   }

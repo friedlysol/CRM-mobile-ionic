@@ -23,9 +23,11 @@ export class MessageCardComponent implements OnInit {
 
   ngOnInit() {}
 
-  onCompleteClick(){
-    this.messagesDatabase.complete(this.message);
+  async onCompleteClick() {
     this.message.completed = 1;
+
+    await this.messagesDatabase.complete(this.message);
+    await this.messagesDatabase.getTotalUncompleted();
   }
 
   async openFormModal() {

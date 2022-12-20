@@ -12,6 +12,7 @@ import { SyncApiInterface } from '@app/providers/api/interfaces/sync-api.interfa
 import { HashMapInterface } from '@app/interfaces/hash-map.interface';
 import { ActivityApiInterface } from '@app/providers/api/interfaces/response-activity-api.interface';
 import { UtilsService } from '@app/services/utils.service';
+import { EventService } from '@app/services/event.service';
 
 @Injectable({
   providedIn: 'root'
@@ -22,6 +23,22 @@ export class MessagesDatabase {
     private databaseService: DatabaseService,
     private utilsService: UtilsService
   ) {
+  }
+
+  async getTotalUncompleted() {
+    const account = await this.accountsDatabase.getActive();
+
+    return this.databaseService.findOrNull(`
+      select count(*) as total
+      from messages
+      where type = 'task'
+        and completed = 0
+        and creator_person_id != ?
+    `, [
+      account.person_id
+    ]).then(result => {
+      return EventService.newMessages.next(result.total);
+    });
   }
 
   getUnSynchronized() {
@@ -272,7 +289,8 @@ export class MessagesDatabase {
       query += ` and messages.object_type = ?`;
       params.push(objectType);
     } else {
-      query += ` and messages.object_type is null`;
+      // query += ` and messages.object_type is null`;
+      query += ` and messages.type = 'task'`;
     }
 
     if(search) {
@@ -675,7 +693,7 @@ export class MessagesDatabase {
 
   getSqlForUpdateFromApiData(message: ActivityApiInterface, condition = {}) {
     return sqlBuilder
-      .update('work_orders', Object.assign({
+      .update('messages', Object.assign({
           updated_at: this.databaseService.getTimeStamp(),
           sync: 1
         }, this.messageDatabaseObj(message))
@@ -686,7 +704,7 @@ export class MessagesDatabase {
   private messageDatabaseObj(message: ActivityApiInterface): MessageInterface {
     return {
       id: message.id,
-      person_id: message.id,
+      person_id: message.person_id,
       creator_person_id: message.creator_person_id,
       subject: message.subject,
       description: message.description,
@@ -699,10 +717,8 @@ export class MessagesDatabase {
       customer_ids: message.customer_ids,
       type: message.type,
       work_order_number: message.work_order_number,
-      // client_and_address: message.c,
       view_type_id: message.view_type_id,
       interval_type_id: message.interval_type_id,
-      // limit_of_repetitions: message.,
       hash: message.hash,
       completed: message.completed,
       completed_at: message.completed_at,

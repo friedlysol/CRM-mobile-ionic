@@ -48,6 +48,13 @@ export class WorkOrderService implements SyncInterface {
   }
 
   async sync(params = {}): Promise<boolean> {
+    EventService.syncDetails.next({
+      start: moment().toISOString(),
+      title: this.syncTitle,
+      total: 3,
+      done: 0
+    });
+
     const syncData = {
       workorders: await this.databaseService.getUnSynchronized('work_orders'),
       //status_history: await this.databaseService.getUnSynchronized('work_order_status_history'),
@@ -62,9 +69,15 @@ export class WorkOrderService implements SyncInterface {
       .then(async (res: ResponseWorkOrderApiInterface) => {
         await this.syncStatus(res);
 
+        EventService.syncDetailsDone.next(true);
+
         await this.addressService.syncAddresses(res);
 
+        EventService.syncDetailsDone.next(true);
+
         await this.syncWorkOrders(res);
+
+        EventService.syncDetailsDone.next(true);
 
         return true;
       });

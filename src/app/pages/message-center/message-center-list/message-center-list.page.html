@@ -27,7 +27,8 @@
       <app-note-card *ngIf="isNote; else notNote" [message]="message"></app-note-card>
 
       <ng-template #notNote>
-        <app-message-card 
+        <app-message-card
+          *ngIf="(getActiveTabKey() === 'new' && !message.completed) || getActiveTabKey() !== 'new'"
           [message]="message"
           [showComplete]="getActiveTabKey() === 'new' && !message.completed"
           [showReply]="getActiveTabKey() !== 'sent'">

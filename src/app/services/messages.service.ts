@@ -48,6 +48,8 @@ export class MessagesService implements SyncInterface {
         await this.syncActivities(res);
         await this.syncFiles(res);
 
+        await this.messagesDatabase.getTotalUncompleted();
+
         return true;
       });
   }

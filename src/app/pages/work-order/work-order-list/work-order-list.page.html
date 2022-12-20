@@ -48,7 +48,7 @@
     </ion-card>
   </ion-list>
 
-  <app-calendar-views-list 
+  <app-calendar-views-list
     *ngIf="getActiveTabKey() === 'calendar'"
     [(selectedDate)]="selectedDate">
   </app-calendar-views-list>
@@ -61,7 +61,7 @@
   <ion-row class="tab-content">
     <ng-container *ngFor="let tab of tabs">
       <ion-col [class]="{active: tab.isActive}" (click)="setActiveTab(tab.key)">
-        <ion-label>{{ tab.label }} ({{ tab.total }})</ion-label>
+        <ion-label>{{ tab.label }} <span *ngIf="tab.withTotal">({{ tab.total }})</span></ion-label>
       </ion-col>
     </ng-container>
   </ion-row>
